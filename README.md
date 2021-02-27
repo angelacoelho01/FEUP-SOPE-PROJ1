@@ -1,1 +1,1 @@
-# feup-sope-proj1
+# FEUP-SOPE-PROJ1
