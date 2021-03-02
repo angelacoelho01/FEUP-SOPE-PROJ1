@@ -10,7 +10,7 @@ xmod: main.c
 path:
 #	@export PATH=$$PATH:$(src_path)
 #	@echo $$PATH
-	@echo $(src_path)
+	echo $(src_path)
 
 clean:
 	rm -f xmod
