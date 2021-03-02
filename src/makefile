@@ -1,8 +1,6 @@
 CC = gcc
 CFLAGS=-Wall
-mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
-mkfile_dir := $(dir $(mkfile_path))
-PATH := $(PATH):$(mkfile_path)
+src_path := $(shell pwd)
 
 all: xmod path
 
@@ -10,7 +8,9 @@ xmod: main.c
 	$(CC) $(CFLAGS) main.c -o xmod
 
 path:
-	@echo $(PATH)
+	@export PATH=$$PATH:$(src_path)
+	@echo $$PATH
+	@echo $(src_path)
 
 clean:
 	rm -f xmod
