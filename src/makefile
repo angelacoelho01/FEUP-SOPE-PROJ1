@@ -8,8 +8,8 @@ xmod: main.c
 	$(CC) $(CFLAGS) main.c -o xmod
 
 path:
-	@export PATH=$$PATH:$(src_path)
-	@echo $$PATH
+#	@export PATH=$$PATH:$(src_path)
+#	@echo $$PATH
 	@echo $(src_path)
 
 clean:
