@@ -1,15 +1,16 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdbool.h>
+#include <sys/sysmacros.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <sys/sysmacros.h>
 #include <dirent.h>
 #include <sys/wait.h>
 
 bool is_pathname_dir(const char *pathname) {
 	// try to open
-	FILE *f = fopen(pathname, O_RDONLY);
+	FILE *f = fopen(pathname, "r");
 	if (f == NULL) {
 		fprintf(stderr, "\nError in opening File %s", pathname);
 		exit(EXIT_FAILURE);
@@ -61,7 +62,7 @@ int change_dir_files_permissions(const char *dirname, bool iterate_sub_dirs) {
 	
 	while ((dir_content = readdir(dir)) != NULL) {
 		// its a directory and option -R is set true
-		if ((is_pathname_dir(dir_content->name)) && (iterate_sub_dirs)) {
+		if ((is_pathname_dir(dir_content->d_name)) && (iterate_sub_dirs)) {
 			// create a new process - the child - who will iterate over this subdirectory
 			pid_t pid = fork();
 			if (pid == -1) {
@@ -69,7 +70,7 @@ int change_dir_files_permissions(const char *dirname, bool iterate_sub_dirs) {
 				break; // --> do to return with -1 <--
 			}
 			else if (pid == 0) { // child process
-				change_dir_files_permissions(dir_content->name, iterate_sub_dirs);
+				change_dir_files_permissions(dir_content->d_name, iterate_sub_dirs);
 				// --> make this to pass the directory name by changing the last line arguments <--
 			} else {
 				// parent wait for the child to end 
@@ -77,7 +78,7 @@ int change_dir_files_permissions(const char *dirname, bool iterate_sub_dirs) {
 			}
 		} else {
 			// its a file in the directory
-			change_file_permissions(dir_content->name);
+			change_file_permissions(dir_content->d_name);
 		}
 	}
 	
@@ -94,7 +95,7 @@ int main(int numArg, char *argv[], char *env[]){
        // assumindo a correcao das variaveis da linha de comandos
 	// xpm [OPTIONS] (MODE | OCTAL_MODE) FILE/DIR
 	
-	char *root = argv[argc - 1]; // the last parameter identifies the path location
+	char *root = argv[numArg - 1]; // the last parameter identifies the path location
 	
 	// then the value of this bool depends if -R option exists
 	bool change_subdirectories = true;
