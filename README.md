@@ -109,11 +109,11 @@ Apesar da estrutura do programa ser deixada a cargo de cada grupo de trabalho, h
 
 Sugere-se que o mini-projecto, que produzirá a ferramenta `xmod`, seja desenvolvido por etapas:
 
-1.   experimentação de múltiplas funções/chamadas ao sistema que irão ser úteis ao `xmod`;
+1.    experimentação de múltiplas funções/chamadas ao sistema que irão ser úteis ao `xmod`;
 2.    escrita de uma primeira versão do `xmod` que trabalhe apenas com um ficheiro ou com um directório,que faça registos e não utilize sinais;
 3.    adição do tratamento de sinais à 1a. versão de `xmod`, formando uma segunda versão;
-4.     alargamento   da   2a.   versão   de  `xmod`  ao   caso   recursivo   (processamento   de   toda   uma   árvore   dedirectórios),   mas   sem   grande   preocupação   com   a   boa   funcionalidade   dos   sinais:   será   a   terceiraversão;
-5.     afinação da 3a. versão de `xmod`: sinais, registos, etc. produzindo, assim, a versão final.
+4.    alargamento   da   2a.   versão   de  `xmod`  ao   caso   recursivo   (processamento   de   toda   uma   árvore   dedirectórios),   mas   sem   grande   preocupação   com   a   boa   funcionalidade   dos   sinais:   será   a   terceiraversão;
+5.    afinação da 3a. versão de `xmod`: sinais, registos, etc. produzindo, assim, a versão final.
 
 ### Notas finais
 
