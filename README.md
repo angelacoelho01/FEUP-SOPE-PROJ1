@@ -7,7 +7,7 @@
 ## Ferramenta para modificar permissões de ficheiros
 
 ### Objetivos
-Familiarização com a programação de interacção com um sistema operativo (aqui, Unix/Linux), envolvendoprocessos, intercomunicação por sinais e acesso ao sistema de ficheiros.
+Familiarização com a programação de interacção com um sistema operativo (aqui, Unix/Linux), envolvendo processos, intercomunicação por sinais e acesso ao sistema de ficheiros.
 
 ### Descrição geral
 A ferramenta a desenvolver, denominada `xmod`,  deve ter como referência o comando  chmod  (change filemode bits), que permite modificar permissões de acesso a ficheiros e diretórios.
