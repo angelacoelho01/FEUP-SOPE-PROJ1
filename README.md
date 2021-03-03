@@ -33,17 +33,17 @@ xmod [OPTIONS] OCTAL-ODE FILE/DIR
 -   **FILE/DIR** é o nome inequívoco (absoluto ou relativo) de um ficheiro ou diretório a processar, podendo serum link simbólico.
 
 -   **OPTIONS** poderá ser um ou mais de:
-     
+
     -   **-v**: modo verboso, que apresenta muita informação sobre todos os ficheiros encontrados;
-       
+
     -   **-c**: semelhante a modo verboso, mas apenas apresentando informação quando é efetuada umamodificação;
-       
+
     -   **-R**: o directório indicado em **FILE/DIR** é processado e atravessado recursivamente, processando-se toda a árvore de directórios abaixo.
 
 -   **MODE** possui o formato __[ugoa](-+=)(rwx)+__, indicando:
--   
+ 
     -   **[ugoa]**: opcionalmente, o tipo de utilizador a ser afetado, ug ou o, ou todos os tipos, a (de all);por omissão, assume-se ‘a’, mas os bits assinalados em “umask" (file mode creation mask) não serãoalterados;
-  
+
     -   **(-+=)**: que as permissões (imediatamente a seguir) serão, respectivamente, removidas, adicionadasou substituirão as que já existem, removendo as não mencionadas;
 
     -   **(rwx)**: as permissões a serem modificadas, podendo várias ser indicadas.
@@ -56,11 +56,12 @@ xmod [OPTIONS] OCTAL-ODE FILE/DIR
 
 Para facilitar a análise, desenvolvimento e avaliação da ferramenta `xmod`, devem ser registados num ficheiroa   ocorrência   de   diversos   eventos,   listados   mais   abaixo   (por   exemplo,   criação   de   processos).Os registos devem ser efectuados se a variável de ambiente  **LOG_FILENAME**  for definida pelo utilizador;nesse caso, ela determina o nome do ficheiro de registo. Se tal ficheiro já existir, deve ser truncado (e escritocomo se fosse um novo); se não existir, deve ser criado.Qualquer   um   dos   processos   participantes   na   operação   do   programa   acede   ao   ficheiro,   acrescentando-lheinformação, linha a linha, no seguinte formato:
 
-```
+```sh
 instant ; pid ; action ; info
 ```
 
 -   **instant** é o instante de tempo imediatamente anterior ao registo, medido em milissegundos, tendocomo referência o instante em que o programa começou a executar;
+
 - **pid** é o identificador do processo que faz o registo da linha;
 
 -   **event** é a identificação do tipo de evento que afectou o processo (ver já a seguir);
@@ -81,12 +82,12 @@ A tabela seguinte mostra a representação dos tipos de eventos que devem ser re
 
 Estando  `xmod`  em execução, quando lhe for enviado o sinal  **SIGINT**  (normalmente originado na consolapor  CTRL-C),   deverá   ser   apresentado   na   saída   padrão   um   conjunto   de   linhas   com   informação   textualreferente aos processos em execução. Cada linha, para cada processo, terá o formato:
 
-```
+```sh
 pid ; fich/dir ; nftot ; nfmod
 ```
 
 -   **pid** é o identificador do processo;
-   
+
 -   **fich/dir**  é o nome canónico do ficheiro ou directório especificado em  **FILE/DIR**  da linha decomando que originou o processo (ver, abaixo, __Requisitos Arquitecturais__);
 
 -   **nftot** é o número de ficheiros encontrados até ao momento;
@@ -107,11 +108,11 @@ Apesar da estrutura do programa ser deixada a cargo de cada grupo de trabalho, h
 
 Sugere-se que o mini-projecto, que produzirá a ferramenta `xmod`, seja desenvolvido por etapas:
 
-1.  experimentação de múltiplas funções/chamadas ao sistema que irão ser úteis ao `xmod`;
-2.   escrita de uma primeira versão do `xmod` que trabalhe apenas com um ficheiro ou com um directório,que faça registos e não utilize sinais;
-3.   adição do tratamento de sinais à 1a. versão de `xmod`, formando uma segunda versão;
-4.    alargamento   da   2a.   versão   de  `xmod`  ao   caso   recursivo   (processamento   de   toda   uma   árvore   dedirectórios),   mas   sem   grande   preocupação   com   a   boa   funcionalidade   dos   sinais:   será   a   terceiraversão;
-5.    afinação da 3a. versão de `xmod`: sinais, registos, etc. produzindo, assim, a versão final.
+1.   experimentação de múltiplas funções/chamadas ao sistema que irão ser úteis ao `xmod`;
+2.    escrita de uma primeira versão do `xmod` que trabalhe apenas com um ficheiro ou com um directório,que faça registos e não utilize sinais;
+3.    adição do tratamento de sinais à 1a. versão de `xmod`, formando uma segunda versão;
+4.     alargamento   da   2a.   versão   de  `xmod`  ao   caso   recursivo   (processamento   de   toda   uma   árvore   dedirectórios),   mas   sem   grande   preocupação   com   a   boa   funcionalidade   dos   sinais:   será   a   terceiraversão;
+5.     afinação da 3a. versão de `xmod`: sinais, registos, etc. produzindo, assim, a versão final.
 
 ### Notas finais
 
