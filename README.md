@@ -4,12 +4,12 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/dacd9d83738d4f6c9ad5a1fc7bb11748)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=angelacoelho01/FEUP-SOPE-PROJ1&amp;utm_campaign=Badge_Grade)
 [![GitHub license](https://img.shields.io/github/license/ctrlMarcio/feup-sope-proj2?color=blue)](https://github.com/angelacoelho01/FEUP-SOPE-PROJ1/blob/main/LICENSE)
 
-# Ferramenta para modificar permissões de ficheiros
+## Ferramenta para modificar permissões de ficheiros
 
-## Objetivos
+### Objetivos
 Familiarização com a programação de interacção com um sistema operativo (aqui, Unix/Linux), envolvendoprocessos, intercomunicação por sinais e acesso ao sistema de ficheiros.
 
-## Descrição geral
+### Descrição geral
 A ferramenta a desenvolver, denominada `xmod`,  deve ter como referência o comando  chmod  (change filemode bits), que permite modificar permissões de acesso a ficheiros e diretórios.
 
 >Em Unix, tais permissões são função do tipo de acesso e da classe de utilizador onde se inserequem pretende o acesso. As permissões estão associadas em três conjuntos, cada um dos quaisassociado ao dono do ficheiro (**u**, ao grupo a que o utilizador pertence (**g**) e a todos os outrosutilizadores (**o**); cada conjunto contempla três tipos   de acesso: de leitura (**r**), escrita (**w**) e execução (**x**).
@@ -22,7 +22,7 @@ A representação deste conjunto de permissões dá-se em duas maneiras:
 man chmod
 ```
 
-## Requisitos Funcionais
+### Requisitos Funcionais
 
 `xmod` deverá suportar os seguintes métodos de invocação:
 
@@ -43,9 +43,9 @@ xmod [OPTIONS] OCTAL-ODE FILE/DIR
 
 - **OCTAL-MODE**  é uma sequência de 4 números, na representação octal de permissões, já apresentada atrás.
 
-## Funcionalidades Adicionais
+### Funcionalidades Adicionais
 
-### Geração de registos de execução
+#### Geração de registos de execução
 Para facilitar a análise, desenvolvimento e avaliação da ferramenta `xmod`, devem ser registados num ficheiroa   ocorrência   de   diversos   eventos,   listados   mais   abaixo   (por   exemplo,   criação   de   processos).Os registos devem ser efectuados se a variável de ambiente  **LOG_FILENAME**  for definida pelo utilizador;nesse caso, ela determina o nome do ficheiro de registo. Se tal ficheiro já existir, deve ser truncado (e escritocomo se fosse um novo); se não existir, deve ser criado.Qualquer   um   dos   processos   participantes   na   operação   do   programa   acede   ao   ficheiro,   acrescentando-lheinformação, linha a linha, no seguinte formato:
 ```
 instant ; pid ; action ; info
@@ -66,7 +66,7 @@ A tabela seguinte mostra a representação dos tipos de eventos que devem ser re
 | recepção de sinal por processo | SIGNAL_SENT | sinal enviado, seguido do PID do processo alvo, no formato: `sinal : pid` (e.g. , SIGINT : 987) |
 | modificação de permissões de ficheiro /directório por processo | FILE_MODF | nome canónico do ficheiro/directório que teve as permissões alteradas, seguido dos valores em octal daspermissões anteriores e novas no formato: `fich/dir : oldPerm : newPerm` (e.g., /tmp/fich12 : 0666 : 0644) |
 
-### Tratamento de sinais
+#### Tratamento de sinais
 
 Estando  `xmod`  em execução, quando lhe for enviado o sinal  **SIGINT**  (normalmente originado na consolapor  CTRL-C),   deverá   ser   apresentado   na   saída   padrão   um   conjunto   de   linhas   com   informação   textualreferente aos processos em execução. Cada linha, para cada processo, terá o formato:
 ```
@@ -80,14 +80,14 @@ pid ; fich/dir ; nftot ; nfmod
 
 No   final   das   linhas,   deve   ser   apresentada   uma   mensagem   perguntando   ao   utilizador   se   quer   terminar   oprograma ou se quer que a execução prossiga. Recebida a resposta, o programa age em conformidade.
 
-## Requisitos Arquiteturais
+### Requisitos Arquiteturais
 
 Apesar da estrutura do programa ser deixada a cargo de cada grupo de trabalho, há um conjunto de requisitosarquiteturais que são exigidos:
 
 - quando `xmod` é iniciado pelo utilizador, o primeiro processo a ser executado (processo inicial) deve,antes de terminar, aguardar pela terminação de todos os restantes processos do programa;
 - sempre   que  `xmod`  é   invocado   com   a   opção  **-R**,   cada   um   dos   eventuais   processos   criados   deveanalisar somente o diretório que lhe for passado por **FILE/DIR** e criar um (sub)processo por cadaum dos sub-diretórios que eventualmente possam existir; cada um desses (sub)processos executaráuma   nova   instância   de  xmod,   com   as   mesmas   opções   da   invocação   feita   pelo   utilizador,   com   aexcepção   do   parâmetro  **FILE/DIR**  que   terá   a   identificação   do   sub-diretório   que   motivou   a   suacriação; e assim sucessivamente.
 
-## Plano de Trabalho
+### Plano de Trabalho
 
 Sugere-se que o mini-projecto, que produzirá a ferramenta `xmod`, seja desenvolvido por etapas:
 
@@ -97,7 +97,7 @@ Sugere-se que o mini-projecto, que produzirá a ferramenta `xmod`, seja desenvol
 4. alargamento   da   2a.   versão   de  `xmod`  ao   caso   recursivo   (processamento   de   toda   uma   árvore   dedirectórios),   mas   sem   grande   preocupação   com   a   boa   funcionalidade   dos   sinais:   será   a   terceiraversão;
 5. afinação da 3a. versão de `xmod`: sinais, registos, etc. produzindo, assim, a versão final.
 
-## Notas finais
+### Notas finais
 
 - Os nomes do programa e da variável de ambiente, os formatos dos argumentos da linha de comandoe das linhas a apresentar na saída padrão e no ficheiro de registos e todos os outros aspectos queforam especificados devem ser respeitados escrupulosamente.
 
