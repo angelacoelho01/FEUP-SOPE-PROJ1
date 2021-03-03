@@ -43,7 +43,6 @@ int change_file_permissions(const char *filename) {
 	return 0;
 }
 
-
 int change_dir_files_permissions(const char *dirname, bool iterate_sub_dirs) {
 	// if is a dir -> run throw the dir
 	//     -> if in any point we find another dir -> create a new process that will run throw 
@@ -91,7 +90,7 @@ int change_dir_files_permissions(const char *dirname, bool iterate_sub_dirs) {
 	return 0;
 }
 
-int main(int argc, char *argv[], char *envp[]){
+int main(int numArg, char *argv[], char *env[]){
        // assumindo a correcao das variaveis da linha de comandos
 	// xpm [OPTIONS] (MODE | OCTAL_MODE) FILE/DIR
 	
