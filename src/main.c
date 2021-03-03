@@ -7,30 +7,31 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <sys/wait.h>
+#include <string.h>
 
-bool is_pathname_dir(const char *pathname) {
+bool is_path_dir(const char *path) {
 	// try to open
-	FILE *f = fopen(pathname, "r");
+	FILE *f = fopen(path, "r");
 	if (f == NULL) {
-		fprintf(stderr, "\nError in opening File %s", pathname);
+		fprintf(stderr, "Error in opening File %s\n", path);
 		exit(EXIT_FAILURE);
 	}
 	
 	// see if the root is a file or a directory
 	bool is_dir = false;
 	struct stat sb;
-	if (stat(pathname, &sb) == -1) {
-		fprintf(stderr, "\nError in getting File %s status", pathname);
+	if (stat(path, &sb) == -1) {
+		fprintf(stderr, "Error in getting File %s status\n", path);
 		exit(EXIT_FAILURE);
 	}
 	
 	// the path represent a dir
-	if (sb.st_mode == S_IFDIR) 
+	if (S_ISDIR(sb.st_mode)) 
 		is_dir = true;
 		
 	// close
 	if (fclose(f) == -1) {
-		fprintf(stderr, "\nError in closing File %s", pathname);
+		fprintf(stderr, "Error in closing File %s\n", path);
 		exit(EXIT_FAILURE);
 	}
 	
@@ -39,7 +40,7 @@ bool is_pathname_dir(const char *pathname) {
 
 int change_file_permissions(const char *filename) {
 	// the act of be able to change permissions is done by writing the filenames that we acess
-	printf("\n %s", filename);
+	printf(" %s \n", filename);
 	
 	return 0;
 }
@@ -50,43 +51,54 @@ int change_dir_files_permissions(const char *dirname, bool iterate_sub_dirs) {
 	//   this dir too (if option -R)
 	
 	// open directory
-	DIR *dir = opendir(dirname);
-	if (dir == NULL) {
-		fprintf(stderr, "\nError in opening dir %s", dirname);
+	DIR *d; 
+	if ((d = opendir(dirname)) == NULL) {
+		fprintf(stderr, "Error in opening dir %s\n", dirname);
 		return -1;
 	}
 	
+	printf("DIR OPEN! \n");
 	// read the content in the directory
-	struct dirent *dir_content;
+	struct dirent *dir;
 	int status; 
 	
-	while ((dir_content = readdir(dir)) != NULL) {
-		// its a directory and option -R is set true
-		if ((is_pathname_dir(dir_content->d_name)) && (iterate_sub_dirs)) {
-			// create a new process - the child - who will iterate over this subdirectory
-			pid_t pid = fork();
-			if (pid == -1) {
-				fprintf(stderr, "\nError in creating a new process");
-				break; // --> do to return with -1 <--
-			}
-			else if (pid == 0) { // child process
-				change_dir_files_permissions(dir_content->d_name, iterate_sub_dirs);
-				// --> make this to pass the directory name by changing the last line arguments <--
-			} else {
-				// parent wait for the child to end 
-				waitpid(pid, &status, 0);
+	while ((dir = readdir(d)) != NULL) {
+		// printf("HAS CONTENT! %s \n", dir->d_name); // to test purposes
+		
+		//its a directory and option -R is set true 
+		if ((is_path_dir(dir->d_name)) && (iterate_sub_dirs)) {
+			// (ignore '.' and '..' directories)
+			if ((strcmp(dir->d_name, ".")) != 0 && (strcmp(dir->d_name, "..") != 0)) {
+				printf("IT'S A DIR AND IS TO ITERATE! \n");
+				
+				// create a new process - the child - who will iterate over this subdirectory
+				pid_t pid = fork();
+				if (pid == -1) {
+					fprintf(stderr, "Error in creating a new process\n");
+					break; // --> do to return with -1 <--
+				}
+				else if (pid == 0) { // child process
+					change_dir_files_permissions(dir->d_name, iterate_sub_dirs);
+					// --> make this to pass the directory name by changing the last line arguments <--
+				} else {
+					// parent wait for the child to end 
+					waitpid(pid, &status, 0);
+				}
 			}
 		} else {
+			printf("IT'S A FILE! \n");
 			// its a file in the directory
-			change_file_permissions(dir_content->d_name);
+			change_file_permissions(dir->d_name);
 		}
 	}
 	
 	// close directory
-	if (closedir(dir) == -1) {
-		fprintf(stderr, "\nError in closing dir %s", dirname);
+	if (closedir(d) == -1) {
+		fprintf(stderr, "Error in closing dir %s \n", dirname);
 		return -1;
 	}
+	
+	printf("DIR CLOSED! \n");
 	
 	return 0;
 }
@@ -100,23 +112,23 @@ int main(int numArg, char *argv[], char *env[]){
 	// then the value of this bool depends if -R option exists
 	bool change_subdirectories = true;
 	
-	if (is_pathname_dir(root)) {
-		printf("\n Is a directory!");
+	if (is_path_dir(root)) {
+		printf("Is a directory! \n");
 		// with -R option we need to recursevely change the permissions 
 		// of every file within the directory, and other subdirectories that may exist
 		if (change_dir_files_permissions(root, change_subdirectories) == -1) {
-			fprintf(stderr, "\nError changing dir's files permissions");
+			fprintf(stderr, "Error changing dir's files permissions \n");
 			exit(EXIT_FAILURE);
 		}
 	} else {
-		printf("\n Is a regular file!");
+		printf("Is a regular file! \n ");
 		if (change_file_permissions(root) == -1) {
-			fprintf(stderr, "\nError changing File %s permissions", root);
+			fprintf(stderr, "Error changing File %s permissions \n", root);
 			exit(EXIT_FAILURE);
 		}
 	}
 	
-	printf("\nThanks for usinf the program!\n");
+	printf("\nThanks for using the program!\n");
 
 	return 0;
 }
