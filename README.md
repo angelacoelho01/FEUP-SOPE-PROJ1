@@ -18,10 +18,10 @@ A ferramenta a desenvolver, denominada `xmod`,  deve ter como referência o coma
 >   - indicação de uma sequência do dígito ‘0’ mais 3 dígitos em base octal, estando cada umdestes   associado   a   cada   um   dos   tipos   de   utilizador   na   ordem  u g  o  e,   numainterpretação posicional binária,  r w x  correspondem a um bit que será  1  se houveressa permissão ou 0 na sua ausência; por exemplo, 0755, onde só o dono do ficheiro tempermissão de escrita.
 
 `xmod`  deve reproduzir com rigor um subconjunto das funcionalidades de `chmod`, que incluem a maneiracomo “symbolic links” são tratados e o formato da informação apresentada no final da execução.As funcionalidades de xmod relativas   à linha de comando estão listadas   abaixo, na secção __RequisitosFuncionais__. A listagem e descrição completas das funcionalidades de chmod podem ser vistas com:
+
 ```sh
 man chmod
 ```
-
 ### Requisitos Funcionais
 
 `xmod` deverá suportar os seguintes métodos de invocação:
@@ -30,6 +30,7 @@ man chmod
 xmod [OPTIONS] MODE FILE/DIR
 xmod [OPTIONS] OCTAL-ODE FILE/DIR
 ```
+
 -   **FILE/DIR** é o nome inequívoco (absoluto ou relativo) de um ficheiro ou diretório a processar, podendo serum link simbólico.
 
 -   **OPTIONS** poderá ser um ou mais de:
@@ -41,7 +42,7 @@ xmod [OPTIONS] OCTAL-ODE FILE/DIR
     -   **-R**: o directório indicado em **FILE/DIR** é processado e atravessado recursivamente, processando-se toda a árvore de directórios abaixo.
 
 -   **MODE** possui o formato __[ugoa](-+=)(rwx)+__, indicando:
--   
+ 
     -   **[ugoa]**: opcionalmente, o tipo de utilizador a ser afetado, ug ou o, ou todos os tipos, a (de all);por omissão, assume-se ‘a’, mas os bits assinalados em “umask" (file mode creation mask) não serãoalterados;
   
     -   **(-+=)**: que as permissões (imediatamente a seguir) serão, respectivamente, removidas, adicionadasou substituirão as que já existem, removendo as não mencionadas;
@@ -61,6 +62,7 @@ instant ; pid ; action ; info
 ```
 
 -   **instant** é o instante de tempo imediatamente anterior ao registo, medido em milissegundos, tendocomo referência o instante em que o programa começou a executar;
+  
 - **pid** é o identificador do processo que faz o registo da linha;
 
 -   **event** é a identificação do tipo de evento que afectou o processo (ver já a seguir);
