@@ -7,6 +7,7 @@
 #include <sys/stat.h>
 #include <dirent.h>
 #include <sys/wait.h>
+#include <signal.h>
 #include <string.h>
 
 bool is_path_dir(const char *path) {
@@ -65,30 +66,38 @@ int change_dir_files_permissions(const char *dirname, bool iterate_sub_dirs) {
 	while ((dir = readdir(d)) != NULL) {
 		// printf("HAS CONTENT! %s \n", dir->d_name); // to test purposes
 		
+		// (ignore '.' and '..' directories)
+		if ((strcmp(dir->d_name, ".")) == 0 || (strcmp(dir->d_name, "..") == 0)) {
+			continue;
+		}
+		
+		// build the path from the directory (--> change to not depend of the lenght <--)
+		char path[80] = ""; char separator = '/';
+		strcat(strncat(strcat(path, dirname), &separator, 1), dir->d_name); 	
+		// printf("PATH : %s\n", path);
+		
 		//its a directory and option -R is set true 
-		if ((is_path_dir(dir->d_name)) && (iterate_sub_dirs)) {
-			// (ignore '.' and '..' directories)
-			if ((strcmp(dir->d_name, ".")) != 0 && (strcmp(dir->d_name, "..") != 0)) {
-				printf("IT'S A DIR AND IS TO ITERATE! \n");
+		if ((is_path_dir(path)) && (iterate_sub_dirs)) {
+			printf("IT'S A DIR AND IS TO ITERATE! \n");
 				
-				// create a new process - the child - who will iterate over this subdirectory
-				pid_t pid = fork();
-				if (pid == -1) {
-					fprintf(stderr, "Error in creating a new process\n");
-					break; // --> do to return with -1 <--
-				}
-				else if (pid == 0) { // child process
-					change_dir_files_permissions(dir->d_name, iterate_sub_dirs);
-					// --> make this to pass the directory name by changing the last line arguments <--
-				} else {
-					// parent wait for the child to end 
-					waitpid(pid, &status, 0);
-				}
+			// create a new process - the child - who will iterate over this subdirectory
+			pid_t pid = fork();
+			if (pid == -1) {
+				fprintf(stderr, "Error in creating a new process\n");
+				break; // --> do to return with -1 <--
+			}
+			else if (pid == 0) { // child process
+				change_dir_files_permissions(path, iterate_sub_dirs);
+				// --> make this to pass the directory name by changing the last line arguments <--
+				return 0;
+			} else {
+				// parent wait for the child to end 
+				waitpid(pid, &status, 0);
 			}
 		} else {
 			printf("IT'S A FILE! \n");
 			// its a file in the directory
-			change_file_permissions(dir->d_name);
+			change_file_permissions(path);
 		}
 	}
 	
@@ -128,6 +137,9 @@ int main(int numArg, char *argv[], char *env[]){
 		}
 	}
 	
+	// all the possible processes that may exit by iterating each one a respective 
+	// subdirectory will continue here
+	// next print is done by all the proccesses that the program created
 	printf("\nThanks for using the program!\n");
 
 	return 0;
