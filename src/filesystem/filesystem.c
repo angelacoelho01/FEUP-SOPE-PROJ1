@@ -54,10 +54,7 @@ int iterate_directory(const char *dirpath, bool iterate_sub_dirs) {
 			
 			// build the path from the directory (--> change to not depend of the lenght <--)
 			char path[80] = ""; char separator = '/';
-			//strcat(strncat(strcat(path, dirpath), &separator, 1), dir->d_name);
-			strcat(path, dirpath);
-			strcat(path, &separator);
-			strcat(path, dir->d_name);
+			strcat(strncat(strcat(path, dirpath), &separator), dir->d_name);
 			
 			// its a directory  
 			if (is_path_dir(path)) {
