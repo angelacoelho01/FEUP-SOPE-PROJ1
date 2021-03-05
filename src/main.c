@@ -12,10 +12,10 @@ int main(int numArg, char *argv[], char *env[]){
 	
 	char *root = argv[numArg - 1]; // the last parameter identifies the path location
 	
-	// the value of this bool represents if -R option exists
-	bool change_subdirectories = true;
-	
 	if (is_path_dir(root)) {
+		// the value of this bool represents if -R option exists
+		bool change_subdirectories = true;
+		
 		printf("Is a directory! \n"); // to test purposes
 		// with -R option we need to recursevely change the permissions 
 		// of every file/dir within the directory, and other subdirectories that may exist
