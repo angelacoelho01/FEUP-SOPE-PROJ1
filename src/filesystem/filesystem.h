@@ -12,7 +12,7 @@
 #include <sys/wait.h>
 #include <string.h>
 
-#include "permissions.h"
+#include "../permissions/permissions.h"
 
 bool is_path_dir(const char *path);
 

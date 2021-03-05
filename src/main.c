@@ -3,8 +3,8 @@
 #include <unistd.h>
 #include <stdbool.h>
 
-#include "permissions.h"
-#include "filesystem.h"
+#include "permissions/permissions.h"
+#include "filesystem/filesystem.h"
 
 int main(int numArg, char *argv[], char *env[]){
     // assumindo a correcao das variaveis da linha de comandos
