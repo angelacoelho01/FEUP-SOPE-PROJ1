@@ -4,7 +4,7 @@ bool isPathDir(const char *path) {
 	// try to open
 	FILE *f = fopen(path, "r");
 	if (f == NULL) {
-		fprintf(stderr, "Error in opening File %s\n", path);
+		fprintf(stderr, "Error in opening %s\n", path);
 		exit(EXIT_FAILURE);
 	}
 	
@@ -12,7 +12,7 @@ bool isPathDir(const char *path) {
 	bool is_dir = false;
 	struct stat sb;
 	if (stat(path, &sb) == -1) {
-		fprintf(stderr, "Error in getting File %s status\n", path);
+		fprintf(stderr, "Error in getting %s status\n", path);
 		exit(EXIT_FAILURE);
 	}
 	
@@ -22,7 +22,7 @@ bool isPathDir(const char *path) {
 		
 	// close
 	if (fclose(f) == -1) {
-		fprintf(stderr, "Error in closing File %s\n", path);
+		fprintf(stderr, "Error in closing %s\n", path);
 		exit(EXIT_FAILURE);
 	}
 	
@@ -30,7 +30,13 @@ bool isPathDir(const char *path) {
 }
 
 int iterateDirectory(const char* options, const char* mode, const char *dirpath, bool iterate_sub_dirs) {
-	xmod(options, mode, dirpath);
+	int error = 0;
+	
+	// change dir's permissions
+	if (xmod(options, mode, dirpath) != 0) {
+		fprintf(stderr, "Error changing dir's permissions: %s\n", dirpath);
+		return -1;
+	}
 	
 	// option -R is set true 
 	if (iterate_sub_dirs) {
@@ -62,17 +68,23 @@ int iterateDirectory(const char* options, const char* mode, const char *dirpath,
 				pid_t pid = fork();
 				if (pid == -1) {
 					fprintf(stderr, "Error in creating a new process\n");
-					break; // --> do to return with -1 <--
-				}
+					error = -1;
+					break;
+				} 
 				else if (pid == 0) { // child process
 					return (iterateDirectory(options, mode, path, iterate_sub_dirs));
-				} else {
+				} 
+				else {
 					// parent wait for the child to end 
 					waitpid(pid, &status, 0);
 				}
 			} else {
 				// its a file in the directory
-				xmod(options, mode, path);
+				if (xmod(options, mode, path) != 0) {
+					fprintf(stderr, "Error changing file's permissions: %s\n", path);
+					error = -1;
+					break;
+				}
 			}
 		}
 		
@@ -83,5 +95,5 @@ int iterateDirectory(const char* options, const char* mode, const char *dirpath,
 		}
 	}
 	
-	return 0;
+	return error;
 }

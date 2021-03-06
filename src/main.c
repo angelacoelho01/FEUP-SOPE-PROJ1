@@ -10,7 +10,7 @@
 #define MAX_STR_LEN 256
 
 int main(int argc, char *argv[], char *envp[]){
-	if((argc < 3) || (argc > 4)){
+	if ((argc < 3) || (argc > 4)){
 		printf("usage: ./xmod [OPTIONS] MODE FILE/DIR\n");
 		exit(1);
 	}
@@ -19,7 +19,7 @@ int main(int argc, char *argv[], char *envp[]){
 	char* pathname = argv[argc - 1];
 	char* options = argc == 3? NULL : argv[1];
 
-	if(isPathDir(pathname)){
+	if (isPathDir(pathname)){
 		// the value of this bool represents if -R option exists
 		//bool change_subdirectories = true;
 		
@@ -27,15 +27,18 @@ int main(int argc, char *argv[], char *envp[]){
 		// with -R option we need to recursevely change the permissions 
 		// of every file/dir within the directory, and other subdirectories that may exist
 
-		if (iterateDirectory(options, mode, pathname, true) == -1) {
+		if (iterateDirectory(options, mode, pathname, true) != 0) {
 			fprintf(stderr, "Error changing dir's files permissions\n");
 			exit(EXIT_FAILURE);
 		}
 	}
-	else{
+	else {
 		printf("It's a regular file!\n"); // to test purposes
-		xmod(options, mode, pathname);
+		if (xmod(options, mode, pathname) != 0) {
+			fprintf(stderr, "Error changing file's permissions\n");
+			exit(EXIT_FAILURE);
+		}
 	}
 	
-	exit(0);
+	return 0;
 }
