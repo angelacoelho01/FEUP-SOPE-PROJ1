@@ -14,8 +14,8 @@
 
 #include "../permissions/xmod.h"
 
-bool is_path_dir(const char *path);
+bool isPathDir(const char *path);
 
-int iterate_directory(const char* options, const char* mode, const char *dirpath, bool iterate_sub_dirs);
+int iterateDirectory(const char* options, const char* mode, const char *dirpath, bool iterate_sub_dirs);
 
 #endif /* _FILESYSTEM */

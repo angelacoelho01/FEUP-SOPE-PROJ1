@@ -1,6 +1,6 @@
 #include "filesystem.h"
 
-bool is_path_dir(const char *path) {
+bool isPathDir(const char *path) {
 	// try to open
 	FILE *f = fopen(path, "r");
 	if (f == NULL) {
@@ -29,8 +29,7 @@ bool is_path_dir(const char *path) {
 	return is_dir;
 }
 
-int iterate_directory(const char* options, const char* mode, const char *dirpath, bool iterate_sub_dirs) {
-	// --> before or after open te dir ?? <--
+int iterateDirectory(const char* options, const char* mode, const char *dirpath, bool iterate_sub_dirs) {
 	xmod(options, mode, dirpath);
 	
 	// option -R is set true 
@@ -52,12 +51,12 @@ int iterate_directory(const char* options, const char* mode, const char *dirpath
 				continue;
 			}
 			
-			// build the path from the directory (--> change to not depend of the lenght <--)
-			char path[80] = ""; char separator = '/';
-			strcat(strcat(strcat(path, dirpath), &separator), dir->d_name);
+			// build the path from the directory
+			char path[MAX_STR_LEN] = "";
+			strcat(strcat(strcat(path, dirpath), "/"), dir->d_name);
 			
 			// its a directory  
-			if (is_path_dir(path)) {
+			if (isPathDir(path)) {
 							
 				// create a new process - the child - who will iterate over this subdirectory
 				pid_t pid = fork();
@@ -66,8 +65,7 @@ int iterate_directory(const char* options, const char* mode, const char *dirpath
 					break; // --> do to return with -1 <--
 				}
 				else if (pid == 0) { // child process
-					return (iterate_directory(options, mode, path, iterate_sub_dirs));
-					// --> make this to pass the directory name by changing the last line arguments <--
+					return (iterateDirectory(options, mode, path, iterate_sub_dirs));
 				} else {
 					// parent wait for the child to end 
 					waitpid(pid, &status, 0);
@@ -80,7 +78,7 @@ int iterate_directory(const char* options, const char* mode, const char *dirpath
 		
 		// close directory
 		if (closedir(d) == -1) {
-			fprintf(stderr, "Error in closing dir %s \n", dirpath);
+			fprintf(stderr, "Error in closing dir %s\n", dirpath);
 			return -1;
 		}
 	}
