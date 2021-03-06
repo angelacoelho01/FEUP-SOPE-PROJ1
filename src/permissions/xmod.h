@@ -10,7 +10,11 @@
 
 int xmod(const char* options, const char* mode, const char* pathname);
 
-mode_t add_permission(const char user, const char operator,const char* permissions, const char* pathname);
+mode_t handlePermissions(const char* options, const char* mode, const char* pathname);
+
+mode_t addPermissions(const struct stat st, const char user, const int read, const int write, const int execute);
+
+mode_t removePermissions(const struct stat st, const char user, const int read, const int write, const int execute);
 
 #endif /* XMOD_H_ */
 

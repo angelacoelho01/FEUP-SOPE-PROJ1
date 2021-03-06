@@ -1,6 +1,6 @@
 #include "filesystem.h"
 
-bool is_path_dir(const char *path) {
+bool isPathDir(const char *path) {
 	// try to open
 	FILE *f = fopen(path, "r");
 	if (f == NULL) {
@@ -29,7 +29,7 @@ bool is_path_dir(const char *path) {
 	return is_dir;
 }
 
-int iterate_directory(const char* options, const char* mode, const char *dirpath, bool iterate_sub_dirs) {
+int iterateDirectory(const char* options, const char* mode, const char *dirpath, bool iterate_sub_dirs) {
 	// --> before or after open te dir ?? <--
 	xmod(options, mode, dirpath);
 	
@@ -57,7 +57,7 @@ int iterate_directory(const char* options, const char* mode, const char *dirpath
 			strcat(strcat(strcat(path, dirpath), &separator), dir->d_name);
 			
 			// its a directory  
-			if (is_path_dir(path)) {
+			if (isPathDir(path)) {
 							
 				// create a new process - the child - who will iterate over this subdirectory
 				pid_t pid = fork();
@@ -66,7 +66,7 @@ int iterate_directory(const char* options, const char* mode, const char *dirpath
 					break; // --> do to return with -1 <--
 				}
 				else if (pid == 0) { // child process
-					return (iterate_directory(options, mode, path, iterate_sub_dirs));
+					return (iterateDirectory(options, mode, path, iterate_sub_dirs));
 					// --> make this to pass the directory name by changing the last line arguments <--
 				} else {
 					// parent wait for the child to end 

@@ -1,19 +1,7 @@
 #include "xmod.h"
 
 int xmod(const char* options, const char* mode, const char* pathname){
-	char user, operator;
-	char permissions[MAX_STR_LEN];
-    mode_t mode_mask;
-
-	strcpy(&user, &mode[0]);
-	strcpy(&operator, &mode[1]);
-	strcpy(permissions, &mode[2]);
-	
-    if(operator == '+') mode_mask = add_permission(user, operator, permissions, pathname);
-    else{
-        printf("Under construction.\n");
-        exit(2);
-    }
+	mode_t mode_mask = handlePermissions(options, mode, pathname);
 
 	if(chmod(pathname, mode_mask) == -1){
 		perror("chmod()");
@@ -23,7 +11,15 @@ int xmod(const char* options, const char* mode, const char* pathname){
 	exit(0);
 }
 
-mode_t add_permission(const char user, const char operator,const char* permissions, const char* pathname){
+mode_t handlePermissions(const char* options, const char* mode, const char* pathname){
+	char user, operator;
+	char permissions[MAX_STR_LEN];
+    mode_t mode_mask;
+
+	strcpy(&user, &mode[0]);
+	strcpy(&operator, &mode[1]);
+	strcpy(permissions, &mode[2]);
+
 	struct stat st;
 
 	if(stat(pathname, &st) == -1){
@@ -31,24 +27,35 @@ mode_t add_permission(const char user, const char operator,const char* permissio
 		exit(1);
 	}
 
-	char* read = strchr(permissions, 'r');
-	char* write = strchr(permissions, 'w');
-	char* execute = strchr(permissions, 'x');
+	int read = strchr(permissions, 'r') == NULL ? 0 : 1;
+	int write = strchr(permissions, 'w') == NULL? 0 : 1;
+	int execute = strchr(permissions, 'x') == NULL? 0 : 1;
+	
+    if(operator == '+') mode_mask = addPermissions(st, user, read, write, execute);
+    else{
+        printf("Under construction.\n");
+        exit(2);
+    }
+
+	return mode_mask;
+}
+
+mode_t addPermissions(struct stat st, const char user, const int read, const int write, const int execute){
 	int all = user == 'a' ? 1 : 0;
 
-	if(read != NULL){
+	if(read){
 		if(user == 'o' || all) st.st_mode |= S_IROTH;
 		if(user == 'g' || all) st.st_mode |= S_IRGRP;
 		if(user == 'u' || all) st.st_mode |= S_IRUSR;
 	}
 
-	if(write != NULL){
+	if(write){
 		if(user == 'o' || all) st.st_mode |= S_IWOTH;
 		if(user == 'g' || all) st.st_mode |= S_IWGRP;
 		if(user == 'u' || all) st.st_mode |= S_IWUSR;
 	}
 
-	if(execute != NULL){
+	if(execute){
 		if(user == 'o' || all) st.st_mode |= S_IXOTH;
 		if(user == 'g' || all) st.st_mode |= S_IXGRP;
 		if(user == 'u' || all) st.st_mode |= S_IXUSR;
