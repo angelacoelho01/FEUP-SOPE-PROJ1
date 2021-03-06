@@ -15,21 +15,21 @@ mode_t handlePermissions(const char* options, const char* mode, const char* path
 	char user, operator;
 	char permissions[MAX_STR_LEN];
     mode_t mode_mask;
+	struct stat st;
+	int read, write, execute;
 
 	strcpy(&user, &mode[0]);
 	strcpy(&operator, &mode[1]);
 	strcpy(permissions, &mode[2]);
 
-	struct stat st;
+	read = strchr(permissions, 'r') == NULL ? 0 : 1;
+	write = strchr(permissions, 'w') == NULL? 0 : 1;
+	execute = strchr(permissions, 'x') == NULL? 0 : 1;
 
 	if(stat(pathname, &st) == -1){
 		perror("stat()");
 		exit(1);
 	}
-
-	int read = strchr(permissions, 'r') == NULL ? 0 : 1;
-	int write = strchr(permissions, 'w') == NULL? 0 : 1;
-	int execute = strchr(permissions, 'x') == NULL? 0 : 1;
 	
     if(operator == '+') mode_mask = addPermissions(st, user, read, write, execute);
     else{
