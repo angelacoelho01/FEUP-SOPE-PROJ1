@@ -30,7 +30,6 @@ bool isPathDir(const char *path) {
 }
 
 int iterateDirectory(const char* options, const char* mode, const char *dirpath, bool iterate_sub_dirs) {
-	// --> before or after open te dir ?? <--
 	xmod(options, mode, dirpath);
 	
 	// option -R is set true 
@@ -52,9 +51,9 @@ int iterateDirectory(const char* options, const char* mode, const char *dirpath,
 				continue;
 			}
 			
-			// build the path from the directory (--> change to not depend of the lenght <--)
-			char path[80] = ""; char separator = '/';
-			strcat(strcat(strcat(path, dirpath), &separator), dir->d_name);
+			// build the path from the directory
+			char path[MAX_STR_LEN] = "";
+			strcat(strcat(strcat(path, dirpath), "/"), dir->d_name);
 			
 			// its a directory  
 			if (isPathDir(path)) {
@@ -67,7 +66,6 @@ int iterateDirectory(const char* options, const char* mode, const char *dirpath,
 				}
 				else if (pid == 0) { // child process
 					return (iterateDirectory(options, mode, path, iterate_sub_dirs));
-					// --> make this to pass the directory name by changing the last line arguments <--
 				} else {
 					// parent wait for the child to end 
 					waitpid(pid, &status, 0);

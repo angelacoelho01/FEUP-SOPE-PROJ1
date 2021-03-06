@@ -14,4 +14,3 @@ int xmod(const char* options, const char* mode, const char* pathname);
 mode_t changePermissions(const char* options, const char* mode, const char* pathname);
 
 #endif /* XMOD_H_ */
-

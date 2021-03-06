@@ -1,6 +1,7 @@
 #include "xmod.h"
 
 int xmod(const char* options, const char* mode, const char* pathname){
+	printf("paht = %s\n", pathname);
 	mode_t mode_mask = changePermissions(options, mode, pathname);
 
 	if(chmod(pathname, mode_mask) == -1){
@@ -8,7 +9,7 @@ int xmod(const char* options, const char* mode, const char* pathname){
 		exit(1);
 	}
 
-	exit(0);
+	return 0;
 }
 
 mode_t changePermissions(const char* options, const char* mode, const char* pathname){
@@ -55,5 +56,3 @@ mode_t changePermissions(const char* options, const char* mode, const char* path
 
 	return st.st_mode;
 }
-
-

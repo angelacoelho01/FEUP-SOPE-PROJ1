@@ -9,15 +9,15 @@
 
 #define MAX_STR_LEN 256
 
-int main(int arg, char *argv[], char *envp[]){
-	if((arg < 3) || (arg > 4)){
+int main(int argc, char *argv[], char *envp[]){
+	if((argc < 3) || (argc > 4)){
 		printf("usage: ./xmod [OPTIONS] MODE FILE/DIR\n");
 		exit(1);
 	}
 
-	char* mode = argv[arg - 2];
-	char* pathname = argv[arg - 1];
-	char* options = arg == 3? NULL : argv[1];
+	char* mode = argv[argc - 2];
+	char* pathname = argv[argc - 1];
+	char* options = argc == 3? NULL : argv[1];
 
 	if(isPathDir(pathname)){
 		// the value of this bool represents if -R option exists
