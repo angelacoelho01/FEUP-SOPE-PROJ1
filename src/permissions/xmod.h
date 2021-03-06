@@ -8,9 +8,9 @@
 
 #define MAX_STR_LEN 256
 
-int xmod(char* options, char* mode, char* pathname);
+int xmod(const char* options, const char* mode, const char* pathname);
 
-mode_t add_permission(char user, char operator, char* permissions, char* pathname);
+mode_t add_permission(const char user, const char operator,const char* permissions, const char* pathname);
 
 #endif /* XMOD_H_ */
 

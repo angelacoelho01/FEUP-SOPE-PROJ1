@@ -1,6 +1,6 @@
 #include "xmod.h"
 
-int xmod(char* options, char* mode, char* pathname){
+int xmod(const char* options, const char* mode, const char* pathname){
 	char user, operator;
 	char permissions[MAX_STR_LEN];
     mode_t mode_mask;
@@ -23,7 +23,7 @@ int xmod(char* options, char* mode, char* pathname){
 	exit(0);
 }
 
-mode_t add_permission(char user, char operator, char* permissions, char* pathname){
+mode_t add_permission(const char user, const char operator,const char* permissions, const char* pathname){
 	struct stat st;
 
 	if(stat(pathname, &st) == -1){

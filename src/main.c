@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/stat.h>
+#include <unistd.h>
+#include <stdbool.h>
 #include <string.h>
 
 #include "permissions/xmod.h"
+#include "filesystem/filesystem.h"
 
 #define MAX_STR_LEN 256
 
@@ -13,23 +15,27 @@ int main(int arg, char *argv[], char *envp[]){
 		exit(1);
 	}
 
-	char mode[MAX_STR_LEN], pathname[MAX_STR_LEN];
+	char* mode = argv[arg - 2];
+	char* pathname = argv[arg - 1];
+	char* options = arg == 3? NULL : argv[1];
 
-	if(arg == 3){ // If no options
-		strncpy(mode, argv[1], strlen(argv[1]) + 1);
-		strncpy(pathname, argv[2], strlen(argv[2]) + 1);
+	if(is_path_dir(pathname)){
+		// the value of this bool represents if -R option exists
+		//bool change_subdirectories = true;
 		
-		xmod(NULL, mode, pathname);
+		printf("It's a directory! \n"); // to test purposes
+		// with -R option we need to recursevely change the permissions 
+		// of every file/dir within the directory, and other subdirectories that may exist
+
+		if (iterate_directory(options, mode, pathname, true) == -1) {
+			fprintf(stderr, "Error changing dir's files permissions \n");
+			exit(EXIT_FAILURE);
+		}
 	}
-	else if(arg == 4){
-		char options[MAX_STR_LEN];
-
-		strncpy(options, argv[1], strlen(argv[1]) + 1);
-		strncpy(mode, argv[2], strlen(argv[2]) + 1);
-		strncpy(pathname, argv[3], strlen(argv[3]) + 1);
-
+	else{
+		printf("It's a regular file!\n "); // to test purposes
 		xmod(options, mode, pathname);
 	}
-
+	
 	exit(0);
 }
