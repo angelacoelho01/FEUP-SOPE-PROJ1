@@ -3,9 +3,9 @@
 #include <sys/stat.h>
 #include <string.h>
 
-#define MAX_PATH_LEN 256
+#include "permissions/xmod.h"
 
-int xmod();
+#define MAX_STR_LEN 256
 
 int main(int arg, char *argv[], char *envp[]){
 	if((arg < 3) || (arg > 4)){
@@ -13,7 +13,7 @@ int main(int arg, char *argv[], char *envp[]){
 		exit(1);
 	}
 
-	char mode[MAX_PATH_LEN], pathname[MAX_PATH_LEN];
+	char mode[MAX_STR_LEN], pathname[MAX_STR_LEN];
 
 	if(arg == 3){ // If no options
 		strncpy(mode, argv[1], strlen(argv[1]) + 1);
@@ -22,7 +22,7 @@ int main(int arg, char *argv[], char *envp[]){
 		xmod(NULL, mode, pathname);
 	}
 	else if(arg == 4){
-		char options[MAX_PATH_LEN];
+		char options[MAX_STR_LEN];
 
 		strncpy(options, argv[1], strlen(argv[1]) + 1);
 		strncpy(mode, argv[2], strlen(argv[2]) + 1);
@@ -30,11 +30,6 @@ int main(int arg, char *argv[], char *envp[]){
 
 		xmod(options, mode, pathname);
 	}
-
-	exit(0);
-}
-
-int xmod(char* options, char* mode, char* pathname){
 
 	exit(0);
 }
