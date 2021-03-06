@@ -32,6 +32,7 @@ mode_t handlePermissions(const char* options, const char* mode, const char* path
 	}
 	
     if(operator == '+') mode_mask = addPermissions(st, user, read, write, execute);
+	else if(operator == '-') mode_mask = removePermissions(st, user, read, write, execute);
     else{
         printf("Under construction.\n");
         exit(2);
@@ -59,6 +60,30 @@ mode_t addPermissions(struct stat st, const char user, const int read, const int
 		if(user == 'o' || all) st.st_mode |= S_IXOTH;
 		if(user == 'g' || all) st.st_mode |= S_IXGRP;
 		if(user == 'u' || all) st.st_mode |= S_IXUSR;
+	}
+
+	return st.st_mode;
+}
+
+mode_t removePermissions(struct stat st, const char user, const int read, const int write, const int execute){
+	int all = user == 'a' ? 1 : 0;
+
+	if(read){
+		if(user == 'o' || all) st.st_mode &= ~S_IROTH;
+		if(user == 'g' || all) st.st_mode &= ~S_IRGRP;
+		if(user == 'u' || all) st.st_mode &= ~S_IRUSR;
+	}
+
+	if(write){
+		if(user == 'o' || all) st.st_mode &= ~S_IWOTH;
+		if(user == 'g' || all) st.st_mode &= ~S_IWGRP;
+		if(user == 'u' || all) st.st_mode &= ~S_IWUSR;
+	}
+
+	if(execute){
+		if(user == 'o' || all) st.st_mode &= ~S_IXOTH;
+		if(user == 'g' || all) st.st_mode &= ~S_IXGRP;
+		if(user == 'u' || all) st.st_mode &= ~S_IXUSR;
 	}
 
 	return st.st_mode;
