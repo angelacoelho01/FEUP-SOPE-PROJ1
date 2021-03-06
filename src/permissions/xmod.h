@@ -13,6 +13,6 @@ int xmod(const char* options, const char* mode, const char* pathname);
 
 mode_t handlePermissions(const char* options, const char* mode, const char* pathname);
 
-mode_t changePermissions(mode_t mode, const int read, const int write, const int execute, const int remove, const char user);
+mode_t getPermissions(mode_t mode, const int read, const int write, const int execute, const int remove, const char user);
 
 #endif /* XMOD_H_ */
