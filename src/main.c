@@ -23,17 +23,17 @@ int main(int arg, char *argv[], char *envp[]){
 		// the value of this bool represents if -R option exists
 		//bool change_subdirectories = true;
 		
-		printf("It's a directory! \n"); // to test purposes
+		printf("It's a directory!\n"); // to test purposes
 		// with -R option we need to recursevely change the permissions 
 		// of every file/dir within the directory, and other subdirectories that may exist
 
 		if (iterateDirectory(options, mode, pathname, true) == -1) {
-			fprintf(stderr, "Error changing dir's files permissions \n");
+			fprintf(stderr, "Error changing dir's files permissions\n");
 			exit(EXIT_FAILURE);
 		}
 	}
 	else{
-		printf("It's a regular file!\n "); // to test purposes
+		printf("It's a regular file!\n"); // to test purposes
 		xmod(options, mode, pathname);
 	}
 	

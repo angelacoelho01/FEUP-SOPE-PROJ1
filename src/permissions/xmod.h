@@ -7,14 +7,11 @@
 #include <string.h>
 
 #define MAX_STR_LEN 256
+#define RESET_PERM ~(000777)
 
 int xmod(const char* options, const char* mode, const char* pathname);
 
-mode_t handlePermissions(const char* options, const char* mode, const char* pathname);
-
-mode_t addPermissions(struct stat st, const char user, const int read, const int write, const int execute);
-
-mode_t removePermissions(struct stat st, const char user, const int read, const int write, const int execute);
+mode_t changePermissions(const char* options, const char* mode, const char* pathname);
 
 #endif /* XMOD_H_ */
 
