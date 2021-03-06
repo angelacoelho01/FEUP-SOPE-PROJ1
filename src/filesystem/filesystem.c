@@ -80,7 +80,7 @@ int iterateDirectory(const char* options, const char* mode, const char *dirpath,
 		
 		// close directory
 		if (closedir(d) == -1) {
-			fprintf(stderr, "Error in closing dir %s \n", dirpath);
+			fprintf(stderr, "Error in closing dir %s\n", dirpath);
 			return -1;
 		}
 	}
