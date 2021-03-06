@@ -7,7 +7,7 @@ int xmod(const char* options, const char* mode, const char* pathname){
 
 	strcpy(&user, &mode[0]);
 	strcpy(&operator, &mode[1]);
-	strncpy(permissions, &mode[2], 4);
+	strcpy(permissions, &mode[2]);
 	
     if(operator == '+') mode_mask = add_permission(user, operator, permissions, pathname);
     else{
