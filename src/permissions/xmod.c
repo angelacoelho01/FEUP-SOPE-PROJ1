@@ -35,10 +35,10 @@ mode_t handlePermissions(const char* options, const char* mode, const char* path
 
 	if(operator == '=') st.st_mode &= RESET_PERM;
 
-	return changePermissions(st.st_mode, read, write, execute, remove, user);
+	return getPermissions(st.st_mode, read, write, execute, remove, user);
 }
 
-mode_t changePermissions(mode_t mode, const int read, const int write, const int execute, const int remove, const char user){
+mode_t getPermissions(mode_t mode, const int read, const int write, const int execute, const int remove, const char user){
 	int all = user == 'a' ? 1 : 0;
 
 	if(read){
