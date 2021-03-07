@@ -35,7 +35,7 @@ int main(int argc, char *argv[], char *envp[]){
 	printf(" v: %d, c: %d, R: %d\n", opt_v, opt_c, opt_R);
 	//check if octal mode
 
-	if (isPathDir(pathname)){
+	if (isPathDir(pathname) && strstr(options, "R") != NULL){
 		// the value of this bool represents if -R option exists
 		//bool change_subdirectories = true;
 		

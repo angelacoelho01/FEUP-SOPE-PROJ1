@@ -6,13 +6,18 @@
 #include <sys/stat.h>
 #include <string.h>
 
+#include "../utils.h"
+
 #define MAX_STR_LEN 256
-#define RESET_PERM ~(000777)
+#define RESET_MODE ~(000777)
+#define GET_MODE 000777
 
-int xmod(const char* options, const char* mode, const char* pathname);
+int xmod(const char* options, const char* mode, const char* path_name);
 
-mode_t handlePermissions(const char* options, const char* mode, const char* pathname);
+int handleOptions(const char* options, const char* path_name, const mode_t mode_final);
 
-mode_t getPermissions(mode_t mode, const int read, const int write, const int execute, const int remove, const char user);
+mode_t handleMode(const char* options, const char* mode, const char* path_name);
+
+mode_t getNewMode(mode_t mode, const int read, const int write, const int execute, const int remove, const char user);
 
 #endif /* XMOD_H_ */
