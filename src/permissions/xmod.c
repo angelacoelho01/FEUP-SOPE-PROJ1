@@ -13,31 +13,34 @@ int xmod(const char* options, const char* mode, const char* pathname){
 	return 0;
 }
 
-int handleOptions(const char* options, const char* pathname, const mode_t mode_final){
+int handleOptions(const char* options, const char* path_name, const mode_t mode_final){
 	// In case there wasn't any options passed returns immediately
 	if (options == NULL) return 0;
 
 	mode_t mode_init;
-	struct stat st_init;
-	char* file_name = getFileName(pathname);
+	struct stat st;
 
-	if(stat(pathname, &st_init) == -1){
+	if(stat(path_name, &st) == -1){
 		perror("stat()");
 		exit(1);
 	}
 
-	mode_init = st_init.st_mode;
+	mode_init = st.st_mode;
 
 	int isChange = mode_init == mode_final? 0 : 1;
-	int verbose = strstr(options, "-v") == NULL ? 0 : 1;
-	int changes = strstr(options, "-c") == NULL ? 0 : 1;
+	int verbose = strchr(options, 'v') == NULL ? 0 : 1;
+	int changes = strchr(options, 'c') == NULL ? 0 : 1;
+	//const char* file_name = strchr(options, 'R') == NULL? getFileName(path_name) : path_name;
+	//int recursive = strchr(options, 'R') == NULL ? 0 : 1;
 	char* str_mode_init = convertModeToString(mode_init);
 	
-	if(isChange && (verbose || changes))
-		printf("mode of '%s' changed from 0%o (%s) to 0%o (%s)\n", file_name, (mode_init & GET_MODE), str_mode_init, (mode_final & GET_MODE), convertModeToString(mode_final));
-
+	if(isChange && (verbose || changes)){
+		char* str_mode_final = convertModeToString(mode_final);
+		printf("mode of '%s' changed from 0%o (%s) to 0%o (%s)\n", path_name, (mode_init & GET_MODE), str_mode_init, (mode_final & GET_MODE), str_mode_final);
+		
+	}
 	else if(!isChange && verbose)
-		printf("mode of '%s' retained as 0%o (%s)\n", file_name, (mode_final & GET_MODE), str_mode_init);
+		printf("mode of '%s' retained as 0%o (%s)\n", path_name, (mode_final & GET_MODE), str_mode_init);
 
 	return 0;
 }
