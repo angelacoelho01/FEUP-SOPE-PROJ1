@@ -11,7 +11,7 @@
 #define MAX_STR_LEN 256
 
 int main(int argc, char *argv[], char *envp[]){
-	if ((argc < 3) || (argc > 6)){
+	if ((argc < 3) || (argc > 4)){
 		usageNotRight();
 		exit(USAGE_WRONG);
 	}
@@ -21,27 +21,20 @@ int main(int argc, char *argv[], char *envp[]){
 	char* options = argc == 3? NULL : argv[1];
 	int opt_v = 0, opt_c = 0, opt_R = 0;
 
-	for(int i = 1; i <= argc-3; i++){
-		options = argv[i];
+	if(options != NULL){
 
-		if(strlen(argv[i]) > 2){ usageNotRight(); exit(USAGE_WRONG);}
+		if(options[0] != '-'){ usageNotRight(); exit(USAGE_WRONG);}
 
-		//check in argv[i] the options not found yet
-		if(!opt_v){
-			if(strstr(options, "-v") != NULL){
-				opt_v = 1; continue;
-			}
-		}
-		if(!opt_c){
-			if(strstr(options, "-c") != NULL){
-				opt_c = 1; continue;
-			}
-		}
-		if(!opt_R){
-			if(strstr(options, "-R") != NULL){
-				opt_R = 1; continue;
-			}
-		}
+		opt_v = strchr(options, 'v') == NULL ? 0 : 1;
+		opt_c = strchr(options, 'c') == NULL? 0 : 1;
+		opt_R = strchr(options, 'R') == NULL? 0 : 1;
+
+		int active = 0; 
+		if(opt_v) active++;
+		if(opt_c) active++;
+		if(opt_R) active++; 
+
+		if(strlen(options) > active+1){ usageNotRight(); exit(USAGE_WRONG);}
 	}
 
 	printf(" v: %d, c: %d, R: %d\n", opt_v, opt_c, opt_R);
