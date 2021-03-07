@@ -13,7 +13,7 @@
 int main(int argc, char *argv[], char *envp[]){
 	if ((argc < 3) || (argc > 4)){
 		usageNotRight();
-		exit(USAGE_WRONG);
+		exit(INPUT_ERROR);
 	}
 
 	char* mode = argv[argc - 2];
@@ -23,13 +23,13 @@ int main(int argc, char *argv[], char *envp[]){
 
 	if(options != NULL){
 
-		if(options[0] != '-'){ usageNotRight(); exit(USAGE_WRONG);}
+		if(options[0] != '-'){ usageNotRight(); exit(INPUT_ERROR);}
 
 		opt_v = strchr(options, 'v') == NULL ? 0 : 1;
 		opt_c = strchr(options, 'c') == NULL? 0 : 1;
 		opt_R = strchr(options, 'R') == NULL? 0 : 1;
 
-		if(!opt_v && !opt_c && !opt_R){ usageNotRight(); exit(USAGE_WRONG);}
+		if(!opt_v && !opt_c && !opt_R){ usageNotRight(); exit(INPUT_ERROR);}
 	}
 
 	printf(" v: %d, c: %d, R: %d\n", opt_v, opt_c, opt_R);

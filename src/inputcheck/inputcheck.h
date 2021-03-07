@@ -6,7 +6,7 @@
 #include <sys/stat.h>
 #include <string.h>
 
-#define USAGE_WRONG 29
+#define INPUT_ERROR 2
 
 void usageNotRight();
 
