@@ -29,12 +29,7 @@ int main(int argc, char *argv[], char *envp[]){
 		opt_c = strchr(options, 'c') == NULL? 0 : 1;
 		opt_R = strchr(options, 'R') == NULL? 0 : 1;
 
-		int active = 0; 
-		if(opt_v) active++;
-		if(opt_c) active++;
-		if(opt_R) active++; 
-
-		if(strlen(options) > active+1){ usageNotRight(); exit(USAGE_WRONG);}
+		if(!opt_v && !opt_c && !opt_R){ usageNotRight(); exit(USAGE_WRONG);}
 	}
 
 	printf(" v: %d, c: %d, R: %d\n", opt_v, opt_c, opt_R);
