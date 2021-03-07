@@ -4,8 +4,9 @@ CFLAGS=-Wall
 SRC_DIR=src
 PERM_DIR=permissions
 FSYS_DIR=filesystem
+INC_DIR=inputcheck
 
-FILES = $(SRC_DIR)/main.c $(SRC_DIR)/$(PERM_DIR)/xmod.c $(SRC_DIR)/$(FSYS_DIR)/filesystem.c
+FILES = $(SRC_DIR)/main.c $(SRC_DIR)/$(PERM_DIR)/xmod.c $(SRC_DIR)/$(FSYS_DIR)/filesystem.c $(SRC_DIR)/$(INC_DIR)/inputcheck.c
 
 make: ${FILES}
 	$(CC) $(CFLAGS) -o xmod ${FILES}
