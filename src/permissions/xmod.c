@@ -1,7 +1,14 @@
 #include "xmod.h"
 
 int xmod(const char* options, const char* mode, const char* pathname){
-	mode_t mode_mask = handleMode(options, mode, pathname);
+	
+	mode_t mode_mask;
+	
+	if (atoi(mode) != 0)
+		mode_mask = handleModeOctal(options, mode, pathname);
+
+	else
+		mode_mask = handleMode(options, mode, pathname);
 
 	handleOptions(options, pathname, mode_mask);
 
@@ -93,4 +100,146 @@ mode_t getNewMode(mode_t mode, const int read, const int write, const int execut
 	}
 
 	return mode;
+}
+
+mode_t handleModeOctal(const char* options, const char* mode, const char* pathname){
+
+	struct stat st;
+
+	if(stat(pathname, &st) == -1){
+		perror("stat()");
+		exit(1);
+	}
+	printf("%d\n", atoi(mode));
+	return setOctalMode(st.st_mode, atoi(mode));
+}
+
+mode_t setOctalMode(mode_t set_mode, int mode){
+
+	set_mode = 0;
+	int i;
+	int aux_int;
+	int aux_mode = mode;
+
+	for (i = 3; i > 0; i--){
+
+		aux_int = aux_mode % 10;
+
+		switch (aux_int)
+		{
+
+			case 0:
+
+				if (i == 3)
+					set_mode &= ~S_IRWXO;
+
+				else if (i == 2)
+					set_mode &= ~S_IRWXG;
+
+				else if (i == 1)
+					set_mode &= ~S_IRWXU;
+
+				break;
+
+			case 1:
+
+				if (i == 3)
+					set_mode |= S_IXOTH;
+
+				else if (i == 2)
+					set_mode |= S_IXGRP;
+
+				else if (i == 1)
+					set_mode |= S_IXUSR;
+
+				break;
+
+			case 2:
+
+				if (i == 3)
+					set_mode |= S_IWOTH;
+
+				else if (i == 2)
+					set_mode |= S_IWGRP;
+
+				else if (i == 1)
+					set_mode |= S_IWUSR;
+
+				break;
+
+			case 3:
+
+				if (i == 3)
+					set_mode |= (S_IXOTH | S_IWOTH);
+
+				else if (i == 2)
+					set_mode |= (S_IXGRP | S_IWGRP);
+
+				else if (i == 1)
+					set_mode |= (S_IXUSR | S_IWUSR);
+
+				break;
+
+			case 4:
+
+				if (i == 3)
+					set_mode |= S_IROTH;
+
+				else if (i == 2)
+					set_mode |= S_IRGRP;
+
+				else if (i == 1)
+					set_mode |= S_IRUSR;
+
+				break;
+
+			case 5:
+
+				if (i == 3)
+					set_mode |= (S_IXOTH | S_IROTH);
+
+				else if (i == 2)
+					set_mode |= (S_IXGRP | S_IRGRP);
+
+				else if (i == 1)
+					set_mode |= (S_IXUSR | S_IRUSR);
+
+				break;
+
+			case 6:
+
+				if (i == 3)
+					set_mode |= (S_IWOTH | S_IROTH);
+
+				else if (i == 2)
+					set_mode |= (S_IWGRP | S_IRGRP);
+
+				else if (i == 1)
+					set_mode |= (S_IWUSR | S_IRUSR);
+
+				break;
+
+			case 7:
+
+				if (i == 3)
+					set_mode |= S_IRWXO;
+
+				else if (i == 2)
+					set_mode |= S_IRWXG;
+
+				else if (i == 1)
+					set_mode |= S_IRWXU;
+
+				break;
+			
+			default:
+
+				break;
+
+		}
+
+		aux_mode = aux_mode / 10;
+	}
+
+	return set_mode;
 }
