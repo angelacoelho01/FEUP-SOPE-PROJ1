@@ -19,7 +19,7 @@ int main(int argc, char *argv[], char *envp[]){
 	char* pathname = argv[argc - 1];
 	char* options = argc == 3? NULL : argv[1];
 
-	if (isPathDir(pathname)){
+	if (isPathDir(pathname) && strstr(options, "R") != NULL){
 		// the value of this bool represents if -R option exists
 		//bool change_subdirectories = true;
 		
