@@ -1,8 +1,9 @@
 #include "xmod.h"
 
 int xmod(const char* options, const char* mode, const char* pathname){
-	printf("paht = %s\n", pathname);
-	mode_t mode_mask = handlePermissions(options, mode, pathname);
+	mode_t mode_mask = handleMode(options, mode, pathname);
+
+	handleOptions(options, pathname, mode_mask);
 
 	if(chmod(pathname, mode_mask) == -1){
 		perror("chmod()");
@@ -12,9 +13,38 @@ int xmod(const char* options, const char* mode, const char* pathname){
 	return 0;
 }
 
-mode_t handlePermissions(const char* options, const char* mode, const char* pathname){
+int handleOptions(const char* options, const char* pathname, const mode_t mode_final){
+	// In case there wasn't any options passed returns immediately
+	if (options == NULL) return 0;
+
+	mode_t mode_init;
+	struct stat st_init;
+	char* file_name = getFileName(pathname);
+
+	if(stat(pathname, &st_init) == -1){
+		perror("stat()");
+		exit(1);
+	}
+
+	mode_init = st_init.st_mode;
+
+	int isChange = mode_init == mode_final? 0 : 1;
+	int verbose = strstr(options, "-v") == NULL ? 0 : 1;
+	int changes = strstr(options, "-c") == NULL ? 0 : 1;
+	char* str_mode_init = convertModeToString(mode_init);
+	
+	if(isChange && (verbose || changes))
+		printf("mode of '%s' changed from 0%o (%s) to 0%o (%s)\n", file_name, (mode_init & GET_MODE), str_mode_init, (mode_final & GET_MODE), convertModeToString(mode_final));
+
+	else if(!isChange && verbose)
+		printf("mode of '%s' retained as 0%o (%s)\n", file_name, (mode_final & GET_MODE), str_mode_init);
+
+	return 0;
+}
+
+mode_t handleMode(const char* options, const char* mode, const char* pathname){
 	char user, operator;
-	char permissions[MAX_STR_LEN];
+	char Mode[MAX_STR_LEN];
 	int read, write, execute;
 	struct stat st;
 
@@ -25,20 +55,20 @@ mode_t handlePermissions(const char* options, const char* mode, const char* path
 
 	strcpy(&user, &mode[0]);
 	strcpy(&operator, &mode[1]);
-	strcpy(permissions, &mode[2]);
+	strcpy(Mode, &mode[2]);
 
-	read = strchr(permissions, 'r') == NULL ? 0 : 1;
-	write = strchr(permissions, 'w') == NULL? 0 : 1;
-	execute = strchr(permissions, 'x') == NULL? 0 : 1;
+	read = strchr(Mode, 'r') == NULL ? 0 : 1;
+	write = strchr(Mode, 'w') == NULL? 0 : 1;
+	execute = strchr(Mode, 'x') == NULL? 0 : 1;
 
 	int remove = operator == '-' ? 1 : 0;
 
-	if(operator == '=') st.st_mode &= RESET_PERM;
+	if(operator == '=') st.st_mode &= RESET_MODE;
 
-	return getPermissions(st.st_mode, read, write, execute, remove, user);
+	return getNewMode(st.st_mode, read, write, execute, remove, user);
 }
 
-mode_t getPermissions(mode_t mode, const int read, const int write, const int execute, const int remove, const char user){
+mode_t getNewMode(mode_t mode, const int read, const int write, const int execute, const int remove, const char user){
 	int all = user == 'a' ? 1 : 0;
 
 	if(read){
