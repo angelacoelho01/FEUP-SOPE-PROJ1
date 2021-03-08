@@ -49,7 +49,7 @@ int handleOptions(const char* options, const char* path_name, const mode_t new_m
 
 mode_t handleMode(const char* options, const char* mode, const char* pathname){
 	char user, operator;
-	char Mode[MAX_STR_LEN];
+	char permissions[MAX_STR_LEN];
 	int read, write, execute;
 	struct stat st;
 
@@ -63,17 +63,16 @@ mode_t handleMode(const char* options, const char* mode, const char* pathname){
 		return strtol(mode, &ptr, 8) | (st.st_mode & RESET_MODE);
 	}
 
-	if(operator == '=') st.st_mode &= RESET_MODE;
-
-	int remove = operator == '-' ? 1 : 0;
-
 	strcpy(&user, &mode[0]);
 	strcpy(&operator, &mode[1]);
-	strcpy(Mode, &mode[2]);
+	strcpy(permissions, &mode[2]);
 
-	read = strchr(Mode, 'r') == NULL ? 0 : 1;
-	write = strchr(Mode, 'w') == NULL? 0 : 1;
-	execute = strchr(Mode, 'x') == NULL? 0 : 1;
+	int remove = operator == '-' ? 1 : 0;
+	if(operator == '=') st.st_mode &= RESET_MODE;
+
+	read = strchr(permissions, 'r') == NULL ? 0 : 1;
+	write = strchr(permissions, 'w') == NULL? 0 : 1;
+	execute = strchr(permissions, 'x') == NULL? 0 : 1;
 
 	return getNewMode(st.st_mode, read, write, execute, remove, user);
 }
