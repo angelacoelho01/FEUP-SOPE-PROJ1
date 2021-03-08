@@ -7,7 +7,6 @@ bool isPathDir(const char *path) {
 		fprintf(stderr, "Error in opening %s\n", path);
 		exit(EXIT_FAILURE);
 	}
-	
 	// see if the root is a file or a directory
 	bool is_dir = false;
 	struct stat sb;
