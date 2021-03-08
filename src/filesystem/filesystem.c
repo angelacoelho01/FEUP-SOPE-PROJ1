@@ -28,7 +28,7 @@ bool isPathDir(const char *path) {
 	return is_dir;
 }
 
-int iterateDirectory(const char* options, const char* mode, const char *dirpath, bool iterate_sub_dirs) {
+int iterateDirectory(const char* options, const char* mode, const char *dirpath) {
 	int error = 0;
 	
 	// change dir's permissions
@@ -37,61 +37,58 @@ int iterateDirectory(const char* options, const char* mode, const char *dirpath,
 		return -1;
 	}
 	
-	// option -R is set true 
-	if (iterate_sub_dirs) {
-		// open directory
-		DIR *d; 
-		if ((d = opendir(dirpath)) == NULL) {
-			fprintf(stderr, "Error in opening dir %s\n", dirpath);
-			return -1;
+	// open directory
+	DIR *d; 
+	if ((d = opendir(dirpath)) == NULL) {
+		fprintf(stderr, "Error in opening dir %s\n", dirpath);
+		return -1;
+	}
+	
+	// read the content in the directory
+	struct dirent *dir;
+	int status; 
+	
+	while ((dir = readdir(d)) != NULL) {
+		// (ignore '.' and '..' directories)
+		if ((strcmp(dir->d_name, ".")) == 0 || (strcmp(dir->d_name, "..") == 0)) {
+			continue;
 		}
 		
-		// read the content in the directory
-		struct dirent *dir;
-		int status; 
+		// build the path from the directory
+		char path[MAX_STR_LEN] = "";
+		strcat(strcat(strcat(path, dirpath), "/"), dir->d_name);
 		
-		while ((dir = readdir(d)) != NULL) {
-			// (ignore '.' and '..' directories)
-			if ((strcmp(dir->d_name, ".")) == 0 || (strcmp(dir->d_name, "..") == 0)) {
-				continue;
+		// its a directory  
+		if (isPathDir(path)) {
+						
+			// create a new process - the child - who will iterate over this subdirectory
+			pid_t pid = fork();
+			if (pid == -1) {
+				fprintf(stderr, "Error in creating a new process\n");
+				error = -1;
+				break;
+			} 
+			else if (pid == 0) { // child process
+				return (iterateDirectory(options, mode, path));
+			} 
+			else {
+				// parent wait for the child to end 
+				waitpid(pid, &status, 0);
 			}
-			
-			// build the path from the directory
-			char path[MAX_STR_LEN] = "";
-			strcat(strcat(strcat(path, dirpath), "/"), dir->d_name);
-			
-			// its a directory  
-			if (isPathDir(path)) {
-							
-				// create a new process - the child - who will iterate over this subdirectory
-				pid_t pid = fork();
-				if (pid == -1) {
-					fprintf(stderr, "Error in creating a new process\n");
-					error = -1;
-					break;
-				} 
-				else if (pid == 0) { // child process
-					return (iterateDirectory(options, mode, path, iterate_sub_dirs));
-				} 
-				else {
-					// parent wait for the child to end 
-					waitpid(pid, &status, 0);
-				}
-			} else {
-				// its a file in the directory
-				if (xmod(options, mode, path) != 0) {
-					fprintf(stderr, "Error changing file's permissions: %s\n", path);
-					error = -1;
-					break;
-				}
+		} else {
+			// its a file in the directory
+			if (xmod(options, mode, path) != 0) {
+				fprintf(stderr, "Error changing file's permissions: %s\n", path);
+				error = -1;
+				break;
 			}
 		}
-		
-		// close directory
-		if (closedir(d) == -1) {
-			fprintf(stderr, "Error in closing dir %s\n", dirpath);
-			return -1;
-		}
+	}
+	
+	// close directory
+	if (closedir(d) == -1) {
+		fprintf(stderr, "Error in closing dir %s\n", dirpath);
+		return -1;
 	}
 	
 	return error;

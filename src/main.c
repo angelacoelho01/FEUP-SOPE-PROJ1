@@ -35,23 +35,19 @@ int main(int argc, char *argv[], char *envp[]){
 	printf(" v: %d, c: %d, R: %d\n", opt_v, opt_c, opt_R);
 	//check if octal mode
 
-	if (isPathDir(pathname) && opt_R){
-		// the value of this bool represents if -R option exists
-		//bool change_subdirectories = true;
+	if (isPathDir(pathname) && opt_R){	
+		printf("It's a directory to iterate!\n"); // to test purposes
 		
-		printf("It's a directory!\n"); // to test purposes
-		// with -R option we need to recursevely change the permissions 
-		// of every file/dir within the directory, and other subdirectories that may exist
-
-		if (iterateDirectory(options, mode, pathname, opt_R) != 0) {
+		if (iterateDirectory(options, mode, pathname) != 0) {
 			fprintf(stderr, "Error changing dir's files permissions\n");
 			exit(EXIT_FAILURE);
 		}
 	}
 	else {
-		printf("It's a regular file!\n"); // to test purposes
+		printf("It's a single file/directory!\n"); // to test purposes
+		
 		if (xmod(options, mode, pathname) != 0) {
-			fprintf(stderr, "Error changing file's permissions\n");
+			fprintf(stderr, "Error changing file/directory's permissions\n");
 			exit(EXIT_FAILURE);
 		}
 	}
