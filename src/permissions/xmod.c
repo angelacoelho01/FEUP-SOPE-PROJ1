@@ -57,18 +57,20 @@ mode_t getNewPerms(const char *mode, const char *path_name){
 		exit(1);
 	}
 
+	// if octal-mode
 	if(isNumber(mode)){
 		char* ptr;
 		return strtol(mode, &ptr, 8) | (st.st_mode & RESET_MODE);
 	}
 	
-	char user = mode[0];
+	// if normal mode
+	char user = mode[0]; // user: <u|g|o|a>
 	int all = user == 'a' ? 1 : 0;
 
-	char operator = mode[1];
+	char operator = mode[1]; // operator: <+|-|=>
 	int remove = operator == '-' ? 1 : 0;
 
-	char *str_permissions = getStrPerms(mode);
+	char *str_permissions = getStrPerms(mode); // permissions: [rwx]
 	int read = strchr(str_permissions, 'r') == NULL ? 0 : 1;
 	int write = strchr(str_permissions, 'w') == NULL? 0 : 1;
 	int execute = strchr(str_permissions, 'x') == NULL? 0 : 1;
