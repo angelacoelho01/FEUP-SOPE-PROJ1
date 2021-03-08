@@ -26,9 +26,8 @@ bool isPathDir(const char *path);
  * @param options Comand options
  * @param mode Comand new mode
  * @param dirpath The location of the directory to iterate
- * @param iterate_sub_dirs True if it is to iterate his subdirectories, if they exist
  * @return 0 when successfull, -1 otherwise
  */
-int iterateDirectory(const char* options, const char* mode, const char *dirpath, bool iterate_sub_dirs);
+int iterateDirectory(const char* options, const char* mode, const char *dirpath);
 
 #endif /* _FILESYSTEM */
