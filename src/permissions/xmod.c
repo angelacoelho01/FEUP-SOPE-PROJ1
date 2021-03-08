@@ -58,14 +58,14 @@ mode_t handleMode(const char* options, const char* mode, const char* pathname){
 
 	strcpy(&user, &mode[0]);
 	strcpy(&operator, &mode[1]);
-	strcpy(Mode, &mode[2]);
+	strcpy(mode, &mode[2]);
 
 	int remove = operator == '-' ? 1 : 0;
 	if(operator == '=') st.st_mode &= RESET_MODE;
 
-	read = strchr(Mode, 'r') == NULL ? 0 : 1;
-	write = strchr(Mode, 'w') == NULL? 0 : 1;
-	execute = strchr(Mode, 'x') == NULL? 0 : 1;
+	read = strchr(mode, 'r') == NULL ? 0 : 1;
+	write = strchr(mode, 'w') == NULL? 0 : 1;
+	execute = strchr(mode, 'x') == NULL? 0 : 1;
 
 
 	return getNewMode(st.st_mode, read, write, execute, remove, user);
