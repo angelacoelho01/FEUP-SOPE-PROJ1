@@ -1,5 +1,7 @@
 #include "utils.h"
 
+#include <ctype.h>
+
 char* getFileName(const char* path_name){
     char* path = (char*)malloc(MAX_STR_LEN);
     strcpy(path, path_name);
@@ -28,4 +30,11 @@ char* convertModeToString(const mode_t mode){
 	}
 
     return str_mode;
+}
+
+int isNumber(const char* str){
+	for(int i = 0; str[i] != 0; i++){
+		if(!isdigit(str[i])) return 0;
+	}
+	return 1;
 }

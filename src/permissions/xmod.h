@@ -20,4 +20,8 @@ mode_t handleMode(const char* options, const char* mode, const char* path_name);
 
 mode_t getNewMode(mode_t mode, const int read, const int write, const int execute, const int remove, const char user);
 
+mode_t handleModeOctal(const char* options, const char* mode, const char* pathname);
+
+mode_t setOctalMode(mode_t set_mode, int mode);
+
 #endif /* XMOD_H_ */
