@@ -1,18 +1,13 @@
 #include "xmod.h"
 
-int xmod(const char* options, const char* mode, const char* pathname){
-	
-	mode_t mode_mask;
-	
-	if (atoi(mode) != 0)
-		mode_mask = handleModeOctal(options, mode, pathname);
+#include <ctype.h>
 
-	else
-		mode_mask = handleMode(options, mode, pathname);
+int xmod(const char* options, const char* mode, const char* path_name){
+	mode_t mode_mask = handleMode(options, mode, path_name);
 
-	handleOptions(options, pathname, mode_mask);
+	if(handleOptions(options, path_name, mode_mask)) exit(1);
 
-	if(chmod(pathname, mode_mask) == -1){
+	if(chmod(path_name, mode_mask) == -1){
 		perror("chmod()");
 		exit(1);
 	}
@@ -20,11 +15,11 @@ int xmod(const char* options, const char* mode, const char* pathname){
 	return 0;
 }
 
-int handleOptions(const char* options, const char* path_name, const mode_t mode_final){
+int handleOptions(const char* options, const char* path_name, const mode_t new_mode){
 	// In case there wasn't any options passed returns immediately
 	if (options == NULL) return 0;
 
-	mode_t mode_init;
+	mode_t mode_init, mode_final;
 	struct stat st;
 
 	if(stat(path_name, &st) == -1){
@@ -32,7 +27,8 @@ int handleOptions(const char* options, const char* path_name, const mode_t mode_
 		exit(1);
 	}
 
-	mode_init = st.st_mode;
+	mode_init = st.st_mode & GET_MODE;
+	mode_final = new_mode & GET_MODE;
 
 	int isChange = mode_init == mode_final? 0 : 1;
 	int verbose = strchr(options, 'v') == NULL ? 0 : 1;
@@ -43,12 +39,11 @@ int handleOptions(const char* options, const char* path_name, const mode_t mode_
 	
 	if(isChange && (verbose || changes)){
 		char* str_mode_final = convertModeToString(mode_final);
-		printf("mode of '%s' changed from 0%o (%s) to 0%o (%s)\n", path_name, (mode_init & GET_MODE), str_mode_init, (mode_final & GET_MODE), str_mode_final);
+		printf("mode of '%s' changed from 0%o (%s) to 0%o (%s)\n", path_name, mode_init, str_mode_init, mode_final, str_mode_final);
 		
 	}
 	else if(!isChange && verbose)
-		printf("mode of '%s' retained as 0%o (%s)\n", path_name, (mode_final & GET_MODE), str_mode_init);
-
+		printf("mode of '%s' retained as 0%o (%s)\n", path_name, mode_final, str_mode_init);
 	return 0;
 }
 
@@ -63,6 +58,15 @@ mode_t handleMode(const char* options, const char* mode, const char* pathname){
 		exit(1);
 	}
 
+	if(isNumber(mode)){
+		char* ptr;
+		return strtol(mode, &ptr, 8) | (st.st_mode & RESET_MODE);
+	}
+
+	if(operator == '=') st.st_mode &= RESET_MODE;
+
+	int remove = operator == '-' ? 1 : 0;
+
 	strcpy(&user, &mode[0]);
 	strcpy(&operator, &mode[1]);
 	strcpy(Mode, &mode[2]);
@@ -70,10 +74,6 @@ mode_t handleMode(const char* options, const char* mode, const char* pathname){
 	read = strchr(Mode, 'r') == NULL ? 0 : 1;
 	write = strchr(Mode, 'w') == NULL? 0 : 1;
 	execute = strchr(Mode, 'x') == NULL? 0 : 1;
-
-	int remove = operator == '-' ? 1 : 0;
-
-	if(operator == '=') st.st_mode &= RESET_MODE;
 
 	return getNewMode(st.st_mode, read, write, execute, remove, user);
 }
@@ -100,146 +100,4 @@ mode_t getNewMode(mode_t mode, const int read, const int write, const int execut
 	}
 
 	return mode;
-}
-
-mode_t handleModeOctal(const char* options, const char* mode, const char* pathname){
-
-	struct stat st;
-
-	if(stat(pathname, &st) == -1){
-		perror("stat()");
-		exit(1);
-	}
-	printf("%d\n", atoi(mode));
-	return setOctalMode(st.st_mode, atoi(mode));
-}
-
-mode_t setOctalMode(mode_t set_mode, int mode){
-
-	set_mode = 0;
-	int i;
-	int aux_int;
-	int aux_mode = mode;
-
-	for (i = 3; i > 0; i--){
-
-		aux_int = aux_mode % 10;
-
-		switch (aux_int)
-		{
-
-			case 0:
-
-				if (i == 3)
-					set_mode &= ~S_IRWXO;
-
-				else if (i == 2)
-					set_mode &= ~S_IRWXG;
-
-				else if (i == 1)
-					set_mode &= ~S_IRWXU;
-
-				break;
-
-			case 1:
-
-				if (i == 3)
-					set_mode |= S_IXOTH;
-
-				else if (i == 2)
-					set_mode |= S_IXGRP;
-
-				else if (i == 1)
-					set_mode |= S_IXUSR;
-
-				break;
-
-			case 2:
-
-				if (i == 3)
-					set_mode |= S_IWOTH;
-
-				else if (i == 2)
-					set_mode |= S_IWGRP;
-
-				else if (i == 1)
-					set_mode |= S_IWUSR;
-
-				break;
-
-			case 3:
-
-				if (i == 3)
-					set_mode |= (S_IXOTH | S_IWOTH);
-
-				else if (i == 2)
-					set_mode |= (S_IXGRP | S_IWGRP);
-
-				else if (i == 1)
-					set_mode |= (S_IXUSR | S_IWUSR);
-
-				break;
-
-			case 4:
-
-				if (i == 3)
-					set_mode |= S_IROTH;
-
-				else if (i == 2)
-					set_mode |= S_IRGRP;
-
-				else if (i == 1)
-					set_mode |= S_IRUSR;
-
-				break;
-
-			case 5:
-
-				if (i == 3)
-					set_mode |= (S_IXOTH | S_IROTH);
-
-				else if (i == 2)
-					set_mode |= (S_IXGRP | S_IRGRP);
-
-				else if (i == 1)
-					set_mode |= (S_IXUSR | S_IRUSR);
-
-				break;
-
-			case 6:
-
-				if (i == 3)
-					set_mode |= (S_IWOTH | S_IROTH);
-
-				else if (i == 2)
-					set_mode |= (S_IWGRP | S_IRGRP);
-
-				else if (i == 1)
-					set_mode |= (S_IWUSR | S_IRUSR);
-
-				break;
-
-			case 7:
-
-				if (i == 3)
-					set_mode |= S_IRWXO;
-
-				else if (i == 2)
-					set_mode |= S_IRWXG;
-
-				else if (i == 1)
-					set_mode |= S_IRWXU;
-
-				break;
-			
-			default:
-
-				break;
-
-		}
-
-		aux_mode = aux_mode / 10;
-	}
-
-	return set_mode;
 }
