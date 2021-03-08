@@ -27,18 +27,18 @@ int handleOptions(const char *options, const char *path_name, const mode_t new_p
 	mode_t perms_initial = st.st_mode & GET_MODE;
 	mode_t perms_final = new_perms & GET_MODE;
 
-	int isChange = perms_initial == perms_final? 0 : 1;
+	int is_change = perms_initial == perms_final? 0 : 1;
 	int opt_v = strchr(options, 'v') == NULL ? 0 : 1;
 	int opt_c = strchr(options, 'c') == NULL ? 0 : 1;
 
 	char* str_perms_initial = convertModeToString(perms_initial);
 	
-	if(isChange && (opt_v || opt_c)){
+	if(is_change && (opt_v || opt_c)){
 		char* str_perms_final = convertModeToString(perms_final);
 		printf("mode of '%s' changed from 0%o (%s) to 0%o (%s)\n", path_name, perms_initial, str_perms_initial, perms_final, str_perms_final);
 		
 	}
-	else if(!isChange && opt_v && !opt_c)
+	else if(!is_change && opt_v && !opt_c)
 		printf("mode of '%s' retained as 0%o (%s)\n", path_name, perms_initial, str_perms_initial);
 
 	return 0;
