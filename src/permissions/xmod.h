@@ -12,16 +12,13 @@
 #define RESET_MODE ~(000777)
 #define GET_MODE 000777
 
-int xmod(const char* options, const char* mode, const char* path_name);
+int xmod(const char *options, const char *mode, const char *path_name);
 
-int handleOptions(const char* options, const char* path_name, const mode_t mode_final);
+int handleOptions(const char *options, const char *path_name, const mode_t new_perms);
 
-mode_t handleMode(const char* options, const char* mode, const char* path_name);
+char *getStrPerms(const char *mode);
 
-mode_t getNewMode(mode_t mode, const int read, const int write, const int execute, const int remove, const char user);
+mode_t getNewPerms(const char *mode, const char *path_name);
 
-mode_t handleModeOctal(const char* options, const char* mode, const char* pathname);
-
-mode_t setOctalMode(mode_t set_mode, int mode);
 
 #endif /* XMOD_H_ */

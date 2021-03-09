@@ -2,37 +2,37 @@
 
 #include <ctype.h>
 
-char* getFileName(const char* path_name){
-    char* path = (char*)malloc(MAX_STR_LEN);
+char *getFileName(const char *path_name){
+    char *path = (char*)malloc(MAX_STR_LEN);
     strcpy(path, path_name);
 
     // In case path_name is already the file_name returns just path
     return strchr(path_name, '/') == NULL ? path : basename(path);
 }
 
-char* convertModeToString(const mode_t mode){
+char *convertPermsToString(const mode_t perms){
 	const int n = 3;
 	const int read[] = {S_IRUSR, S_IRGRP, S_IROTH};
 	const int write[] = {S_IWUSR, S_IWGRP, S_IWOTH};
 	const int execute[] = {S_IXUSR, S_IXGRP, S_IXOTH};
-    char* str_mode = (char*)malloc(MAX_STR_LEN);
-    memset(str_mode, 0, MAX_STR_LEN);
+    char *str_perms = (char*)malloc(MAX_STR_LEN);
+    memset(str_perms, 0, MAX_STR_LEN);
 
 	for(int i = 0; i < n; i++){
-		if(mode & read[i]) strcat(str_mode, "r");
-		else strcat(str_mode, "-");
+		if(perms & read[i]) strcat(str_perms, "r");
+		else strcat(str_perms, "-");
 
-		if(mode & write[i]) strcat(str_mode, "w");
-		else strcat(str_mode, "-");
+		if(perms & write[i]) strcat(str_perms, "w");
+		else strcat(str_perms, "-");
 
-		if(mode & execute[i]) strcat(str_mode, "x");
-		else strcat(str_mode, "-");
+		if(perms & execute[i]) strcat(str_perms, "x");
+		else strcat(str_perms, "-");
 	}
 
-    return str_mode;
+    return str_perms;
 }
 
-int isNumber(const char* str){
+int isNumber(const char *str){
 	for(int i = 0; str[i] != 0; i++){
 		if(!isdigit(str[i])) return 0;
 	}

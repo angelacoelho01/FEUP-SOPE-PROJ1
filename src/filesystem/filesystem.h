@@ -28,6 +28,6 @@ bool isPathDir(const char *path);
  * @param dirpath The location of the directory to iterate
  * @return 0 when successfull, -1 otherwise
  */
-int iterateDirectory(const char* options, const char* mode, const char *dirpath);
+int iterateDirectory(const char *options, const char *mode, const char *dirpath);
 
 #endif /* _FILESYSTEM */

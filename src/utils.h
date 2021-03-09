@@ -11,8 +11,8 @@
 
 char* getFileName(const char* path_name);
 
-char* convertModeToString(const mode_t mode);
+char* convertPermsToString(const mode_t perms);
 
-int isNumber(const char* str);
+int isNumber(const char *str);
 
 #endif /* UTILS_H_ */

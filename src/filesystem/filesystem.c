@@ -28,7 +28,7 @@ bool isPathDir(const char *path) {
 	return is_dir;
 }
 
-int iterateDirectory(const char* options, const char* mode, const char *dirpath) {
+int iterateDirectory(const char *options, const char *mode, const char *dirpath) {
 	int error = 0;
 	
 	// change dir's permissions
