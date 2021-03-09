@@ -70,10 +70,10 @@ mode_t getNewPerms(const char *mode, const char *path_name){
 	char operator = mode[1]; // operator: <+|-|=>
 	int remove = operator == '-' ? 1 : 0;
 
-	char *str_permissions = getStrPerms(mode); // permissions: [rwx]
-	int read = strchr(str_permissions, 'r') == NULL ? 0 : 1;
-	int write = strchr(str_permissions, 'w') == NULL? 0 : 1;
-	int execute = strchr(str_permissions, 'x') == NULL? 0 : 1;
+	char *str_perms = getStrPerms(mode); // permissions: [rwx]
+	int read = strchr(str_perms, 'r') == NULL ? 0 : 1;
+	int write = strchr(str_perms, 'w') == NULL? 0 : 1;
+	int execute = strchr(str_perms, 'x') == NULL? 0 : 1;
 
 	mode_t perms = operator == '=' ? st.st_mode & RESET_MODE : st.st_mode;
 
