@@ -16,9 +16,9 @@ int main(int argc, char *argv[], char *envp[]){
 		exit(INPUT_ERROR);
 	}
 
-	char* mode = argv[argc - 2];
-	char* pathname = argv[argc - 1];
-	char* options = argc == 3? NULL : argv[1];
+	char *mode = argv[argc - 2];
+	char *path_name = argv[argc - 1];
+	char *options = argc == 3? NULL : argv[1];
 	int opt_v = 0, opt_c = 0, opt_R = 0;
 
 	if(options != NULL){
@@ -35,10 +35,10 @@ int main(int argc, char *argv[], char *envp[]){
 	printf(" v: %d, c: %d, R: %d\n", opt_v, opt_c, opt_R);
 	//check if octal mode
 
-	if (isPathDir(pathname) && opt_R){	
+	if (isPathDir(path_name) && opt_R){	
 		printf("It's a directory to iterate!\n"); // to test purposes
 		
-		if (iterateDirectory(options, mode, pathname) != 0) {
+		if (iterateDirectory(options, mode, path_name) != 0) {
 			fprintf(stderr, "Error changing dir's files permissions\n");
 			exit(EXIT_FAILURE);
 		}
@@ -46,7 +46,7 @@ int main(int argc, char *argv[], char *envp[]){
 	else {
 		printf("It's a single file/directory!\n"); // to test purposes
 		
-		if (xmod(options, mode, pathname) != 0) {
+		if (xmod(options, mode, path_name) != 0) {
 			fprintf(stderr, "Error changing file/directory's permissions\n");
 			exit(EXIT_FAILURE);
 		}

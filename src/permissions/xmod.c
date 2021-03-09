@@ -2,7 +2,7 @@
 
 #include <ctype.h>
 
-int xmod(const char* options, const char* mode, const char* path_name){
+int xmod(const char *options, const char *mode, const char *path_name){
 	mode_t new_perms = getNewPerms(mode, path_name);
 
 	if(handleOptions(options, path_name, new_perms)) exit(1);
@@ -31,10 +31,10 @@ int handleOptions(const char *options, const char *path_name, const mode_t new_p
 	int opt_v = strchr(options, 'v') == NULL ? 0 : 1;
 	int opt_c = strchr(options, 'c') == NULL ? 0 : 1;
 
-	char* str_perms_initial = convertModeToString(perms_initial);
+	char *str_perms_initial = convertPermsToString(perms_initial);
 	
 	if(is_change && (opt_v || opt_c)){
-		char* str_perms_final = convertModeToString(perms_final);
+		char *str_perms_final = convertPermsToString(perms_final);
 		printf("mode of '%s' changed from 0%o (%s) to 0%o (%s)\n", path_name, perms_initial, str_perms_initial, perms_final, str_perms_final);
 		
 	}
@@ -44,7 +44,7 @@ int handleOptions(const char *options, const char *path_name, const mode_t new_p
 	return 0;
 }
 
-char* getStrPerms(const char* mode){
+char *getStrPerms(const char* mode){
 	char *perms = (char*)malloc(MAX_STR_LEN);
 	strcpy(perms, &mode[2]);
 	return perms;
@@ -59,7 +59,7 @@ mode_t getNewPerms(const char *mode, const char *path_name){
 
 	// if octal-mode
 	if(isNumber(mode)){
-		char* ptr;
+		char *ptr;
 		return strtol(mode, &ptr, 8) | (st.st_mode & RESET_MODE);
 	}
 	
