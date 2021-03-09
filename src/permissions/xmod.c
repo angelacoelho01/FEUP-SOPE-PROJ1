@@ -1,7 +1,5 @@
 #include "xmod.h"
 
-#include <ctype.h>
-
 int xmod(const char *options, const char *mode, const char *path_name){
 	mode_t new_perms = getNewPerms(mode, path_name);
 
