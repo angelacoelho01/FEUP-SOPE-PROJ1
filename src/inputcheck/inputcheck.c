@@ -1,14 +1,96 @@
 #include "inputcheck.h"
 
+
 void usageNotRight(){
     printf("usage: ./xmod [OPTIONS] MODE FILE/DIR\n");
 	printf("   or  ./xmod [OPTIONS] OCTAL-MODE FILE/DIR\n\n");
 
 //Define the description better
     printf(" OPTIONS: \n");
-    printf("      '-v' : verbose mode\n");
-    printf("      '-c' : verbose mode only for modifications\n");
-    printf("      '-R' : recursivity on the directory\n");
-    printf(" If more than one option write them like this for example: -vR\n");
+    printf("       '-v' : verbose mode\n");
+    printf("       '-c' : verbose mode only for modifications\n");
+    printf("       '-R' : recursivity on the directory\n");
+    printf("  If more than one option write them like this for example: -vR\n\n");
 
+    printf(" MODE: <u|g|o|a><-|+|=><rwx> \n");
+    printf("       <u|g|o|a> : type of user to affected (only one of the four) \n");
+    printf("       <-|+|=> : permissions to be (-) removed, (+) added or (=)\n");
+    printf("            replaced (only one of the four)\n");
+    printf("       <rwx> : which permissions are going to be modified (one \n");
+    printf("            to three - respecting the order)\n");
+    printf("         Ex.: 'rw', 'wx', 'w' and 'rx' are accepted but 'xr'\n");
+    printf("            and 'wr' are not.\n\n");
+
+    printf(" OCTAL-MODE: \n");
+    printf("       A four number sequence, starting with 0 and then 3 digits\n");
+    printf("            in octal-base (0 to 7)\n");
+    printf("         Ex.: 0056, 0777 and 0175 are accepted but 1000, 075 and 0867 are not.\n\n");
+
+}
+
+int isValidInput(int argc, char *argv[]){
+    //Checks the size of args, the options, the octal_mode number and the order of MODE parameters.
+    
+    if ((argc < 3) || (argc > 4))
+	{
+		return 0;
+	}
+
+	char *mode = argv[argc - 2];
+	char *options = argc == 3 ? NULL : argv[1];
+	int opt_v = 0, opt_c = 0, opt_R = 0;
+
+	if (options != NULL)
+	{
+
+		if (options[0] != '-')
+		{
+			return 0;
+		}
+
+		opt_v = strchr(options, 'v') == NULL ? 0 : 1;
+		opt_c = strchr(options, 'c') == NULL ? 0 : 1;
+		opt_R = strchr(options, 'R') == NULL ? 0 : 1;
+
+		if (!opt_v && !opt_c && !opt_R)
+		{
+			return 0;
+		}
+	}
+
+	printf(" v: %d, c: %d, R: %d\n", opt_v, opt_c, opt_R);
+
+	//check if octal mode
+	if (isNumber(mode))
+	{
+		//check mode[0] with ASCII of '0'
+		if (mode[0] != 48 || mode[1] == '\0' ||  mode[2] == '\0' || mode[3] == '\0' || mode[4] != '\0')
+		{
+			return 0;
+		}
+
+		int oct_mode = atoi(mode); int digit;
+		while(oct_mode){
+			digit = oct_mode % 10;
+    		oct_mode /= 10;
+
+			if(digit > 7){
+				return 0;
+			}
+		}
+	}
+	else
+	{
+		char *checkPer = getStrPerms(mode);
+		if (strstr("rwx", checkPer) || (strcmp(checkPer, "rx") == 0))
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+    return 1;
 }
