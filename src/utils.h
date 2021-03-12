@@ -15,4 +15,6 @@ char* convertPermsToString(const mode_t perms);
 
 int isNumber(const char *str);
 
+int findChar(const char possible_str[], unsigned n, const char ch);
+
 #endif /* UTILS_H_ */
