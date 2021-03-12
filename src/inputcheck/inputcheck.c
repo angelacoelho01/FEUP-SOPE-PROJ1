@@ -58,10 +58,9 @@ int isValidInput(int argc, char *argv[]) {
 			return 0;
 
 		int oct_mode = atoi(mode); 
-        int digit;
 
 		while (oct_mode) {
-			digit = oct_mode % 10;
+            int digit = oct_mode % 10;
     		oct_mode /= 10;
 
 			if (digit > 7) 
