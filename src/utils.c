@@ -2,7 +2,7 @@
 
 #include <ctype.h>
 
-char *getFileName(const char *path_name){
+char *getFileName(const char *path_name) {
     char *path = (char*)malloc(MAX_STR_LEN);
     strcpy(path, path_name);
 
@@ -38,3 +38,11 @@ int isNumber(const char *str){
 	}
 	return 1;
 }
+
+int findChar(const char possible_str[], unsigned n, const char ch){
+    for(unsigned i = 0; i < n; i++){
+        if(ch == possible_str[i]) return 1;
+    }
+    return 0;
+}
+

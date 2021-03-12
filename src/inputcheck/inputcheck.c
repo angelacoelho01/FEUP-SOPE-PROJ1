@@ -1,11 +1,10 @@
 #include "inputcheck.h"
 
-
-void usageNotRight(){
+void usageNotRight() {
     printf("usage: ./xmod [OPTIONS] MODE FILE/DIR\n");
 	printf("   or  ./xmod [OPTIONS] OCTAL-MODE FILE/DIR\n\n");
 
-//Define the description better
+    // Define the description better
     printf(" OPTIONS: \n");
     printf("       '-v' : verbose mode\n");
     printf("       '-c' : verbose mode only for modifications\n");
@@ -28,68 +27,62 @@ void usageNotRight(){
 
 }
 
-int isValidInput(int argc, char *argv[]){
-    //Checks the size of args, the options, the octal_mode number and the order of MODE parameters.
+int isValidInput(int argc, char *argv[]) {
+    // Checks the size of args, the options, the octal_mode number and the order of MODE parameters.
     
     if ((argc < 3) || (argc > 4))
-	{
 		return 0;
-	}
 
 	char *mode = argv[argc - 2];
 	char *options = argc == 3 ? NULL : argv[1];
 	int opt_v = 0, opt_c = 0, opt_R = 0;
 
-	if (options != NULL)
-	{
+	if (options != NULL) {
 
 		if (options[0] != '-')
-		{
 			return 0;
-		}
 
 		opt_v = strchr(options, 'v') == NULL ? 0 : 1;
 		opt_c = strchr(options, 'c') == NULL ? 0 : 1;
 		opt_R = strchr(options, 'R') == NULL ? 0 : 1;
 
 		if (!opt_v && !opt_c && !opt_R)
-		{
 			return 0;
-		}
 	}
 
 	printf(" v: %d, c: %d, R: %d\n", opt_v, opt_c, opt_R);
 
-	//check if octal mode
-	if (isNumber(mode))
-	{
-		//check mode[0] with ASCII of '0'
-		if (mode[0] != 48 || mode[1] == '\0' ||  mode[2] == '\0' || mode[3] == '\0' || mode[4] != '\0')
-		{
+	// Check if octal mode
+	if (isNumber(mode)) {
+		if (mode[0] != '0' || mode[1] == '\0' ||  mode[2] == '\0' || mode[3] == '\0' || mode[4] != '\0')
 			return 0;
-		}
 
-		int oct_mode = atoi(mode); int digit;
-		while(oct_mode){
+		int oct_mode = atoi(mode); 
+        int digit;
+
+		while (oct_mode) {
 			digit = oct_mode % 10;
     		oct_mode /= 10;
 
-			if(digit > 7){
-				return 0;
-			}
+			if (digit > 7) 
+                return 0;
 		}
-	}
-	else
-	{
+	} else {
+        const char possible_users[] = {'a', 'u', 'o', 'g'};
+        const char possible_operator[] = {'-', '+', '='};
+        char user = mode[0];
+        char operator = mode[1];
 		char *checkPer = getStrPerms(mode);
-		if (strstr("rwx", checkPer) || (strcmp(checkPer, "rx") == 0))
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
+
+        // Check user
+        if(!findChar(possible_users, 4, user)) 
+            return 0;
+
+        // Check separator
+        if(!findChar(possible_operator, 3, operator))
+            return 0;
+
+		return strstr("rwx", checkPer) || !strcmp(checkPer, "rx");
 	}
 
     return 1;

@@ -67,11 +67,9 @@ int iterateDirectory(const char *options, const char *mode, const char *dirpath)
 				fprintf(stderr, "Error in creating a new process\n");
 				error = -1;
 				break;
-			} 
-			else if (pid == 0) { // child process
+			} else if (pid == 0) { // child process
 				return (iterateDirectory(options, mode, path));
-			} 
-			else {
+			} else {
 				// parent wait for the child to end 
 				waitpid(pid, &status, 0);
 			}
