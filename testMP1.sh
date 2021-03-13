@@ -19,7 +19,7 @@ export PATH=$PATH:$CURDIR
 # backup copy
 mkdir $LOGDIR/backupMP1
 rm -rf "$LOGDIR/backupMP1/$(basename $DIR)"
-cp -rp --remove-destination $DIR $LOGDIR/backupMP1/$(basename $DIR)
+cp -rp --remove-destination "$DIR" $LOGDIR/backupMP1/$(basename $DIR)
 
 # enforce some useful permissions
 $PROGCH 444 "$FILE"
@@ -49,7 +49,7 @@ done
 
 # reset original dir/files
 rm -rf "$DIR"
-cp -rp --remove-destination "$LOGDIR/backupMP1/$(basename $DIR)" "$DIR"
+cp -rp --remove-destination $LOGDIR/backupMP1/$(basename $DIR "$DIR"
 
 # sequence of tests for XMOD
 echo -e "\ntesting xmod...\n"
@@ -87,7 +87,7 @@ then
 fi
 
 # reset original dir/files
-rm -rf $DIR
-cp -rp --remove-destination $LOGDIR/backupMP1/`basename $DIR` $DIR
+rm -rf "$DIR"
+cp -rp --remove-destination $LOGDIR/backupMP1/$(basename $DIR) "$DIR"
 
 exit
