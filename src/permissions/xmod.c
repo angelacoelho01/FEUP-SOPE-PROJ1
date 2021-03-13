@@ -73,7 +73,7 @@ mode_t getNewPerms(const char *mode, const char *path_name){
 	int write = strchr(str_perms, 'w') == NULL? 0 : 1;
 	int execute = strchr(str_perms, 'x') == NULL? 0 : 1;
 
-	mode_t perms = operator == '=' ? st.st_mode & RESET_MODE : st.st_mode;
+	mode_t perms = operator == '=' ? resetModeUser(st.st_mode, user) : st.st_mode;
 
 	if(read){
 		if(user == 'o' || all) perms = remove ? perms & ~S_IROTH : perms | S_IROTH;

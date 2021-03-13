@@ -34,14 +34,15 @@ find "$DIR" -exec stat --printf="%a\t%n\n" '{}' \; 2> /dev/null | sort -k 2  > $
 # example of tests
 ARGS1="0757 $FILE"
 ARGS2="a-w $DIR"
-ARGS3="-c g=x $FILE"
-ARGS4="-c u+r $DIR"
-ARGS5="-v u+r $FILE"
-### ARGS6="-R 777 $DIR"	# Really, chmod also accepts octals w/o leading '0'
-ARGS6="-R 0777 $DIR"
+ARGS3="-R 0777 $DIR"
+ARGS4="-c g=x $FILE"
+ARGS5="-c u+r $DIR"
+ARGS6="-v u+r $FILE"
+ARGS7="-R 0766 $DIR"
+ARGS8="-R 777 $DIR"	# Really, chmod also accepts octals w/o leading '0'
 
 # sequence of tests for CHMOD
-for TESTN in 1 2 3 4 5 6
+for TESTN in 1 2 3 4 5 6 7 8
 do
 	eval ARGS=\${ARGS$TESTN}
 	$PROGCH $ARGS | sort -b > $LOGDIR/log.$PROGCH.$TESTN.sorted
@@ -53,12 +54,12 @@ cp -rp --remove-destination $LOGDIR/backupMP1/$(basename $DIR) "$DIR"
 
 # sequence of tests for XMOD
 echo -e "\ntesting xmod...\n"
-SEPLONG="-----------------------------------------------------------------"
+SEPLONG="------------------------------------------------------------------"
 SEPSHORT="-----------------------------"
 
 if [ "$PROGX" != "xxx" ]
 then
-	for TESTN in 1 2 3 4 5 6
+	for TESTN in 1 2 3 4 5 6 7 8
 	do
     	eval ARGS=\${ARGS$TESTN}
 
