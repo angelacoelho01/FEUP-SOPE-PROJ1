@@ -54,15 +54,16 @@ cp -rp --remove-destination $LOGDIR/backupMP1/`basename $DIR` $DIR
 # sequence of tests for XMOD
 echo -e "\ntesting xmod...\n"
 SEPLONG="-----------------------------------------------------------------"
-SEPSHORT="-----------"
+SEPSHORT="-----------------------------"
 
 if [ "$PROGX" != "xxx" ]
 then
 	for TESTN in 1 2 3 4 5 6
 	do
-        echo -e "$SEPLONG\ntest no. $TESTN\n$SEPSHORT\n"
+    	eval ARGS=\${ARGS$TESTN}
 
-		eval ARGS=\${ARGS$TESTN}
+        echo -e "$SEPLONG\ntest no. $TESTN: $PROGX $ARGS\n$SEPSHORT\n"
+
 		$PROGX $ARGS | sort -b > $LOGDIR/log.$PROGX.$TESTN.sorted
 
 		diff -b $LOGDIR/log.$PROGX.$TESTN.sorted $LOGDIR/log.$PROGCH.$TESTN.sorted
