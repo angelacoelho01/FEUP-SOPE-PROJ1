@@ -18,17 +18,17 @@ export PATH=$PATH:$CURDIR
 
 # backup copy
 mkdir $LOGDIR/backupMP1
-rm -rf $LOGDIR/backupMP1/`basename $DIR`
-cp -rp --remove-destination $DIR $LOGDIR/backupMP1/`basename $DIR`
+rm -rf "$LOGDIR/backupMP1/$(basename $DIR)"
+cp -rp --remove-destination "$DIR" $LOGDIR/backupMP1/$(basename $DIR)
 
 # enforce some useful permissions
-$PROGCH 444 $FILE
-$PROGCH 755 $DIR
+$PROGCH 444 "$FILE"
+$PROGCH 755 "$DIR"
 
 # save initial permissions of $FILE $DIR (can be useful...)
 TESTN=0
-stat --printf="%A\t%n\n" $FILE > $LOGDIR/perm.`basename $FILE`.$TESTN
-find $DIR -exec stat --printf="%a\t%n\n" '{}' \; 2> /dev/null | sort -k 2  > $LOGDIR/perm.`basename $DIR`.$TESTN
+stat --printf="%A\t%n\n" "$FILE" > $LOGDIR/perm.$(basename $FILE).$TESTN
+find "$DIR" -exec stat --printf="%a\t%n\n" '{}' \; 2> /dev/null | sort -k 2  > $LOGDIR/perm.$(basename $DIR).$TESTN
 # find $DIR -maxdepth 1 -exec stat --printf="%a\t%n\n" '{}' \; 2> /dev/null | sort -k 2  > $LOGDIR/perm.`basename $DIR`.$TESTN
 
 # example of tests
@@ -44,12 +44,12 @@ ARGS6="-R 0777 $DIR"
 for TESTN in 1 2 3 4 5 6
 do
 	eval ARGS=\${ARGS$TESTN}
-	$PROGCH $ARGS | sort -b > $LOGDIR/log.$PROGCH.$TESTN.sorted
+	$PROGCH "$ARGS" | sort -b > $LOGDIR/log.$PROGCH.$TESTN.sorted
 done
 
 # reset original dir/files
-rm -rf $DIR
-cp -rp --remove-destination $LOGDIR/backupMP1/`basename $DIR` $DIR
+rm -rf "$DIR"
+cp -rp --remove-destination $LOGDIR/backupMP1/$(basename $DIR "$DIR"
 
 # sequence of tests for XMOD
 echo -e "\ntesting xmod...\n"
@@ -64,9 +64,9 @@ then
 
         echo -e "$SEPLONG\ntest no. $TESTN: $PROGX $ARGS\n$SEPSHORT\n"
 
-		$PROGX $ARGS | sort -b > $LOGDIR/log.$PROGX.$TESTN.sorted
+		$PROGX "$ARGS" | sort -b > $LOGDIR/log.$PROGX.$TESTN.sorted
 
-		diff -b $LOGDIR/log.$PROGX.$TESTN.sorted $LOGDIR/log.$PROGCH.$TESTN.sorted
+		diff -b "$LOGDIR/log.$PROGX.$TESTN.sorted" "$LOGDIR/log.$PROGCH.$TESTN.sorted"
         
         if [ $? -eq 0 ]
         then
@@ -77,17 +77,17 @@ then
         fi
 
         echo -e "\n$FILE permissions:"
-        ls -l $FILE
+        ls -l "$FILE"
         echo -e "\n$DIR permissions:"
-        ls -ld $DIR
-        ls -l $DIR
+        ls -ld "$DIR"
+        ls -l "$DIR"
         echo -e "$SEPLONG\n\n"
 
 	done
 fi
 
 # reset original dir/files
-rm -rf $DIR
-cp -rp --remove-destination $LOGDIR/backupMP1/`basename $DIR` $DIR
+rm -rf "$DIR"
+cp -rp --remove-destination $LOGDIR/backupMP1/$(basename $DIR) "$DIR"
 
 exit

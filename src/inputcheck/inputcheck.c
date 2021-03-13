@@ -35,16 +35,15 @@ int isValidInput(int argc, char *argv[]) {
 
 	char *mode = argv[argc - 2];
 	char *options = argc == 3 ? NULL : argv[1];
-	int opt_v = 0, opt_c = 0, opt_R = 0;
 
 	if (options != NULL) {
 
 		if (options[0] != '-')
 			return 0;
 
-		opt_v = strchr(options, 'v') == NULL ? 0 : 1;
-		opt_c = strchr(options, 'c') == NULL ? 0 : 1;
-		opt_R = strchr(options, 'R') == NULL ? 0 : 1;
+		int opt_v = strchr(options, 'v') == NULL ? 0 : 1;
+		int opt_c = strchr(options, 'c') == NULL ? 0 : 1;
+		int opt_R = strchr(options, 'R') == NULL ? 0 : 1;
 
 		if (!opt_v && !opt_c && !opt_R)
 			return 0;

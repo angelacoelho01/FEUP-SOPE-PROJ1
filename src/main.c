@@ -21,9 +21,7 @@ int main(int argc, char *argv[], char *envp[]) {
     char *mode = argv[argc - 2];
     char *path_name = argv[argc - 1];
     char *options = argc == 3 ? NULL : argv[1];
-    int opt_R = 0;
-
-    opt_R = options != NULL && strchr(options, 'R') != NULL ? 1 : 0;
+    int opt_R = options != NULL && strchr(options, 'R') != NULL ? 1 : 0;
 
     if (isPathDir(path_name) && opt_R) {
         // printf("It's a directory to iterate!\n");   // to test purposes
