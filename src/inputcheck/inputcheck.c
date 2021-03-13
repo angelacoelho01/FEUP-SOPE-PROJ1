@@ -56,11 +56,16 @@ int isValidInput(int argc, char *argv[]) {
         // Check if it starts with 0 => no_digits must be 4; otherwise no_digits must be 3
         int no_digits = mode[0] == '0' ? 4 : 3;
 
+        // Checks if there is actually the exepected number of digits
+        if(mode[no_digits] != '\0') 
+            return 0;
+
         // Checks if there is really the expected number of digits
         for(int i = 1; i < no_digits; i++) {
             if(mode[i] == '\0') 
                 return 0;
         }
+
 
 		int oct_mode = atoi(mode); 
 
