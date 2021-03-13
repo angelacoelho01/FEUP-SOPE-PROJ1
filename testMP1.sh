@@ -12,7 +12,7 @@ case $# in
 	*) PROGX="$1" ; DIR="$2" ; FILE="$3" ;;
 esac
 
-# make sure "xmod" is a known command by adding it to PATH
+# make sure "xmod" is a known command by adding the current paht with executable file to PATH
 CURDIR=$(pwd)
 export PATH=$PATH:$CURDIR
 
