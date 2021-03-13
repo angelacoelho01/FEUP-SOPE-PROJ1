@@ -26,14 +26,14 @@ int main(int argc, char *argv[], char *envp[]) {
     opt_R = options != NULL && strchr(options, 'R') != NULL ? 1 : 0;
 
     if (isPathDir(path_name) && opt_R) {
-        printf("It's a directory to iterate!\n");   // to test purposes
+        // printf("It's a directory to iterate!\n");   // to test purposes
 
         if (iterateDirectory(options, mode, path_name) != 0) {
             fprintf(stderr, "Error changing dir's files permissions\n");
             exit(EXIT_FAILURE);
         }
     } else {
-        printf("It's a single file/directory!\n");  // to test purposes
+        // printf("It's a single file/directory!\n");  // to test purposes
 
         if (xmod(options, mode, path_name) != 0) {
             fprintf(stderr, "Error changing file/directory's permissions\n");

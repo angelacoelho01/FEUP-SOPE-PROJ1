@@ -50,7 +50,7 @@ int isValidInput(int argc, char *argv[]) {
 			return 0;
 	}
 
-	printf(" v: %d, c: %d, R: %d\n", opt_v, opt_c, opt_R);
+	// printf(" v: %d, c: %d, R: %d\n", opt_v, opt_c, opt_R);
 
 	// Check if octal mode
 	if (isNumber(mode)) {

@@ -72,13 +72,14 @@ then
             echo -e "test succeeded!"
 
         else
-            echo -e "\n$FILE permissions:"
-            ls -l $FILE
-            echo -e "\n$DIR permissions:"
-            ls -ld $DIR
-            ls -l $DIR
+            echo -e "\ntest failed"
         fi
 
+        echo -e "\n$FILE permissions:"
+        ls -l $FILE
+        echo -e "\n$DIR permissions:"
+        ls -ld $DIR
+        ls -l $DIR
         echo -e "$SEPLONG\n\n"
 
 	done
