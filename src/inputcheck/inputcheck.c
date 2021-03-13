@@ -66,7 +66,6 @@ int isValidInput(int argc, char *argv[]) {
                 return 0;
         }
 
-
 		int oct_mode = atoi(mode); 
 
 		while (oct_mode) {
