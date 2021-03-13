@@ -49,7 +49,7 @@ done
 
 # reset original dir/files
 rm -rf "$DIR"
-cp -rp --remove-destination $LOGDIR/backupMP1/$(basename $DIR) "$DIR"
+cp -rp --remove-destination "$LOGDIR/backupMP1/$(basename $DIR)" "$DIR"
 
 # sequence of tests for XMOD
 echo -e "\ntesting xmod...\n"
