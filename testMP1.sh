@@ -44,12 +44,12 @@ ARGS6="-R 0777 $DIR"
 for TESTN in 1 2 3 4 5 6
 do
 	eval ARGS=\${ARGS$TESTN}
-	$PROGCH "$ARGS" | sort -b > $LOGDIR/log.$PROGCH.$TESTN.sorted
+	$PROGCH $ARGS | sort -b > $LOGDIR/log.$PROGCH.$TESTN.sorted
 done
 
 # reset original dir/files
 rm -rf "$DIR"
-cp -rp --remove-destination $LOGDIR/backupMP1/$(basename $DIR "$DIR"
+cp -rp --remove-destination $LOGDIR/backupMP1/$(basename $DIR) "$DIR"
 
 # sequence of tests for XMOD
 echo -e "\ntesting xmod...\n"
@@ -64,9 +64,9 @@ then
 
         echo -e "$SEPLONG\ntest no. $TESTN: $PROGX $ARGS\n$SEPSHORT\n"
 
-		$PROGX "$ARGS" | sort -b > $LOGDIR/log.$PROGX.$TESTN.sorted
+		$PROGX $ARGS | sort -b > $LOGDIR/log.$PROGX.$TESTN.sorted
 
-		diff -b "$LOGDIR/log.$PROGX.$TESTN.sorted" "$LOGDIR/log.$PROGCH.$TESTN.sorted"
+		diff -b $LOGDIR/log.$PROGX.$TESTN.sorted $LOGDIR/log.$PROGCH.$TESTN.sorted
         
         if [ $? -eq 0 ]
         then
