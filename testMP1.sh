@@ -18,8 +18,8 @@ export PATH=$PATH:$CURDIR
 
 # backup copy
 mkdir $LOGDIR/backupMP1
-rm -rf "$LOGDIR/backupMP1/$(basename $DIR)"
-cp -rp --remove-destination "$DIR" $LOGDIR/backupMP1/$(basename $DIR)
+rm -rf $LOGDIR/backupMP1/$(basename $DIR)
+cp -rp --remove-destination $DIR $LOGDIR/backupMP1/$(basename $DIR)
 
 # enforce some useful permissions
 $PROGCH 444 "$FILE"
