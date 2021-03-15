@@ -9,6 +9,7 @@ void ctrlcReceived(int sig) {
 	
     if (0 == waitpid(-1, &status, WNOHANG)) { // unterminated children exist
 		// Send SIGUSR1 to every process with the same groupId as the sender (himself + descendents)
+		printf("\n");
 		if (kill(0, SIGUSR1) != 0) 
 			perror("SIGUSR1");
 	} else {
@@ -55,7 +56,7 @@ void questionPrompt(int sig) {
 
 void terminate(int sig) {
 	// to registrate the signal
-	printf("Termitating!!...\n");  // to test purposes
+	printf("Termitating Process PID %u!!...\n", getpid());  // to test purposes
 	
 	exit(EXIT_CTRLC); 
 }
