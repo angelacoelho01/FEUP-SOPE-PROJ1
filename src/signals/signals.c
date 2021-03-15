@@ -40,13 +40,11 @@ void questionPrompt(int sig) {
 	
 	// Confirm exit prompt
 	printf("\nDo you really want to terminate the program (y/n)? ");
-    
-	// receive the answer
 	char answer = readAnswer();
 	
 	// Continue all processes including himself
 	if (kill(0, SIGCONT) != 0) 
-		perror("Error sending SIGCONT to the child");
+		perror("SIGCONT");
 	
 	if (answer == 'y') { 
 		// Terminate all processes including himself
