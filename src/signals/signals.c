@@ -1,9 +1,12 @@
 #include "signals.h"
 
+extern unsigned int nftot;
+extern unsigned int nfmod;
+
 void registerAndIgnore(int sig) {
 	signal(sig, registerAndIgnore);
 	
-	printf("Signal %u received by pid %u and ignored!\n", sig, getpid());
+	// printf("Signal %u received by pid %u and ignored!\n", sig, getpid());
 }
 
 void ctrlcReceived(int sig) {
@@ -28,7 +31,7 @@ void displayInfo(int sig) {
 	signal(SIGUSR1, displayInfo); // reset 
 	
 	// --> Display current process info <--
-	printf("Process PID: %u; (info extra ...)\n", getpid());
+	printf("Process PID: %u; (path); nftot: %u; nfmod: %u\n", getpid(), nftot, nfmod);
 		
 	// Send SIGUSR2 to the parent - display finished
 	if (kill(getppid(), SIGUSR2) != 0)
@@ -43,7 +46,7 @@ void questionPrompt(int sig) {
 	signal(SIGUSR2, questionPrompt); // reset 
 
 	// --> Display principal process info <--
-	printf("Process PID: %u; (info extra ...)\n", getpid());
+	printf("Process PID: %u; (path); nftot: %u; nfmod: %u\n", getpid(), nftot, nfmod);
 	
 	// Confirm exit prompt
 	printf("\nDo you really want to terminate the program (y/n)? ");

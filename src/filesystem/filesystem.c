@@ -1,5 +1,8 @@
 #include "filesystem.h"
 
+extern unsigned int nftot;
+extern unsigned int nfmod;
+
 bool isPathDir(const char *path) {
 	// try to open
 	FILE *f = fopen(path, "r");
@@ -71,6 +74,15 @@ int iterateDirectory(const char *options, const char *mode, const char *dirpath)
 				signal(SIGINT, SIG_IGN); // ignore SIG_IGN signal
 				signal(SIGUSR1, displayInfo); 
 				signal(SIGUSR2, SIG_IGN);
+
+				// Reset counters everytime new process is created
+				nftot = 0;
+				nfmod = 0;
+
+				/* --- Added to test ctrl-c --- */
+				// printf("Process groupId: %u, id: %u created\n", getpgrp(), getpid());
+				// sleep(5);
+				/* --- --- */
 
 				return (iterateDirectory(options, mode, path));
 			} else {

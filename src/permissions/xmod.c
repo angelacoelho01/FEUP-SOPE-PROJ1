@@ -1,11 +1,16 @@
 #include "xmod.h"
 
+unsigned int nftot = 0;
+unsigned int nfmod = 0;
+
 int xmod(const char *options, const char *mode, const char *path_name){
 	mode_t new_perms = getNewPerms(mode, path_name);
 
-	if(handleOptions(options, path_name, new_perms)) exit(1);
+	if (handleOptions(options, path_name, new_perms)) exit(1);
 
-	if(chmod(path_name, new_perms) == -1){
+	nftot++; // new file/dir found
+
+	if (chmod(path_name, new_perms) == -1){
 		perror("chmod()");
 		exit(1);
 	}
@@ -31,12 +36,14 @@ int handleOptions(const char *options, const char *path_name, const mode_t new_p
 
 	char *str_perms_initial = convertPermsToString(perms_initial);
 	
-	if(is_change && (opt_v || opt_c)){
-		char *str_perms_final = convertPermsToString(perms_final);
-		printf("mode of '%s' changed from 0%o (%s) to 0%o (%s)\n", path_name, perms_initial, str_perms_initial, perms_final, str_perms_final);
-		
+	if (is_change) {
+		nfmod++; // file/dir found change is permissions
+		if (opt_v || opt_c) {
+			char *str_perms_final = convertPermsToString(perms_final);
+			printf("mode of '%s' changed from 0%o (%s) to 0%o (%s)\n", path_name, perms_initial, str_perms_initial, perms_final, str_perms_final);
+		}
 	}
-	else if(!is_change && opt_v && !opt_c)
+	else if (!is_change && opt_v && !opt_c)
 		printf("mode of '%s' retained as 0%o (%s)\n", path_name, perms_initial, str_perms_initial);
 
 	return 0;
