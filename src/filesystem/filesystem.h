@@ -11,8 +11,10 @@
 #include <dirent.h>
 #include <sys/wait.h>
 #include <string.h>
+#include <signal.h>
 
 #include "../permissions/xmod.h"
+#include "../signals/signals.h"
 
 /**
  * Check if a specific path corresponds to a directory

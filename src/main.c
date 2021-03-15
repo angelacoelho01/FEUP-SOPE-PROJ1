@@ -39,23 +39,14 @@ int main(int argc, char *argv[], char *envp[]) {
             fprintf(stderr, "Error changing dir's files permissions\n");
             exit(EXIT_FAILURE);
         }
-        // for testing only -----------------
-        while(1){
-            //printf("Waste cycles\n");
-        }
-        //-----------------------------------
+
     } else {
         printf("It's a single file/directory!\n");  // to test purposes
-
+        
         if (xmod(options, mode, path_name) != 0) {
             fprintf(stderr, "Error changing file/directory's permissions\n");
             exit(EXIT_FAILURE);
         }
-        // for testing only ------------------
-        while(1){
-            //printf("Waste cycles\n");
-        }
-        //------------------------------------
     }
 
     return 0;
