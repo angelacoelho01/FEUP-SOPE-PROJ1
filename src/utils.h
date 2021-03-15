@@ -17,6 +17,6 @@ int isNumber(const char *str);
 
 int findChar(const char possible_str[], unsigned n, const char ch);
 
-void flush_in(void);
+char readAnswer(void);
 
 #endif /* UTILS_H_ */

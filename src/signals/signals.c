@@ -1,74 +1,63 @@
 #include "signals.h"
 
-void handler_ctrlc_parent(int sig) {
-	signal(SIGINT, handler_ctrlc_parent); // reset 
+void ctrlcReceived(int sig) {
+	signal(SIGINT, ctrlcReceived); // reset 
 	
-	// Receives signal
-	printf("\nParent received signal %u\n", sig);
+	// printf("\nParent received signal %u\n", sig); // to test purposes
 	
 	int status;
-	pid_t ret = waitpid(-1, &status, WNOHANG);
 	
-    if (ret == 0) { // unterminated children exist!
-		// if there are child processes! - sends to child group		
-		if (kill(0, SIGUSR1) != 0) // SEND SIGNAL TO EVERY PROCESS WITH SAME GROUP ID - PARENT + DESCENDANTS
-			perror("Error sending SIGUSR1 to children!");
-	}
-
-    else {
-		// if there aren't descendants - send signal 2 to himself
+    if (0 == waitpid(-1, &status, WNOHANG)) { // unterminated children exist
+		// Send SIGUSR1 to every process with the same groupId as the sender (himself + descendents)
+		if (kill(0, SIGUSR1) != 0) 
+			perror("SIGUSR1");
+	} else {
+		// Send SIGUSR2 to himself
 		kill(getpid(), SIGUSR2);
 	}
 }
 
-
-void display_child_info(int sig) {
-	signal(SIGUSR1, display_child_info); // reset 
+void displayInfo(int sig) {
+	signal(SIGUSR1, displayInfo); // reset 
 	
 	// --> Display current process info <--
-	printf("CHILD: Process no %u; (info extra ...)\n", getpid());
+	printf("Process PID: %u; (info extra ...)\n", getpid());
 		
-	// send signal 2 to parents - display finished
+	// Send SIGUSR2 to the parent - display finished
 	if (kill(getppid(), SIGUSR2) != 0)
-		perror("Error sending SIGUSR2 to parent!");
+		perror("SIGUSR2");
 	
-	// STOP himself
+	// Send SIGSTOP to himself
 	if (kill(getpid(), SIGSTOP) != 0)
-		perror("Error sending SIGSTOP to himself"); 
+		perror("SIGSTOP"); 
 }
 
-void term_prompt(int sig) {
+void questionPrompt(int sig) {
+	signal(SIGUSR2, questionPrompt); // reset 
 
-    char c;
-
-	signal(SIGUSR2, term_prompt); // reset 
+	// --> Display principal process info <--
+	printf("Process PID: %u; (info extra ...)\n", getpid());
 	
-	// --> Display Parent process info - Supremo
-	printf("PARENT: Process no %u; (info extra ...)\n", getpid());
-	
-	// --> Confirm exit prompt
-	printf("\nDo you wish to continue? (y/n)\n");
+	// Confirm exit prompt
+	printf("\nDo you really want to terminate the program (y/n)? ");
     
-	scanf("%c", &c);
-    flush_in();
+	// receive the answer
+	char answer = readAnswer();
 	
-	if (c == 'n') { 
-		// really wants to terminate
-		
-		if (kill(0, SIGTERM) != 0) // Terminate all processes including himself
-			perror("Error sending SIGTERM to the descendents");
-
+	// Continue all processes including himself
+	if (kill(0, SIGCONT) != 0) 
+		perror("Error sending SIGCONT to the child");
+	
+	if (answer == 'y') { 
+		// Terminate all processes including himself
+		if (kill(0, SIGTERM) != 0) 
+			perror("SIGTERM");
 	} 
-    
-    else { 
-		// continue processing descendants
-		if (kill(0, SIGCONT) != 0) 
-			perror("Error sending SIGCONT to the child");
-        printf("Resuming...\n");
-	}
 }
 
-void handler_term(int sig) {
-	printf("Termitating!!...\n"); // to registrate the signal
+void terminate(int sig) {
+	// to registrate the signal
+	printf("Termitating!!...\n");  // to test purposes
+	
 	exit(EXIT_CTRLC); 
 }

@@ -68,16 +68,14 @@ int iterateDirectory(const char *options, const char *mode, const char *dirpath)
 				error = -1;
 				break;
 			} else if (pid == 0) { // child process
-
-				signal(SIGINT, SIG_IGN); // ignore sigint signal - filho
-				signal(SIGUSR1, display_child_info); // dispor da sua informação - os processos filhos
+				signal(SIGINT, SIG_IGN); // ignore SIG_IGN signal
+				signal(SIGUSR1, displayInfo); 
 				signal(SIGUSR2, SIG_IGN);
 
 				return (iterateDirectory(options, mode, path));
 			} else {
 				// parent wait for the child to end 
 				waitpid(pid, &status, 0);
-
 			}
 		} else {
 			// its a file in the directory

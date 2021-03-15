@@ -46,7 +46,15 @@ int findChar(const char possible_str[], unsigned n, const char ch){
     return 0;
 }
 
-void flush_in(){ 
-    int ch;
-    while( (ch = fgetc(stdin)) != EOF && ch != '\n' ){} 
+char readAnswer(){ 
+	char c;
+
+	// Wait for valid input
+    while(1) {
+		scanf(" %c", &c);
+		if (c != 'y' && c != 'n')
+			printf("Invalid Answer! (y/n)? ");
+		else 
+			return c;
+	} 
 }

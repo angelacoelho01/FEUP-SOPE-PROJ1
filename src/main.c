@@ -13,10 +13,10 @@
 
 int main(int argc, char *argv[], char *envp[]) {
 
-    signal(SIGINT, handler_ctrlc_parent); // sinal do ctrl-c - pai trata
-	signal(SIGUSR1, SIG_IGN); // ignore SIGUSR1 signal - pai
-	signal(SIGUSR2, term_prompt); // apenas pai trata deste sinal
-	signal(SIGTERM, handler_term);
+    signal(SIGINT, ctrlcReceived); // handle ctrlc
+	signal(SIGUSR1, SIG_IGN); // ignore SIGUSR1 signal
+	signal(SIGUSR2, questionPrompt); // make que question of exit
+	signal(SIGTERM, terminate);
 
     if (!isValidInput(argc, argv)) {
         usageNotRight();
@@ -33,7 +33,7 @@ int main(int argc, char *argv[], char *envp[]) {
     opt_R = options != NULL && strchr(options, 'R') != NULL ? 1 : 0;
 
     if (isPathDir(path_name) && opt_R) {
-        printf("It's a directory to iterate!\n");   // to test purposes
+        // printf("It's a directory to iterate!\n");   // to test purposes
 
         if (iterateDirectory(options, mode, path_name) != 0) {
             fprintf(stderr, "Error changing dir's files permissions\n");
@@ -41,7 +41,7 @@ int main(int argc, char *argv[], char *envp[]) {
         }
         
     } else {
-        printf("It's a single file/directory!\n");  // to test purposes
+        // printf("It's a single file/directory!\n");  // to test purposes
         
         if (xmod(options, mode, path_name) != 0) {
             fprintf(stderr, "Error changing file/directory's permissions\n");
