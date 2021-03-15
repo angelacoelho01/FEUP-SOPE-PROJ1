@@ -21,4 +21,8 @@ int writeToLogger(int pid, const char *event, const char *info);
 
 int closeLogger();
 
+int getInfoSig(char *info, const char *signal, int pid);
+
+int getInfoFModf(char *info, const char *fname, const char* oldPerm, const char* newPerm);
+
 #endif /* LOGGER_H_ */

@@ -26,3 +26,13 @@ int writeToLogger(int pid, const char *event, const char *info) {
 int closeLogger() {
     return close(LOGGER_FD);
 }
+
+int getInfoSig(char *info, const char *signal, int pid){
+    sprintf(info, "%s : %d", signal, pid);
+    return 0;
+}
+
+int getInfoFModf(char *info, const char *fname, const char* oldPerm, const char* newPerm){
+    sprintf(info, "%s : %s : %s", fname, oldPerm, newPerm);
+    return 0;
+}
