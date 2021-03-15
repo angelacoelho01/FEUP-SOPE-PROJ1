@@ -1,5 +1,6 @@
 #include "signals.h"
 
+extern char *process_path;
 extern unsigned int nftot;
 extern unsigned int nfmod;
 
@@ -30,8 +31,8 @@ void ctrlcReceived(int sig) {
 void displayInfo(int sig) {
 	signal(SIGUSR1, displayInfo); // reset 
 	
-	// --> Display current process info <--
-	printf("Process PID: %u; (path); nftot: %u; nfmod: %u\n", getpid(), nftot, nfmod);
+	// Display current process info
+	printf("%u ; %s ; %u ; %u\n", getpid(), process_path, nftot, nfmod);
 		
 	// Send SIGUSR2 to the parent - display finished
 	if (kill(getppid(), SIGUSR2) != 0)
@@ -45,9 +46,9 @@ void displayInfo(int sig) {
 void questionPrompt(int sig) {
 	signal(SIGUSR2, questionPrompt); // reset 
 
-	// --> Display principal process info <--
-	printf("Process PID: %u; (path); nftot: %u; nfmod: %u\n", getpid(), nftot, nfmod);
-	
+	// Display principal process info
+	printf("%u ; %s ; %u ; %u\n", getpid(), process_path, nftot, nfmod);
+
 	// Confirm exit prompt
 	printf("\nDo you really want to terminate the program (y/n)? ");
 	char answer = readAnswer();

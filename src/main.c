@@ -11,6 +11,8 @@
 
 #define MAX_STR_LEN 256
 
+char *process_path;
+
 int main(int argc, char *argv[], char *envp[]) {
     signal(SIGINT, ctrlcReceived); // handle ctrlc
 	signal(SIGUSR1, SIG_IGN); // just ignore SIGUSR1 signal
@@ -39,6 +41,8 @@ int main(int argc, char *argv[], char *envp[]) {
     int opt_R = 0;
 
     opt_R = options != NULL && strchr(options, 'R') != NULL ? 1 : 0;
+
+    process_path = path_name;
 
     if (isPathDir(path_name) && opt_R) {
         // printf("It's a directory to iterate!\n");   // to test purposes

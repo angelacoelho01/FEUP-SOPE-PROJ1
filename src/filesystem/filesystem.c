@@ -1,5 +1,6 @@
 #include "filesystem.h"
 
+extern char *process_path;
 extern unsigned int nftot;
 extern unsigned int nfmod;
 
@@ -75,7 +76,8 @@ int iterateDirectory(const char *options, const char *mode, const char *dirpath)
 				signal(SIGUSR1, displayInfo); 
 				signal(SIGUSR2, SIG_IGN);
 
-				// Reset counters everytime new process is created
+				// Reset global variables everytime new process is created
+    			process_path = path;
 				nftot = 0;
 				nfmod = 0;
 
