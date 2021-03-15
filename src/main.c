@@ -4,9 +4,10 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include "permissions/xmod.h"
-#include "filesystem/filesystem.h"
-#include "inputcheck/inputcheck.h"
+#include "xmod.h"
+#include "filesystem.h"
+#include "inputcheck.h"
+#include "logger.h"
 
 #define MAX_STR_LEN 256
 
@@ -15,7 +16,8 @@ int main(int argc, char *argv[], char *envp[]) {
         usageNotRight();
         exit(INPUT_ERROR);
     }
-
+    //printf("process = %d\n", getpid());
+    openLogger();
     // With the valid input we can save the values without any problem
 
     char *mode = argv[argc - 2];
@@ -38,6 +40,9 @@ int main(int argc, char *argv[], char *envp[]) {
             exit(EXIT_FAILURE);
         }
     }
+
+    //writeToLogger();
+    closeLogger();
 
     return 0;
 }

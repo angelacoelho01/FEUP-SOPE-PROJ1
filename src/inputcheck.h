@@ -6,7 +6,7 @@
 #include <sys/stat.h>
 #include <string.h>
 
-#include "../permissions/xmod.h"
+#include "xmod.h"
 
 #define INPUT_ERROR 2
 

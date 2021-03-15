@@ -12,7 +12,8 @@
 #include <sys/wait.h>
 #include <string.h>
 
-#include "../permissions/xmod.h"
+#include "xmod.h"
+#include "logger.h"
 
 /**
  * Check if a specific path corresponds to a directory

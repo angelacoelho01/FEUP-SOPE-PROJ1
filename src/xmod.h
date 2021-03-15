@@ -7,7 +7,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "../utils.h"
+#include "utils.h"
 
 #define MAX_STR_LEN 256
 #define RESET_MODE ~(000777)

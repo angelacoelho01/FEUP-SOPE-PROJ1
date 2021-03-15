@@ -1,5 +1,6 @@
 #include "filesystem.h"
 
+
 bool isPathDir(const char *path) {
 	// try to open
 	FILE *f = fopen(path, "r");
@@ -68,10 +69,15 @@ int iterateDirectory(const char *options, const char *mode, const char *dirpath)
 				error = -1;
 				break;
 			} else if (pid == 0) { // child process
+				printf("child = %d\n", getpid());
+				writeToLogger(getpid(), PROC_CREAT);
 				return (iterateDirectory(options, mode, path));
 			} else {
 				// parent wait for the child to end 
+				printf("parent pid = %d\n", pid);
+				printf("parent = %d\n", getpid());
 				waitpid(pid, &status, 0);
+				writeToLogger(pid, PROC_EXIT);
 			}
 		} else {
 			// its a file in the directory
@@ -81,6 +87,7 @@ int iterateDirectory(const char *options, const char *mode, const char *dirpath)
 				break;
 			}
 		}
+
 	}
 	
 	// close directory
