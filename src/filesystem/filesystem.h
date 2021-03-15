@@ -1,5 +1,5 @@
-#ifndef _FILESYSTEM
-#define _FILESYSTEM
+#ifndef FILESYSTEM_H_
+#define FILESYSTEM_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,8 +11,10 @@
 #include <dirent.h>
 #include <sys/wait.h>
 #include <string.h>
+#include <signal.h>
 
 #include "../permissions/xmod.h"
+#include "../signals/signals.h"
 
 /**
  * Check if a specific path corresponds to a directory
@@ -30,4 +32,4 @@ bool isPathDir(const char *path);
  */
 int iterateDirectory(const char *options, const char *mode, const char *dirpath);
 
-#endif /* _FILESYSTEM */
+#endif /* FILESYSTEM_H_ */

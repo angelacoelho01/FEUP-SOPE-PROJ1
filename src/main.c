@@ -7,10 +7,27 @@
 #include "permissions/xmod.h"
 #include "filesystem/filesystem.h"
 #include "inputcheck/inputcheck.h"
+#include "signals/signals.h"
 
 #define MAX_STR_LEN 256
 
+char *process_path;
+
 int main(int argc, char *argv[], char *envp[]) {
+    signal(SIGINT, ctrlcReceived); // handle ctrlc
+	signal(SIGUSR1, SIG_IGN); // just ignore SIGUSR1 signal
+	signal(SIGUSR2, questionPrompt); // make que question of exit
+	signal(SIGTERM, terminate);
+
+    // ignore other main signals, and be able to regist them
+    signal(SIGHUP, registerAndIgnore);
+    signal(SIGQUIT, registerAndIgnore);
+    signal(SIGSEGV, registerAndIgnore);
+    signal(SIGPIPE, registerAndIgnore);
+    signal(SIGALRM, registerAndIgnore);
+    signal(SIGCHLD, registerAndIgnore);
+
+    // Check program call
     if (!isValidInput(argc, argv)) {
         usageNotRight();
         exit(INPUT_ERROR);
@@ -22,6 +39,8 @@ int main(int argc, char *argv[], char *envp[]) {
     char *path_name = argv[argc - 1];
     char *options = argc == 3 ? NULL : argv[1];
     int opt_R = options != NULL && strchr(options, 'R') != NULL ? 1 : 0;
+
+    process_path = path_name;
 
     if (isPathDir(path_name) && opt_R) {
         // printf("It's a directory to iterate!\n");   // to test purposes

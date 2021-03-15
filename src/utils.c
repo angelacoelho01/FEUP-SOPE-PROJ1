@@ -53,3 +53,15 @@ mode_t resetModeUser(const mode_t current_mode, const char user){
     return current_mode & RESET_MODE_ALL;
 }
 
+char readAnswer(){ 
+	char c;
+
+	// Wait for valid input
+    while(1) {
+		scanf(" %c", &c);
+		if (c != 'y' && c != 'n')
+			printf("Invalid Answer! (y/n)? ");
+		else 
+			return c;
+	} 
+}

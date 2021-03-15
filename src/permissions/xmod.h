@@ -21,5 +21,4 @@ char *getStrPerms(const char *mode);
 
 mode_t getNewPerms(const char *mode, const char *path_name);
 
-
 #endif /* XMOD_H_ */

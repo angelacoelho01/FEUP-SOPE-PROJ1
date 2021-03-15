@@ -1,5 +1,9 @@
 #include "filesystem.h"
 
+extern char *process_path;
+extern unsigned int nftot;
+extern unsigned int nfmod;
+
 bool isPathDir(const char *path) {
 	// try to open
 	FILE *f = fopen(path, "r");
@@ -68,6 +72,20 @@ int iterateDirectory(const char *options, const char *mode, const char *dirpath)
 				error = -1;
 				break;
 			} else if (pid == 0) { // child process
+				signal(SIGINT, SIG_IGN); // ignore SIG_IGN signal
+				signal(SIGUSR1, displayInfo); 
+				signal(SIGUSR2, SIG_IGN);
+
+				// Reset global variables everytime new process is created
+    			process_path = path;
+				nftot = 0;
+				nfmod = 0;
+
+				/* --- Added to test ctrl-c --- */
+				// printf("Process groupId: %u, id: %u created\n", getpgrp(), getpid());
+				// sleep(5);
+				/* --- --- */
+
 				return (iterateDirectory(options, mode, path));
 			} else {
 				// parent wait for the child to end 

@@ -1,5 +1,5 @@
-#ifndef INPUTCHECK
-#define INPUTCHECK
+#ifndef INPUTCHECK_H_
+#define INPUTCHECK_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,4 +25,4 @@ void usageNotRight();
  */
 int isValidInput(int argc, char *argv[]);
 
-#endif /* INPUTCHECK */
+#endif /* INPUTCHECK_H_ */
