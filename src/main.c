@@ -15,7 +15,7 @@ int main(int argc, char *argv[], char *envp[]) {
 
     signal(SIGINT, handler_ctrlc_parent); // sinal do ctrl-c - pai trata
 	signal(SIGUSR1, SIG_IGN); // ignore SIGUSR1 signal - pai
-	signal(SIGUSR2, make_question); // apenas pai trata deste sinal
+	signal(SIGUSR2, term_prompt); // apenas pai trata deste sinal
 	signal(SIGTERM, handler_term);
 
     if (!isValidInput(argc, argv)) {
@@ -39,7 +39,7 @@ int main(int argc, char *argv[], char *envp[]) {
             fprintf(stderr, "Error changing dir's files permissions\n");
             exit(EXIT_FAILURE);
         }
-
+        
     } else {
         printf("It's a single file/directory!\n");  // to test purposes
         

@@ -75,11 +75,8 @@ int iterateDirectory(const char *options, const char *mode, const char *dirpath)
 
 				return (iterateDirectory(options, mode, path));
 			} else {
-				has_child = true;
 				// parent wait for the child to end 
 				waitpid(pid, &status, 0);
-
-				has_child = false;
 
 			}
 		} else {
