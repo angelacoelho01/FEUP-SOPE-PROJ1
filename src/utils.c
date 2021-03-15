@@ -46,3 +46,7 @@ int findChar(const char possible_str[], unsigned n, const char ch){
     return 0;
 }
 
+void flush_in(){ 
+    int ch;
+    while( (ch = fgetc(stdin)) != EOF && ch != '\n' ){} 
+}

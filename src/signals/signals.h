@@ -8,13 +8,14 @@
 #include <unistd.h>
 #include <stdbool.h>
 
+#include "../utils.h"
+
+
 #define EXIT_CTRLC 5
 
 void handler_ctrlc_parent(int sig);
 void display_child_info(int sig);
 void term_prompt(int sig);
 void handler_term(int sig);
-
-void flush_in();
 
 #endif /* SIGNALS_H_ */

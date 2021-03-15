@@ -72,8 +72,3 @@ void handler_term(int sig) {
 	printf("Termitating!!...\n"); // to registrate the signal
 	exit(EXIT_CTRLC); 
 }
-
-void flush_in(){ 
-    int ch;
-    while( (ch = fgetc(stdin)) != EOF && ch != '\n' ){} 
-}
