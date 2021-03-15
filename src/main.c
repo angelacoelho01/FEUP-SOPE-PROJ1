@@ -12,12 +12,20 @@
 #define MAX_STR_LEN 256
 
 int main(int argc, char *argv[], char *envp[]) {
-
     signal(SIGINT, ctrlcReceived); // handle ctrlc
-	signal(SIGUSR1, SIG_IGN); // ignore SIGUSR1 signal
+	signal(SIGUSR1, SIG_IGN); // just ignore SIGUSR1 signal
 	signal(SIGUSR2, questionPrompt); // make que question of exit
 	signal(SIGTERM, terminate);
 
+    // ignore other main signals, and be able to regist them
+    signal(SIGHUP, registerAndIgnore);
+    signal(SIGQUIT, registerAndIgnore);
+    signal(SIGSEGV, registerAndIgnore);
+    signal(SIGPIPE, registerAndIgnore);
+    signal(SIGALRM, registerAndIgnore);
+    signal(SIGCHLD, registerAndIgnore);
+
+    // Check program call
     if (!isValidInput(argc, argv)) {
         usageNotRight();
         exit(INPUT_ERROR);

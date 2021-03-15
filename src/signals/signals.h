@@ -13,6 +13,8 @@
 
 #define EXIT_CTRLC 5
 
+void registerAndIgnore(int sig);
+
 void ctrlcReceived(int sig);
 
 void displayInfo(int sig);

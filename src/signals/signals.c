@@ -1,5 +1,11 @@
 #include "signals.h"
 
+void registerAndIgnore(int sig) {
+	signal(sig, registerAndIgnore);
+	
+	printf("Signal %u received by pid %u and ignored!\n", sig, getpid());
+}
+
 void ctrlcReceived(int sig) {
 	signal(SIGINT, ctrlcReceived); // reset 
 	
