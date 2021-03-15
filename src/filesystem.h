@@ -13,8 +13,8 @@
 #include <string.h>
 #include <signal.h>
 
-#include "../permissions/xmod.h"
-#include "../signals/signals.h"
+#include "xmod.h"
+#include "signals.h"
 
 /**
  * Check if a specific path corresponds to a directory

@@ -9,7 +9,7 @@
 #include <signal.h>
 #include <stdbool.h>
 
-#include "../utils.h"
+#include "utils.h"
 
 #define EXIT_CTRLC 5
 

@@ -4,10 +4,10 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include "permissions/xmod.h"
-#include "filesystem/filesystem.h"
-#include "inputcheck/inputcheck.h"
-#include "signals/signals.h"
+#include "xmod.h"
+#include "filesystem.h"
+#include "inputcheck.h"
+#include "signals.h"
 
 #define MAX_STR_LEN 256
 
