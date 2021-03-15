@@ -35,13 +35,13 @@ int handleOptions(const char *options, const char *path_name, const mode_t new_p
 	int opt_c = strchr(options, 'c') == NULL ? 0 : 1;
 
 	char *str_perms_initial = convertPermsToString(perms_initial);
+
+	// increment variable only if a permission is modified
+	if (is_change) nfmod++;
 	
-	if (is_change) {
-		nfmod++; // file/dir found change is permissions
-		if (opt_v || opt_c) {
-			char *str_perms_final = convertPermsToString(perms_final);
-			printf("mode of '%s' changed from 0%o (%s) to 0%o (%s)\n", path_name, perms_initial, str_perms_initial, perms_final, str_perms_final);
-		}
+	if (is_change && (opt_v || opt_c)) {
+		char *str_perms_final = convertPermsToString(perms_final);
+		printf("mode of '%s' changed from 0%o (%s) to 0%o (%s)\n", path_name, perms_initial, str_perms_initial, perms_final, str_perms_final);
 	}
 	else if (!is_change && opt_v && !opt_c)
 		printf("mode of '%s' retained as 0%o (%s)\n", path_name, perms_initial, str_perms_initial);
