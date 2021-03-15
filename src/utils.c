@@ -1,6 +1,6 @@
 #include "utils.h"
 
-#include <ctype.h>
+#include <ctype.h>	
 
 char *getFileName(const char *path_name) {
     char *path = (char*)malloc(MAX_STR_LEN);
@@ -46,10 +46,10 @@ int findChar(const char possible_str[], unsigned n, const char ch){
     return 0;
 }
 
-mode_t resetModeUser(const mode_t current_mode, const char user){
-    if(user == 'u') return current_mode & RESET_MODE_USR;
-    else if(user == 'g') return current_mode & RESET_MODE_GRP;
-    else if(user == 'o') return current_mode & RESET_MODE_OTH;
-    return current_mode & RESET_MODE_ALL;
-}
+double getElapsedTime(const struct timespec begin){
+	struct timespec end;
 
+	clock_gettime(CLOCK_MONOTONIC, &end);
+
+	return (double) (end.tv_sec - begin.tv_sec) / 1000.0 + (end.tv_nsec - begin.tv_nsec) / 1000000.0;
+}

@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <stdbool.h>
 #include <string.h>
+#include <time.h>
 
 #include "xmod.h"
 #include "filesystem.h"
@@ -16,8 +17,10 @@ int main(int argc, char *argv[], char *envp[]) {
         usageNotRight();
         exit(INPUT_ERROR);
     }
-    //printf("process = %d\n", getpid());
+    
     openLogger();
+    writeToLogger(getpid(), PROC_CREAT, "args");
+
     // With the valid input we can save the values without any problem
 
     char *mode = argv[argc - 2];
@@ -41,7 +44,6 @@ int main(int argc, char *argv[], char *envp[]) {
         }
     }
 
-    //writeToLogger();
     closeLogger();
 
     return 0;

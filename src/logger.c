@@ -1,6 +1,9 @@
 #include "logger.h"
 
+#include "utils.h"	
+
 int LOGGER_FD;
+struct timespec START_TIME;
 
 int openLogger() {
     // Get logger path
@@ -10,14 +13,13 @@ int openLogger() {
 
     LOGGER_FD = open(path, O_CREAT | O_TRUNC | O_WRONLY, 0777);
 
-    return 0;
+    return 1;
 }
 
-int writeToLogger(int pid, const char *info) {
+int writeToLogger(int pid, const char *event, const char *info) {
     char reg[256];
-    sprintf(reg, "instant ; %d ; event ; %s\n", pid, info);
+    sprintf(reg, "%0.3f ; %d ; %s ; %s\n", getElapsedTime(START_TIME), pid, event, info);
     write(LOGGER_FD, reg, strlen(reg));
-
     return 0;
 }
 

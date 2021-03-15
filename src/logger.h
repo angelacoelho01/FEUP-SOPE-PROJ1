@@ -17,7 +17,7 @@
 
 int openLogger();
 
-int writeToLogger(int pid, const char *info);
+int writeToLogger(int pid, const char *event, const char *info);
 
 int closeLogger();
 

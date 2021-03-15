@@ -69,15 +69,15 @@ int iterateDirectory(const char *options, const char *mode, const char *dirpath)
 				error = -1;
 				break;
 			} else if (pid == 0) { // child process
-				printf("child = %d\n", getpid());
-				writeToLogger(getpid(), PROC_CREAT);
+				writeToLogger(getpid(), PROC_CREAT, "args");
 				return (iterateDirectory(options, mode, path));
 			} else {
 				// parent wait for the child to end 
-				printf("parent pid = %d\n", pid);
-				printf("parent = %d\n", getpid());
 				waitpid(pid, &status, 0);
-				writeToLogger(pid, PROC_EXIT);
+				char exit_status[MAX_STR_LEN];
+				sprintf(exit_status, "%d", WEXITSTATUS(status));
+				printf("EXIT STATUS = %d\n", WEXITSTATUS(status));
+				writeToLogger(getpid(), PROC_EXIT, exit_status);
 			}
 		} else {
 			// its a file in the directory

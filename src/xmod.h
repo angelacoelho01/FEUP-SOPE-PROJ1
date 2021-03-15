@@ -21,5 +21,7 @@ char *getStrPerms(const char *mode);
 
 mode_t getNewPerms(const char *mode, const char *path_name);
 
+mode_t resetModeUser(const mode_t current_mode, const char user);
+
 
 #endif /* XMOD_H_ */

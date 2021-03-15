@@ -5,6 +5,7 @@
 #include <libgen.h>
 #include <sys/stat.h>
 #include <stdlib.h>
+#include <time.h>
 
 #define MAX_STR_LEN 256
 #define RESET_MODE_USR ~(000700)
@@ -20,6 +21,6 @@ int isNumber(const char *str);
 
 int findChar(const char possible_str[], unsigned n, const char ch);
 
-mode_t resetModeUser(const mode_t current_mode, const char user);
+double getElapsedTime(const struct timespec begin);
 
 #endif /* UTILS_H_ */
