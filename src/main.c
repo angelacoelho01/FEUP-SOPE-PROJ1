@@ -12,7 +12,7 @@
 #include "signals.h"
 
 #define MAX_STR_LEN 256
-char info[256];
+char info[MAX_STR_LEN];
 
 char *process_path;
 

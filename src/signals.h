@@ -10,6 +10,14 @@
 #include <stdbool.h>
 
 #include "utils.h"
+#include "logger.h"
+
+#define STR_SIGINT "SIGINT"
+#define STR_SIGUSR1 "SIGUSR1"
+#define STR_SIGUSR2 "SIGUSR2"
+#define STR_SIGTERM "SIGTERM"
+#define STR_SIGSTOP "SIGSTOP"
+#define STR_SIGCONT "SIGCONT"
 
 #define EXIT_CTRLC 5
 
