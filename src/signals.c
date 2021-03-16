@@ -21,10 +21,12 @@ void ctrlcReceived(int sig) {
 		// Send SIGUSR1 to every process with the same groupId as the sender (himself + descendents)
 		printf("\n");
 		if (kill(0, SIGUSR1) != 0) 
-			perror("SIGUSR1");
+			perror(STR_SIGUSR1);
+		writeToLogger(getpid(), SIGNAL_SENT, STR_SIGUSR1);
 	} else {
 		// Send SIGUSR2 to himself
 		kill(getpid(), SIGUSR2);
+		writeToLogger(getpid(), SIGNAL_SENT, STR_SIGUSR2);
 	}
 }
 
@@ -36,11 +38,15 @@ void displayInfo(int sig) {
 		
 	// Send SIGUSR2 to the parent - display finished
 	if (kill(getppid(), SIGUSR2) != 0)
-		perror("SIGUSR2");
+		perror(STR_SIGUSR2);
 	
+	writeToLogger(getpid(), SIGNAL_SENT, STR_SIGUSR2);
+
+	writeToLogger(getpid(), SIGNAL_SENT, STR_SIGSTOP);
 	// Send SIGSTOP to himself
 	if (kill(getpid(), SIGSTOP) != 0)
-		perror("SIGSTOP"); 
+		perror(STR_SIGSTOP); 
+
 }
 
 void questionPrompt(int sig) {
@@ -55,12 +61,14 @@ void questionPrompt(int sig) {
 	
 	// Continue all processes including himself
 	if (kill(0, SIGCONT) != 0) 
-		perror("SIGCONT");
-	
+		perror(STR_SIGCONT);
+	writeToLogger(0, SIGNAL_SENT, STR_SIGCONT);
+
 	if (answer == 'y') { 
+		writeToLogger(0, SIGNAL_SENT, STR_SIGTERM);
 		// Terminate all processes including himself
 		if (kill(0, SIGTERM) != 0) 
-			perror("SIGTERM");
+			perror(STR_SIGTERM);
 	} 
 }
 

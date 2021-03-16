@@ -18,7 +18,7 @@ int openLogger() {
 
 int writeToLogger(int pid, const char *event, const char *info) {
     char reg[256];
-    sprintf(reg, "%0.3f ; %d ; %s ; %s\n", getElapsedTime(START_TIME), pid, event, info);
+    sprintf(reg, "%f ; %d ; %s ; %s\n", getElapsedTime(START_TIME), pid, event, info);
     write(LOGGER_FD, reg, strlen(reg));
     return 0;
 }

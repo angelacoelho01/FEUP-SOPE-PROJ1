@@ -83,8 +83,8 @@ int iterateDirectory(const char *options, const char *mode, const char *dirpath)
 				nfmod = 0;
 
 				/* --- Added to test ctrl-c --- */
-				// printf("Process groupId: %u, id: %u created\n", getpgrp(), getpid());
-				// sleep(5);
+				printf("Process groupId: %u, id: %u created\n", getpgrp(), getpid());
+				sleep(5);
 				/* --- --- */
 
 				return (iterateDirectory(options, mode, path));

@@ -49,6 +49,7 @@ int findChar(const char possible_str[], unsigned n, const char ch){
 double getElapsedTime(const struct timespec begin){
 	struct timespec end;
 
+	//clock_gettime(CLOCK_REALTIME, &end);
 	clock_gettime(CLOCK_MONOTONIC, &end);
 
 	return (double) (end.tv_sec - begin.tv_sec) / 1000.0 + (end.tv_nsec - begin.tv_nsec) / 1000000.0;
