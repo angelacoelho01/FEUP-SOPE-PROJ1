@@ -53,3 +53,16 @@ double getElapsedTime(const struct timespec begin){
 
 	return (double) (end.tv_sec - begin.tv_sec) / 1000.0 + (end.tv_nsec - begin.tv_nsec) / 1000000.0;
 }
+
+char readAnswer(){ 
+	char c;
+
+	// Wait for valid input
+    while(1) {
+		scanf(" %c", &c);
+		if (c != 'y' && c != 'n')
+			printf("Invalid Answer! (y/n)? ");
+		else 
+			return c;
+	} 
+}
