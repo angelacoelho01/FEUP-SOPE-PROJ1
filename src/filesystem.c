@@ -77,7 +77,7 @@ int iterateDirectory(const char *options, const char *mode, const char *dirpath)
 				char exit_status[MAX_STR_LEN];
 				sprintf(exit_status, "%d", WEXITSTATUS(status));
 				printf("EXIT STATUS = %d\n", WEXITSTATUS(status));
-				writeToLogger(getpid(), PROC_EXIT, exit_status);
+				writeToLogger(pid, PROC_EXIT, exit_status);
 			}
 		} else {
 			// its a file in the directory
