@@ -1,6 +1,8 @@
 #include "utils.h"
 
-#include <ctype.h>
+#include <ctype.h>	
+
+extern char line_args[MAX_STR_LEN];
 
 char *getFileName(const char *path_name) {
     char *path = (char*)malloc(MAX_STR_LEN);
@@ -46,11 +48,12 @@ int findChar(const char possible_str[], unsigned n, const char ch){
     return 0;
 }
 
-mode_t resetModeUser(const mode_t current_mode, const char user){
-    if(user == 'u') return current_mode & RESET_MODE_USR;
-    else if(user == 'g') return current_mode & RESET_MODE_GRP;
-    else if(user == 'o') return current_mode & RESET_MODE_OTH;
-    return current_mode & RESET_MODE_ALL;
+double getElapsedTime(const struct timespec begin){
+	struct timespec end;
+
+	clock_gettime(CLOCK_MONOTONIC, &end);
+
+	return (double) (end.tv_sec - begin.tv_sec) / 1000.0 + (end.tv_nsec - begin.tv_nsec) / 1000000.0;
 }
 
 char readAnswer(){ 
@@ -58,10 +61,27 @@ char readAnswer(){
 
     // Wait for valid input
     while(1) {
-        scanf(" %c", &c);
-        if (c != 'y' && c != 'n')
-            printf("Invalid Answer! (y/n)? ");
-        else 
-            return c;
-    } 
+		scanf(" %c", &c);
+		if (c != 'y' && c != 'n')
+			printf("Invalid Answer! (y/n)? ");
+		else 
+			return c;
+	} 
+}
+
+void getLineArgs(const char *mode, const char *path, const char *options) {
+	memset(line_args, 0, MAX_STR_LEN);
+	if(options != NULL)
+		strcat(line_args, options);
+
+	strcat(line_args, " ");
+	strcat(line_args, mode);
+	strcat(line_args, " ");
+	strcat(line_args, path);
+}
+
+int counterChar(const char* str, const char ch) {
+    int i = 0;
+    for(i = 0; str[i]; str[i] == ch ? i++ : *str++);
+    return i;
 }

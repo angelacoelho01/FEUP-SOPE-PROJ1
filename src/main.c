@@ -3,15 +3,19 @@
 #include <unistd.h>
 #include <stdbool.h>
 #include <string.h>
+#include <time.h>
 
 #include "xmod.h"
 #include "filesystem.h"
 #include "inputcheck.h"
+#include "logger.h"
 #include "signals.h"
 
 #define MAX_STR_LEN 256
 
-char *process_path;
+//char info[MAX_STR_LEN];
+extern char *process_path;
+extern char line_args[MAX_STR_LEN];
 
 int main(int argc, char *argv[], char *envp[]) {
     signal(SIGINT, ctrlcReceived); // handle ctrlc
@@ -41,6 +45,10 @@ int main(int argc, char *argv[], char *envp[]) {
 
     process_path = path_name;
 
+    getLineArgs(mode, path_name, options);
+    openLogger();
+    writeToLogger(getpid(), PROC_CREAT, line_args);
+
     if ((pathType(path_name) == TYPE_DIR) && opt_R) {
         // directory to iterate
         if (iterateDirectory(options, mode, path_name) != 0) {
@@ -54,6 +62,8 @@ int main(int argc, char *argv[], char *envp[]) {
             exit(EXIT_FAILURE);
         }
     }
+
+    closeLogger();
 
     return 0;
 }

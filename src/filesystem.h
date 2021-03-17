@@ -14,6 +14,7 @@
 #include <signal.h>
 
 #include "xmod.h"
+#include "logger.h"
 #include "signals.h"
 
 // Macro: Identify the content's type

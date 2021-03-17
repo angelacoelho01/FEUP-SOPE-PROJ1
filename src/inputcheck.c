@@ -41,15 +41,17 @@ int isValidInput(int argc, char *argv[]) {
         if (options[0] != '-')
             return 0;
 
-        int opt_v = strchr(options, 'v') == NULL ? 0 : 1;
-        int opt_c = strchr(options, 'c') == NULL ? 0 : 1;
-        int opt_R = strchr(options, 'R') == NULL ? 0 : 1;
+        int opt_v = counterChar(options, 'v');
+        int opt_c = counterChar(options, 'c');
+        int opt_R = counterChar(options, 'R');
 
-        if (!opt_v && !opt_c && !opt_R)
+        if(opt_v > 1 || opt_c > 1 || opt_R > 1)
+            return 0;
+
+        if(opt_v + opt_c + opt_R + 1 != strlen(options))
             return 0;
     }
 
-    // printf(" v: %d, c: %d, R: %d\n", opt_v, opt_c, opt_R);
 
     // Check if octal mode
     if (isNumber(mode)) {

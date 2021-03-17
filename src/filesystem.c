@@ -3,6 +3,7 @@
 extern char *process_path;
 extern unsigned int nftot;
 extern unsigned int nfmod;
+extern char line_args[MAX_STR_LEN];
 
 int pathType(const char *path) {
     // Try to open
@@ -72,24 +73,29 @@ int iterateDirectory(const char *options, const char *mode, const char *dirpath)
                 error = -1;
                 break;
             } else if (pid == 0) { // child process
-                signal(SIGINT, registerAndIgnore); 
-                signal(SIGUSR1, displayInfo); 
-                signal(SIGUSR2, registerAndIgnore);
+                getLineArgs(mode, path, options);
+				writeToLogger(getpid(), PROC_CREAT, line_args);
+				signal(SIGINT, SIG_IGN); // ignore SIG_IGN signal
+				signal(SIGUSR1, displayInfo); 
+				signal(SIGUSR2, SIG_IGN);
 
-                // Reset global variables everytime new process is created
-                process_path = path;
-                nftot = 0;
-                nfmod = 0;
+				// Reset global variables everytime new process is created
+    			process_path = path;
+				nftot = 0;
+				nfmod = 0;
 
-                /* --- Added to test ctrl-c --- */
-                // printf("Process groupId: %u, id: %u created\n", getpgrp(), getpid());
-                // sleep(5);
-                /* --- --- */
+				/* --- Added to test ctrl-c --- */
+				//printf("Process groupId: %u, id: %u created\n", getpgrp(), getpid());
+				//sleep(5);
+				/* --- --- */
 
                 return (iterateDirectory(options, mode, path));
             } else {
                 // parent wait for the child to end 
                 waitpid(pid, &status, 0);
+				char exit_status[MAX_STR_LEN];
+				sprintf(exit_status, "%d", WEXITSTATUS(status));
+				writeToLogger(pid, PROC_EXIT, exit_status);
             }
         } else if (type == TYPE_LNK) { 
             // ignore symbolic links
