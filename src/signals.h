@@ -14,31 +14,36 @@
 #define EXIT_CTRLC 5
 
 /**
- * Register the reception of signals to be ignored
+ * @brief Register the reception of signals to be ignored
+ * 
  * @param sig received signal
  */
 void registerAndIgnore(int sig);
 
 /**
- * Handle interrupt - order the children to write their information
+ * @brief Handle interrupt - order the children to write their information
+ * 
  * @param sig received signal
  */
 void ctrlcReceived(int sig);
 
 /**
- * Write the process information on the screen and stop him self
+ * @brief Write the process information on the screen and stop him self
+ * 
  * @param sig received signal
  */
 void displayInfo(int sig);
 
 /**
- * Confirm the termination of the program and operate according the answer
+ * @brief Confirm the termination of the program and operate according the answer
+ * 
  * @param sig received signal
  */
 void questionPrompt(int sig);
 
 /**
- * Register the termination of a process and exit it
+ * @brief Register the termination of a process and exit it
+ * 
  * @param sig received signal
  */
 void terminate(int sig);
