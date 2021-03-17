@@ -39,11 +39,3 @@ char* getInfoFModf(const char *fname) {
     sprintf(info, "%s : 0%o : 0%o", fname, old_perm, new_perm);
     return info;
 }
-
-int getOldPerm() {
-    return 0;
-}
-
-int getNewPerm() {
-    return 0;
-}
