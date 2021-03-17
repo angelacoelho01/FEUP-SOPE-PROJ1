@@ -5,13 +5,13 @@ extern unsigned int nftot;
 extern unsigned int nfmod;
 
 int pathType(const char *path) {
-    // try to open
+    // Try to open
     FILE *f = fopen(path, "r");
     if (f == NULL) {
         fprintf(stderr, "xmod: cannot access '%s': No such file or directory\n", path);
         exit(EXIT_FAILURE);
     }
-    // see if the root is a file or a directory
+
     int type = TYPE_OTHER;
     struct stat sb;
     if (stat(path, &sb) == -1) {
@@ -19,13 +19,12 @@ int pathType(const char *path) {
         exit(EXIT_FAILURE);
     }
     
-    // the path represent a dir
-    if (S_ISDIR(sb.st_mode)) 
+    if (S_ISDIR(sb.st_mode)) // directory
         type = TYPE_DIR;
-    else if (S_ISLNK(sb.st_mode))
+    else if (S_ISLNK(sb.st_mode)) // symbolic link
         type = TYPE_LNK;
         
-    // close
+    // Close
     if (fclose(f) == -1) {
         fprintf(stderr, "Error in closing '%s'\n", path);
         exit(EXIT_FAILURE);
@@ -65,7 +64,6 @@ int iterateDirectory(const char *options, const char *mode, const char *dirpath)
         strcat(strcat(strcat(path, dirpath), "/"), dir->d_name);
         
         int type = pathType(path);
-        // its a directory  
         if (type == TYPE_DIR) {         
             // create a new process - the child - who will iterate over this subdirectory
             pid_t pid = fork();
@@ -74,7 +72,7 @@ int iterateDirectory(const char *options, const char *mode, const char *dirpath)
                 error = -1;
                 break;
             } else if (pid == 0) { // child process
-                signal(SIGINT, registerAndIgnore); // ignore SIG_IGN signal
+                signal(SIGINT, registerAndIgnore); 
                 signal(SIGUSR1, displayInfo); 
                 signal(SIGUSR2, registerAndIgnore);
 

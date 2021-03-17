@@ -16,12 +16,13 @@
 #include "xmod.h"
 #include "signals.h"
 
+// Macro: Identify the content's type
 #define TYPE_OTHER 0
 #define TYPE_DIR 1
 #define TYPE_LNK 2
 
 /**
- * Check if a specific path corresponds to a directory
+ * Check the type of the content of a specific path 
  * @param path The location of the content to check
  * @return Number that identifies the type of the content the path represents
  */

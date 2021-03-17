@@ -6,18 +6,14 @@ extern unsigned int nfmod;
 
 void registerAndIgnore(int sig) {
     signal(sig, registerAndIgnore);
-    
-    // printf("Signal %u received by pid %u and ignored!\n", sig, getpid());
 }
 
 void ctrlcReceived(int sig) {
     signal(SIGINT, ctrlcReceived); // reset 
-    
-    // printf("\nParent received signal %u\n", sig); // to test purposes
-    
+     
     int status;
-    
-    if (0 == waitpid(-1, &status, WNOHANG)) { // unterminated children exist
+    // check if an unterminated children exist
+    if (0 == waitpid(-1, &status, WNOHANG)) { 
         // Send SIGUSR1 to every process with the same groupId as the sender (himself + descendents)
         printf("\n");
         if (kill(0, SIGUSR1) != 0) 
@@ -31,10 +27,10 @@ void ctrlcReceived(int sig) {
 void displayInfo(int sig) {
     signal(SIGUSR1, displayInfo); // reset 
     
-    // Display current process info
+    // Display the process info
     printf("%u ; %s ; %u ; %u\n", getpid(), process_path, nftot, nfmod);
         
-    // Send SIGUSR2 to the parent - display finished
+    // Send SIGUSR2 to the parent (display finished)
     if (kill(getppid(), SIGUSR2) != 0)
         perror("SIGUSR2");
     
@@ -65,7 +61,6 @@ void questionPrompt(int sig) {
 }
 
 void terminate(int sig) {
-    // to registrate the signal
     printf("Termitating Process PID %u!!...\n", getpid());  // to test purposes
     
     exit(EXIT_CTRLC); 
