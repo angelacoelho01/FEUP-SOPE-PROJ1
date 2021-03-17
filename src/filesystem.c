@@ -8,14 +8,14 @@ int pathType(const char *path) {
     // try to open
     FILE *f = fopen(path, "r");
     if (f == NULL) {
-        fprintf(stderr, "Error in opening %s\n", path);
+        fprintf(stderr, "xmod: cannot access '%s': No such file or directory\n", path);
         exit(EXIT_FAILURE);
     }
     // see if the root is a file or a directory
     int type = TYPE_OTHER;
     struct stat sb;
     if (stat(path, &sb) == -1) {
-        fprintf(stderr, "Error in getting %s status\n", path);
+        fprintf(stderr, "Error in getting '%s' status\n", path);
         exit(EXIT_FAILURE);
     }
     
@@ -27,7 +27,7 @@ int pathType(const char *path) {
         
     // close
     if (fclose(f) == -1) {
-        fprintf(stderr, "Error in closing %s\n", path);
+        fprintf(stderr, "Error in closing '%s'\n", path);
         exit(EXIT_FAILURE);
     }
     
@@ -39,14 +39,14 @@ int iterateDirectory(const char *options, const char *mode, const char *dirpath)
     
     // change dir's permissions
     if (xmod(options, mode, dirpath) != 0) {
-        fprintf(stderr, "Error changing dir's permissions: %s\n", dirpath);
+        fprintf(stderr, "Error changing dir's permissions: '%s'\n", dirpath);
         return -1;
     }
     
     // open directory
     DIR *d; 
     if ((d = opendir(dirpath)) == NULL) {
-        fprintf(stderr, "Error in opening dir %s\n", dirpath);
+        fprintf(stderr, "Error in opening dir '%s'\n", dirpath);
         return -1;
     }
     
@@ -96,11 +96,11 @@ int iterateDirectory(const char *options, const char *mode, const char *dirpath)
         } else if (type == TYPE_LNK) { 
             // ignore symbolic links
             if (strchr(options, 'v') != NULL)
-                fprintf(stdout, "neither symbolic link %s nor referent has been changed\n", path);
+                fprintf(stdout, "neither symbolic link '%s' nor referent has been changed\n", path);
         } else {
             // its a file in the directory
             if (xmod(options, mode, path) != 0) {
-                fprintf(stderr, "Error changing file's permissions: %s\n", path);
+                fprintf(stderr, "Error changing file's permissions: '%s'\n", path);
                 error = -1;
                 break;
             }
@@ -109,7 +109,7 @@ int iterateDirectory(const char *options, const char *mode, const char *dirpath)
     
     // close directory
     if (closedir(d) == -1) {
-        fprintf(stderr, "Error in closing dir %s\n", dirpath);
+        fprintf(stderr, "Error in closing dir '%s'\n", dirpath);
         return -1;
     }
     
