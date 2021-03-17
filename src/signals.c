@@ -32,6 +32,15 @@ void registerAndIgnore(int sig) {
 	case SIGCHLD:
 		strcpy(SIGRECV,"SIGCHLD");
 		break;
+	case SIGINT:
+        strcpy(SIGRECV,STR_SIGINT);
+        break;
+    case SIGUSR1:
+        strcpy(SIGRECV,STR_SIGUSR1);
+        break;
+    case SIGUSR2:
+        strcpy(SIGRECV,STR_SIGUSR2);
+        break;
 	default:
 		strcpy(SIGRECV,"SIGNALRECEIVED");
 		break;
