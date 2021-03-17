@@ -13,7 +13,8 @@
 
 #define MAX_STR_LEN 256
 
-char *process_path;
+extern char *process_path;
+extern char line_args[MAX_STR_LEN];
 
 int main(int argc, char *argv[], char *envp[]) {
     signal(SIGINT, ctrlcReceived); // handle ctrlc
@@ -34,18 +35,18 @@ int main(int argc, char *argv[], char *envp[]) {
         usageNotRight();
         exit(INPUT_ERROR);
     }
-    
-    openLogger();
-    writeToLogger(getpid(), PROC_CREAT, "args");
 
     // With the valid input we can save the values without any problem
-
     char *mode = argv[argc - 2];
     char *path_name = argv[argc - 1];
     char *options = argc == 3 ? NULL : argv[1];
     int opt_R = options != NULL && strchr(options, 'R') != NULL ? 1 : 0;
 
     process_path = path_name;
+
+    getLineArgs(mode, path_name, options);
+    openLogger();
+    writeToLogger(getpid(), PROC_CREAT, line_args);
 
     if (isPathDir(path_name) && opt_R) {
         // printf("It's a directory to iterate!\n");   // to test purposes

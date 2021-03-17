@@ -1,6 +1,6 @@
 #include "signals.h"
 
-extern char *process_path;
+char *process_path;
 extern unsigned int nftot;
 extern unsigned int nfmod;
 

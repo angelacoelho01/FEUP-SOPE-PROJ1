@@ -24,6 +24,8 @@ int findChar(const char possible_str[], unsigned n, const char ch);
 
 double getElapsedTime(const struct timespec begin);
 
+void getLineArgs(const char *mode, const char *path, const char *options);
+
 char readAnswer(void);
 
 #endif /* UTILS_H_ */

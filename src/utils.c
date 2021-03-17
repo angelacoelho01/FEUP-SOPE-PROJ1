@@ -2,6 +2,8 @@
 
 #include <ctype.h>	
 
+extern char line_args[MAX_STR_LEN];
+
 char *getFileName(const char *path_name) {
     char *path = (char*)malloc(MAX_STR_LEN);
     strcpy(path, path_name);
@@ -66,4 +68,15 @@ char readAnswer(){
 		else 
 			return c;
 	} 
+}
+
+void getLineArgs(const char *mode, const char *path, const char *options) {
+	memset(line_args, 0, MAX_STR_LEN);
+	if(options != NULL)
+		strcat(line_args, options);
+
+	strcat(line_args, " ");
+	strcat(line_args, mode);
+	strcat(line_args, " ");
+	strcat(line_args, path);
 }

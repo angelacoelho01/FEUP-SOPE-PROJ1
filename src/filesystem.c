@@ -3,6 +3,7 @@
 extern char *process_path;
 extern unsigned int nftot;
 extern unsigned int nfmod;
+extern char line_args[MAX_STR_LEN];
 
 bool isPathDir(const char *path) {
 	// try to open
@@ -72,7 +73,8 @@ int iterateDirectory(const char *options, const char *mode, const char *dirpath)
 				error = -1;
 				break;
 			} else if (pid == 0) { // child process
-				writeToLogger(getpid(), PROC_CREAT, "args");
+				getLineArgs(mode, path, options);
+				writeToLogger(getpid(), PROC_CREAT, line_args);
 				signal(SIGINT, SIG_IGN); // ignore SIG_IGN signal
 				signal(SIGUSR1, displayInfo); 
 				signal(SIGUSR2, SIG_IGN);
@@ -83,8 +85,8 @@ int iterateDirectory(const char *options, const char *mode, const char *dirpath)
 				nfmod = 0;
 
 				/* --- Added to test ctrl-c --- */
-				printf("Process groupId: %u, id: %u created\n", getpgrp(), getpid());
-				sleep(5);
+				//printf("Process groupId: %u, id: %u created\n", getpgrp(), getpid());
+				//sleep(5);
 				/* --- --- */
 
 				return (iterateDirectory(options, mode, path));

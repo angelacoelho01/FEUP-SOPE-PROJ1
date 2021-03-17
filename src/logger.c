@@ -4,6 +4,7 @@
 
 int LOGGER_FD;
 struct timespec START_TIME;
+char *line_args;
 
 int openLogger() {
     // Get logger path
