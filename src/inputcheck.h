@@ -1,12 +1,12 @@
-#ifndef INPUTCHECK
-#define INPUTCHECK
+#ifndef INPUTCHECK_H_
+#define INPUTCHECK_H_
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <string.h>
 
-#include "../permissions/xmod.h"
+#include "xmod.h"
 
 #define INPUT_ERROR 2
 
@@ -25,4 +25,4 @@ void usageNotRight();
  */
 int isValidInput(int argc, char *argv[]);
 
-#endif /* INPUTCHECK */
+#endif /* INPUTCHECK_H_ */

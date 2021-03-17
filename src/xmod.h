@@ -7,7 +7,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "../utils.h"
+#include "utils.h"
 
 #define MAX_STR_LEN 256
 #define RESET_MODE ~(000777)
@@ -20,6 +20,5 @@ int handleOptions(const char *options, const char *path_name, const mode_t new_p
 char *getStrPerms(const char *mode);
 
 mode_t getNewPerms(const char *mode, const char *path_name);
-
 
 #endif /* XMOD_H_ */

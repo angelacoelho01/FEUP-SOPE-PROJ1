@@ -1,5 +1,5 @@
-#ifndef _FILESYSTEM
-#define _FILESYSTEM
+#ifndef FILESYSTEM_H_
+#define FILESYSTEM_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,15 +11,22 @@
 #include <dirent.h>
 #include <sys/wait.h>
 #include <string.h>
+#include <signal.h>
 
-#include "../permissions/xmod.h"
+#include "xmod.h"
+#include "signals.h"
+
+// Macro: Identify the content's type
+#define TYPE_OTHER 0
+#define TYPE_DIR 1
+#define TYPE_LNK 2
 
 /**
- * Check if a specific path corresponds to a directory
+ * Check the type of the content of a specific path 
  * @param path The location of the content to check
- * @return True if the path corresponds to a directory, false otherwise
+ * @return Number that identifies the type of the content the path represents
  */
-bool isPathDir(const char *path);
+int pathType(const char *path);
 
 /**
  * Iterate a directory and change his content permissions, including himself
@@ -30,4 +37,4 @@ bool isPathDir(const char *path);
  */
 int iterateDirectory(const char *options, const char *mode, const char *dirpath);
 
-#endif /* _FILESYSTEM */
+#endif /* FILESYSTEM_H_ */
