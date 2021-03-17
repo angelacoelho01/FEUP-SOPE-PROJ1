@@ -15,7 +15,7 @@ char *process_path;
 
 int main(int argc, char *argv[], char *envp[]) {
     signal(SIGINT, ctrlcReceived); // handle ctrlc
-    signal(SIGUSR1, SIG_IGN); // just ignore SIGUSR1 signal
+    signal(SIGUSR1, registerAndIgnore); // just ignore SIGUSR1 signal
     signal(SIGUSR2, questionPrompt); // make que question of exit
     signal(SIGTERM, terminate);
 
