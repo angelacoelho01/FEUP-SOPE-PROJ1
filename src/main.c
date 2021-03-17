@@ -42,7 +42,7 @@ int main(int argc, char *argv[], char *envp[]) {
 
     process_path = path_name;
 
-    if (isPathDir(path_name) && opt_R) {
+    if ((pathType(path_name) == TYPE_DIR) && opt_R) {
         // printf("It's a directory to iterate!\n");   // to test purposes
 
         if (iterateDirectory(options, mode, path_name) != 0) {
@@ -50,7 +50,7 @@ int main(int argc, char *argv[], char *envp[]) {
             exit(EXIT_FAILURE);
         }
     } else {
-        // printf("It's a single file/directory!\n");  // to test purposes
+        // printf("It's a single file/directory/symbolic link!\n");  // to test purposes
 
         if (xmod(options, mode, path_name) != 0) {
             fprintf(stderr, "Error changing file/directory's permissions\n");

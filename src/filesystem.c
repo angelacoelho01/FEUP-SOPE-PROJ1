@@ -4,7 +4,7 @@ extern char *process_path;
 extern unsigned int nftot;
 extern unsigned int nfmod;
 
-bool isPathDir(const char *path) {
+int pathType(const char *path) {
     // try to open
     FILE *f = fopen(path, "r");
     if (f == NULL) {
@@ -12,7 +12,7 @@ bool isPathDir(const char *path) {
         exit(EXIT_FAILURE);
     }
     // see if the root is a file or a directory
-    bool is_dir = false;
+    int type = TYPE_OTHER;
     struct stat sb;
     if (stat(path, &sb) == -1) {
         fprintf(stderr, "Error in getting %s status\n", path);
@@ -21,7 +21,9 @@ bool isPathDir(const char *path) {
     
     // the path represent a dir
     if (S_ISDIR(sb.st_mode)) 
-        is_dir = true;
+        type = TYPE_DIR;
+    else if (S_ISLNK(sb.st_mode))
+        type = TYPE_LNK;
         
     // close
     if (fclose(f) == -1) {
@@ -29,7 +31,7 @@ bool isPathDir(const char *path) {
         exit(EXIT_FAILURE);
     }
     
-    return is_dir;
+    return type;
 }
 
 int iterateDirectory(const char *options, const char *mode, const char *dirpath) {
@@ -62,9 +64,9 @@ int iterateDirectory(const char *options, const char *mode, const char *dirpath)
         char path[MAX_STR_LEN] = "";
         strcat(strcat(strcat(path, dirpath), "/"), dir->d_name);
         
+        int type = pathType(path);
         // its a directory  
-        if (isPathDir(path)) {
-                        
+        if (type == TYPE_DIR) {         
             // create a new process - the child - who will iterate over this subdirectory
             pid_t pid = fork();
             if (pid == -1) {
@@ -91,6 +93,10 @@ int iterateDirectory(const char *options, const char *mode, const char *dirpath)
                 // parent wait for the child to end 
                 waitpid(pid, &status, 0);
             }
+        } else if (type == TYPE_LNK) { 
+            // ignore symbolic links
+            if (strchr(options, 'v') != NULL)
+                fprintf(stdout, "neither symbolic link %s nor referent has been changed\n", path);
         } else {
             // its a file in the directory
             if (xmod(options, mode, path) != 0) {

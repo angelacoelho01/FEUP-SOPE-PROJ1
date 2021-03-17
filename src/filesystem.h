@@ -16,12 +16,16 @@
 #include "xmod.h"
 #include "signals.h"
 
+#define TYPE_OTHER 0
+#define TYPE_DIR 1
+#define TYPE_LNK 2
+
 /**
  * Check if a specific path corresponds to a directory
  * @param path The location of the content to check
- * @return True if the path corresponds to a directory, false otherwise
+ * @return Number that identifies the type of the content the path represents
  */
-bool isPathDir(const char *path);
+int pathType(const char *path);
 
 /**
  * Iterate a directory and change his content permissions, including himself
