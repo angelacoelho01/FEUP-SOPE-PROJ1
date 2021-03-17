@@ -12,15 +12,16 @@
 #include "signals.h"
 
 #define MAX_STR_LEN 256
+char info[MAX_STR_LEN];
 
 extern char *process_path;
 extern char line_args[MAX_STR_LEN];
 
 int main(int argc, char *argv[], char *envp[]) {
     signal(SIGINT, ctrlcReceived); // handle ctrlc
-	signal(SIGUSR1, SIG_IGN); // just ignore SIGUSR1 signal
-	signal(SIGUSR2, questionPrompt); // make que question of exit
-	signal(SIGTERM, terminate);
+    signal(SIGUSR1, SIG_IGN); // just ignore SIGUSR1 signal
+    signal(SIGUSR2, questionPrompt); // make que question of exit
+    signal(SIGTERM, terminate);
 
     // ignore other main signals, and be able to regist them
     signal(SIGHUP, registerAndIgnore);
@@ -64,6 +65,10 @@ int main(int argc, char *argv[], char *envp[]) {
         }
     }
 
+    //Test write SIGNAL_SENT to logger
+    getInfoSig(info, "SIGINT", getpid());
+    writeToLogger(getpid(), SIGNAL_SENT, info);
+    
     closeLogger();
 
     return 0;

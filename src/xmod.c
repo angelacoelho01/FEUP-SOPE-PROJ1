@@ -2,9 +2,11 @@
 
 unsigned int nftot = 0;
 unsigned int nfmod = 0;
+extern mode_t new_perm, old_perm;
 
 int xmod(const char *options, const char *mode, const char *path_name){
 	mode_t new_perms = getNewPerms(mode, path_name);
+	new_perm = new_perms & GET_MODE;
 
 	if (handleOptions(options, path_name, new_perms)) exit(1);
 
@@ -36,8 +38,11 @@ int handleOptions(const char *options, const char *path_name, const mode_t new_p
 
 	char *str_perms_initial = convertPermsToString(perms_initial);
 
-	// increment variable only if a permission is modified
-	if (is_change) nfmod++;
+	// increment variable only if a permission is modified and writes to logger
+	if (is_change) {
+		nfmod++;
+		writeToLogger(getpid(), FILE_MODF, getInfoFModf(path_name));
+	}
 	
 	if (is_change && (opt_v || opt_c)) {
 		char *str_perms_final = convertPermsToString(perms_final);
@@ -61,6 +66,9 @@ mode_t getNewPerms(const char *mode, const char *path_name){
 		perror("stat()");
 		exit(1);
 	}
+
+	// Save old permissions to logger
+	old_perm = st.st_mode & GET_MODE;
 
 	// if octal-mode
 	if (isNumber(mode)) {
@@ -99,7 +107,6 @@ mode_t getNewPerms(const char *mode, const char *path_name){
 		if (user == 'g' || all) perms = remove ? perms & ~S_IXGRP : perms | S_IXGRP;
 		if (user == 'u' || all) perms = remove ? perms & ~S_IXUSR : perms | S_IXUSR;
 	}
-
 	return perms;
 }
 

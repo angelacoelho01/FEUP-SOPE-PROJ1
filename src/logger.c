@@ -4,7 +4,8 @@
 
 int LOGGER_FD;
 struct timespec START_TIME;
-char *line_args;
+char line_args[MAX_STR_LEN];
+mode_t new_perm, old_perm;
 
 int openLogger() {
     // Get logger path
@@ -26,4 +27,23 @@ int writeToLogger(int pid, const char *event, const char *info) {
 
 int closeLogger() {
     return close(LOGGER_FD);
+}
+
+int getInfoSig(char *info, const char *signal, int pid){
+    sprintf(info, "%s : %d", signal, pid);
+    return 0;
+}
+
+char* getInfoFModf(const char *fname) {
+    char *info = (char*)malloc(MAX_STR_LEN);
+    sprintf(info, "%s : 0%o : 0%o", fname, old_perm, new_perm);
+    return info;
+}
+
+int getOldPerm() {
+    return 0;
+}
+
+int getNewPerm() {
+    return 0;
 }
