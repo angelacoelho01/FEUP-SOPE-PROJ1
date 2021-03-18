@@ -36,7 +36,7 @@ int isNumber(const char *str);
  */
 int findChar(const char possible_str[], unsigned n, const char ch);
 
-double getElapsedTime(const struct timespec begin);
+double getElapsedTime(const struct timespec start);
 
 void getLineArgs(const char *mode, const char *path, const char *options);
 
