@@ -53,7 +53,7 @@ double getElapsedTime(const struct timespec start){
 
 	clock_gettime(CLOCK_MONOTONIC, &end);
 
-	return (double) (end.tv_sec - begin.tv_sec) / 1000.0 + (end.tv_nsec - begin.tv_nsec) / 1000000.0;
+	return (double) (end.tv_sec - start.tv_sec) / 1000.0 + (end.tv_nsec - start.tv_nsec) / 1000000.0;
 }
 
 char readAnswer(){ 
