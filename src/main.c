@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <time.h>
+#include <sys/time.h>
 
 #include "xmod.h"
 #include "filesystem.h"
@@ -17,8 +18,11 @@
 extern char *process_path;
 extern char line_args[MAX_STR_LEN];
 extern int env_def;
+extern long start_time;
+extern struct timespec START_TIME;
 
 int main(int argc, char *argv[], char *envp[]) {
+    start_time = getElapsedTime(START_TIME);
     setUpSignals();
 
     // Check program call
@@ -54,6 +58,7 @@ int main(int argc, char *argv[], char *envp[]) {
     }
 
     closeLogger();
+    printf("time = %f\n", getElapsedTime(START_TIME) - start_time);
 
     return 0;
 }

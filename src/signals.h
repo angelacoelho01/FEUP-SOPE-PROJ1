@@ -23,8 +23,6 @@
 
 void setUpSignals();
 
-char *getSignalName(int sig);
-
 /**
  * @brief Register the reception of signals to be ignored
  * 

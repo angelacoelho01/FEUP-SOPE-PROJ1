@@ -4,6 +4,7 @@
 
 int LOGGER_FD;
 struct timespec START_TIME;
+long start_time;
 char line_args[MAX_STR_LEN];
 mode_t new_perm, old_perm;
 int env_def = 0;

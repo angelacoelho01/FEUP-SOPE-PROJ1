@@ -20,22 +20,47 @@ void setUpSignals() {
     signal(SIGCHLD, registerAndIgnore);
 }
 
-char *getSignalName(int sig) {
-    char *str = strdup(sys_siglist[sig]);
-    if (!str) return NULL;
-    upperCase(str);
-    
-    char *signalStr = (char*)malloc(MAX_STR_LEN);
-    sprintf(signalStr, "SIG%s", str);
-
-    return signalStr;
-}
-
 void registerAndIgnore(int sig) {
     signal(sig, registerAndIgnore);
 
+	//register on log the received signal
+	char SIGRECV[20];
+
+	switch (sig){
+		case SIGHUP:
+			strcpy(SIGRECV,"SIGHUP");
+			break;
+		case SIGQUIT:
+			strcpy(SIGRECV,"SIGQUIT");
+			break;
+		case SIGSEGV:
+			strcpy(SIGRECV,"SIGSEGV");
+			break;
+		case SIGPIPE:
+			strcpy(SIGRECV,"SIGPIPE");
+			break;
+		case SIGALRM:
+			strcpy(SIGRECV, "SIGALRM");
+			break;
+		case SIGCHLD:
+			strcpy(SIGRECV,"SIGCHLD");
+			break;
+		case SIGINT:
+			strcpy(SIGRECV,STR_SIGINT);
+			break;
+		case SIGUSR1:
+			strcpy(SIGRECV,STR_SIGUSR1);
+			break;
+		case SIGUSR2:
+			strcpy(SIGRECV,STR_SIGUSR2);
+			break;
+		default:
+			strcpy(SIGRECV,"SIGNALRECEIVED");
+			break;
+	}
+
     //register on log the received signal
-    writeToLogger(getpid(), SIGNAL_RECV, getSignalName(sig));
+    writeToLogger(getpid(), SIGNAL_RECV, SIGRECV);
 }
 
 void ctrlcReceived(int sig) {

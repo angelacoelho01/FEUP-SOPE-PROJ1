@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
+#include <sys/time.h>
 
 #define MAX_STR_LEN 256
 #define RESET_MODE_USR ~(000700)

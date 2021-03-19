@@ -49,11 +49,17 @@ int findChar(const char possible_str[], unsigned n, const char ch){
 }
 
 double getElapsedTime(const struct timespec start){
-	struct timespec end;
+	//struct timespec end;
 
-	clock_gettime(CLOCK_MONOTONIC, &end);
+	//clock_gettime(CLOCK_MONOTONIC, &end);
 
-	return (double) (end.tv_sec - start.tv_sec) / 1000.0 + (end.tv_nsec - start.tv_nsec) / 1000000.0;
+	//return (double) (end.tv_sec - start.tv_sec) / 1000.0 + (end.tv_nsec - start.tv_nsec) / 1000000.0;
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    unsigned long ret = tv.tv_usec;
+    ret /= 1000.0;
+    ret += (tv.tv_sec * 1000);
+    return ret;
 }
 
 char readAnswer(){ 
