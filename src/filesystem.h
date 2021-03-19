@@ -23,18 +23,20 @@
 #define TYPE_LNK 2
 
 /**
- * Check the type of the content of a specific path 
- * @param path The location of the content to check
- * @return Number that identifies the type of the content the path represents
+ * Checks wether the path is relative to directory, symbolic link or other.
+ * 
+ * @param path the path to check 
+ * @return the number that identifies the type of the content the path represents
  */
 int pathType(const char *path);
 
 /**
- * Iterate a directory and change his content permissions, including himself
- * @param options Comand options
- * @param mode Comand new mode
- * @param dirpath The location of the directory to iterate
- * @return 0 when successfull, -1 otherwise
+ * Iterates through a directory and changes its content permissions, including itself.
+ * 
+ * @param options the command options
+ * @param mode the new file permissions to add, remove or set
+ * @param dirpath the directory path to iterate through
+ * @return 0 on success, or -1 on error
  */
 int iterateDirectory(const char *options, const char *mode, const char *dirpath);
 

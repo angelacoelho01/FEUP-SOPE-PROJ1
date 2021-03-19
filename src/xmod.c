@@ -1,5 +1,7 @@
 #include "xmod.h"
 
+#define ERROR -1
+
 unsigned int nftot = 0;
 unsigned int nfmod = 0;
 extern mode_t new_perm, old_perm;
@@ -12,9 +14,9 @@ int xmod(const char *options, const char *mode, const char *path_name){
 
 	nftot++; // new file/dir found
 
-	if (chmod(path_name, new_perms) == -1) {
+	if (chmod(path_name, new_perms) == ERROR) {
 		perror("chmod()");
-		exit(1);
+		exit(ERROR);
 	}
 
 	return 0;

@@ -1,5 +1,7 @@
 #include "filesystem.h"
 
+#define ERROR -1
+
 extern char *process_path;
 extern unsigned int nftot;
 extern unsigned int nfmod;
@@ -9,15 +11,15 @@ int pathType(const char *path) {
     // Try to open
     FILE *f = fopen(path, "r");
     if (f == NULL) {
-        fprintf(stderr, "xmod: cannot access '%s': No such file or directory\n", path);
-        exit(EXIT_FAILURE);
+        perror("fopen()");
+        exit(ERROR);
     }
 
     int type = TYPE_OTHER;
     struct stat sb;
-    if (stat(path, &sb) == -1) {
-        fprintf(stderr, "Error in getting '%s' status\n", path);
-        exit(EXIT_FAILURE);
+    if (stat(path, &sb) == ERROR) {
+        perror("stat()");
+        exit(ERROR);
     }
     
     if (S_ISDIR(sb.st_mode)) // directory
@@ -26,9 +28,9 @@ int pathType(const char *path) {
         type = TYPE_LNK;
         
     // Close
-    if (fclose(f) == -1) {
-        fprintf(stderr, "Error in closing '%s'\n", path);
-        exit(EXIT_FAILURE);
+    if (fclose(f) == ERROR) {
+        perror("fclose()");
+        exit(ERROR);
     }
     
     return type;
@@ -38,16 +40,16 @@ int iterateDirectory(const char *options, const char *mode, const char *dirpath)
     int error = 0;
     
     // change dir's permissions
-    if (xmod(options, mode, dirpath) != 0) {
+    if (xmod(options, mode, dirpath) == ERROR) {
         fprintf(stderr, "Error changing dir's permissions: '%s'\n", dirpath);
-        return -1;
+        return ERROR;
     }
     
     // open directory
     DIR *d; 
     if ((d = opendir(dirpath)) == NULL) {
-        fprintf(stderr, "Error in opening dir '%s'\n", dirpath);
-        return -1;
+        perror("opendir()");
+        return ERROR;
     }
     
     // read the content in the directory
@@ -112,9 +114,9 @@ int iterateDirectory(const char *options, const char *mode, const char *dirpath)
     }
     
     // close directory
-    if (closedir(d) == -1) {
-        fprintf(stderr, "Error in closing dir '%s'\n", dirpath);
-        return -1;
+    if (closedir(d) == ERROR) {
+        perror("closedir()");
+        return ERROR;
     }
     
     return error;
