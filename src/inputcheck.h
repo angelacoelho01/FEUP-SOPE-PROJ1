@@ -8,20 +8,18 @@
 
 #include "xmod.h"
 
-#define INPUT_ERROR 2
-
 /**
- * @brief Prints the Usage Wrong Message.
+ * @brief Prints the program usage information.
  * 
  */
 void usageNotRight();
 
 /**
- * @brief Checks if the input provided on the command line is Valid.
+ * @brief Checks if the input provided on the command line is valid.
  * 
- * @param argc The number of arguments written in the command line
- * @param argv The array containing all the arguments passed on the execution of the program
- * @return 0 when there is an InputError, 1 otherwise
+ * @param argc the number of arguments written in the command line
+ * @param argv the array containing all the arguments passed on the execution of the program
+ * @return 0 on success, or -1 if there is an InputError
  */
 int isValidInput(int argc, char *argv[]);
 
