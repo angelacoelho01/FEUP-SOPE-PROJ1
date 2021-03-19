@@ -3,7 +3,15 @@
 char *process_path;
 extern unsigned int nftot;
 extern unsigned int nfmod;
-extern const char * const sys_siglist[];
+const char *siglist[] = {   [SIGHUP] = "SIGHUP",
+                            [SIGQUIT] = "SIGQUIT",
+                            [SIGSEGV] = "SIGSEGV",
+                            [SIGPIPE] = "SIGPIPE",
+                            [SIGALRM] = "SIGALRM",
+                            [SIGCHLD] = "SIGCHLD",
+                            [SIGINT] = STR_SIGINT,
+                            [SIGUSR1] = STR_SIGUSR1,
+                            [SIGUSR2] = STR_SIGUSR2 };
 
 void setUpSignals() {
 	signal(SIGINT, ctrlcReceived); // handle ctrlc
@@ -20,22 +28,14 @@ void setUpSignals() {
     signal(SIGCHLD, registerAndIgnore);
 }
 
-char *getSignalName(int sig) {
-    char *str = strdup(sys_siglist[sig]);
-    if (!str) return NULL;
-    upperCase(str);
-    
-    char *signalStr = (char*)malloc(MAX_STR_LEN);
-    sprintf(signalStr, "SIG%s", str);
-
-    return signalStr;
-}
-
 void registerAndIgnore(int sig) {
     signal(sig, registerAndIgnore);
 
+	//register on log the received signal
+	const char *signal_recv = siglist[sig];
+
     //register on log the received signal
-    writeToLogger(getpid(), SIGNAL_RECV, getSignalName(sig));
+    writeToLogger(getpid(), SIGNAL_RECV, signal_recv);
 }
 
 void ctrlcReceived(int sig) {

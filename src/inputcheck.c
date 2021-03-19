@@ -1,5 +1,7 @@
 #include "inputcheck.h"
 
+#define INPUT_ERROR -1
+
 void usageNotRight() {
     printf("usage: ./xmod [OPTIONS] MODE FILE/DIR\n");
     printf("   or  ./xmod [OPTIONS] OCTAL-MODE FILE/DIR\n\n");
@@ -30,8 +32,8 @@ void usageNotRight() {
 int isValidInput(int argc, char *argv[]) {
     // Checks the size of args, the options, the octal_mode number and the order of MODE parameters.
     
-    if ((argc < 3) || (argc > 4))
-        return 0;
+    if ((argc < 3) || (argc > 4)) 
+        return INPUT_ERROR;
 
     char *mode = argv[argc - 2];
     char *options = argc == 3 ? NULL : argv[1];
@@ -39,17 +41,17 @@ int isValidInput(int argc, char *argv[]) {
     if (options != NULL) {
 
         if (options[0] != '-')
-            return 0;
+            return INPUT_ERROR;
 
         int opt_v = counterChar(options, 'v');
         int opt_c = counterChar(options, 'c');
         int opt_R = counterChar(options, 'R');
 
         if(opt_v > 1 || opt_c > 1 || opt_R > 1)
-            return 0;
+            return INPUT_ERROR;
 
         if(opt_v + opt_c + opt_R + 1 != strlen(options))
-            return 0;
+            return INPUT_ERROR;
     }
 
 
@@ -60,12 +62,12 @@ int isValidInput(int argc, char *argv[]) {
 
         // Checks if there is actually the exepected number of digits
         if(mode[no_digits] != '\0') 
-            return 0;
+            return INPUT_ERROR;
 
         // Checks if there is really the expected number of digits
         for(int i = 1; i < no_digits; i++) {
             if(mode[i] == '\0') 
-                return 0;
+                return INPUT_ERROR;
         }
 
         int oct_mode = atoi(mode); 
@@ -75,7 +77,7 @@ int isValidInput(int argc, char *argv[]) {
             oct_mode /= 10;
 
             if (digit > 7) 
-                return 0;
+                return INPUT_ERROR;
         }
     } else {
         const char possible_users[] = {'a', 'u', 'o', 'g'};
@@ -86,14 +88,14 @@ int isValidInput(int argc, char *argv[]) {
 
         // Check user
         if(!findChar(possible_users, 4, user)) 
-            return 0;
+            return INPUT_ERROR;
 
         // Check separator
         if(!findChar(possible_operator, 3, operator))
-            return 0;
+            return INPUT_ERROR;
 
         return strstr("rwx", checkPer) || !strcmp(checkPer, "rx");
     }
 
-    return 1;
+    return 0;
 }

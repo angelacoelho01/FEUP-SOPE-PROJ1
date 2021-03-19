@@ -1,5 +1,12 @@
 #include "xmod.h"
 
+#define ERROR -1
+#define RESET_MODE_USR ~(000700)
+#define RESET_MODE_GRP ~(000070)
+#define RESET_MODE_OTH ~(000007)
+#define RESET_MODE_ALL ~(000777)
+#define GET_MODE 000777
+
 unsigned int nftot = 0;
 unsigned int nfmod = 0;
 extern mode_t new_perm, old_perm;
@@ -8,13 +15,15 @@ int xmod(const char *options, const char *mode, const char *path_name){
 	mode_t new_perms = getNewPerms(mode, path_name);
 	new_perm = new_perms & GET_MODE;
 
-	if (handleOptions(options, path_name, new_perms)) exit(1);
+	if (handleOptions(options, path_name, new_perms)) {
+        exit(ERROR);
+    }
 
 	nftot++; // new file/dir found
 
-	if (chmod(path_name, new_perms) == -1) {
+	if (chmod(path_name, new_perms) == ERROR) {
 		perror("chmod()");
-		exit(1);
+		exit(ERROR);
 	}
 
 	return 0;
@@ -26,7 +35,7 @@ int handleOptions(const char *options, const char *path_name, const mode_t new_p
 	struct stat st;
 	if (stat(path_name, &st) == -1) {
 		perror("stat()");
-		exit(1);
+		exit(ERROR);
 	}
 
 	mode_t perms_initial = st.st_mode & GET_MODE;
@@ -64,7 +73,7 @@ mode_t getNewPerms(const char *mode, const char *path_name){
 	struct stat st;
 	if (stat(path_name, &st) == -1) {
 		perror("stat()");
-		exit(1);
+		exit(ERROR);
 	}
 
 	// Save old permissions to logger
@@ -73,7 +82,7 @@ mode_t getNewPerms(const char *mode, const char *path_name){
 	// if octal-mode
 	if (isNumber(mode)) {
 		char *ptr;
-		return strtol(mode, &ptr, 8) | (st.st_mode & RESET_MODE);
+		return strtol(mode, &ptr, 8) | (st.st_mode & RESET_MODE_ALL);
 	}
 	
 	// if normal mode
