@@ -3,50 +3,39 @@
 char *process_path;
 extern unsigned int nftot;
 extern unsigned int nfmod;
+extern const char * const sys_siglist[];
+
+void setUpSignals() {
+	signal(SIGINT, ctrlcReceived); // handle ctrlc
+    signal(SIGUSR1, registerAndIgnore); 
+    signal(SIGUSR2, questionPrompt); // confirm exit
+    signal(SIGTERM, terminate);
+
+    // ignore other main signals, and be able to regist them
+    signal(SIGHUP, registerAndIgnore);
+    signal(SIGQUIT, registerAndIgnore);
+    signal(SIGSEGV, registerAndIgnore);
+    signal(SIGPIPE, registerAndIgnore);
+    signal(SIGALRM, registerAndIgnore);
+    signal(SIGCHLD, registerAndIgnore);
+}
+
+char *getSignalName(int sig) {
+    char *str = strdup(sys_siglist[sig]);
+    if (!str) return NULL;
+    upperCase(str);
+    
+    char *signalStr = (char*)malloc(MAX_STR_LEN);
+    sprintf(signalStr, "SIG%s", str);
+
+    return signalStr;
+}
 
 void registerAndIgnore(int sig) {
-	signal(sig, registerAndIgnore);
+    signal(sig, registerAndIgnore);
 
-	// printf("Signal %u received by pid %u and ignored!\n", sig, getpid());
-
-	//register on log the received signal
-	char SIGRECV[20];
-
-	switch (sig)
-	{
-	case SIGHUP:
-		strcpy(SIGRECV,"SIGHUP");
-		break;
-	case SIGQUIT:
-		strcpy(SIGRECV,"SIGQUIT");
-		break;
-	case SIGSEGV:
-		strcpy(SIGRECV,"SIGSEGV");
-		break;
-	case SIGPIPE:
-		strcpy(SIGRECV,"SIGPIPE");
-		break;
-	case SIGALRM:
-		strcpy(SIGRECV, "SIGALRM");
-		break;
-	case SIGCHLD:
-		strcpy(SIGRECV,"SIGCHLD");
-		break;
-	case SIGINT:
-        strcpy(SIGRECV,STR_SIGINT);
-        break;
-    case SIGUSR1:
-        strcpy(SIGRECV,STR_SIGUSR1);
-        break;
-    case SIGUSR2:
-        strcpy(SIGRECV,STR_SIGUSR2);
-        break;
-	default:
-		strcpy(SIGRECV,"SIGNALRECEIVED");
-		break;
-	}
-
-	writeToLogger(getpid(), SIGNAL_RECV, SIGRECV); //received SIGINT
+    //register on log the received signal
+    writeToLogger(getpid(), SIGNAL_RECV, getSignalName(sig));
 }
 
 void ctrlcReceived(int sig) {
@@ -62,11 +51,11 @@ void ctrlcReceived(int sig) {
 		printf("\n");
 		if (kill(0, SIGUSR1) != 0) 
 			perror(STR_SIGUSR1);
-		writeToLogger(getpid(), SIGNAL_SENT, STR_SIGUSR1);
+		writeToLogger(getpid(), SIGNAL_SENT, getGroupInfoSig(STR_SIGUSR1, getpgrp()));
 	} else {
 		// Send SIGUSR2 to himself
 		kill(getpid(), SIGUSR2);
-		writeToLogger(getpid(), SIGNAL_SENT, STR_SIGUSR2);
+		writeToLogger(getpid(), SIGNAL_SENT, getInfoSig(STR_SIGUSR2, getpid()));
 	}
 }
 
@@ -81,10 +70,9 @@ void displayInfo(int sig) {
 	// Send SIGUSR2 to the parent - display finished
 	if (kill(getppid(), SIGUSR2) != 0)
 		perror(STR_SIGUSR2);
-	
-	writeToLogger(getpid(), SIGNAL_SENT, STR_SIGUSR2);
+	writeToLogger(getpid(), SIGNAL_SENT, getInfoSig(STR_SIGUSR2, getppid()));
 
-	writeToLogger(getpid(), SIGNAL_SENT, STR_SIGSTOP);
+	writeToLogger(getpid(), SIGNAL_SENT, getInfoSig(STR_SIGSTOP, getpid()));
 	// Send SIGSTOP to himself
 	if (kill(getpid(), SIGSTOP) != 0)
 		perror(STR_SIGSTOP); 
@@ -106,10 +94,10 @@ void questionPrompt(int sig) {
 	// Continue all processes including himself
 	if (kill(0, SIGCONT) != 0) 
 		perror(STR_SIGCONT);
-	writeToLogger(0, SIGNAL_SENT, STR_SIGCONT);
+	writeToLogger(getpid(), SIGNAL_SENT, getGroupInfoSig(STR_SIGCONT, getpgrp()));
 
 	if (answer == 'y') { 
-		writeToLogger(0, SIGNAL_SENT, STR_SIGTERM);
+		writeToLogger(getpid(), SIGNAL_SENT, getGroupInfoSig(STR_SIGTERM, getpgrp()));
 		// Terminate all processes including himself
 		if (kill(0, SIGTERM) != 0) 
 			perror(STR_SIGTERM);
@@ -124,3 +112,4 @@ void terminate(int sig) {
 
 	exit(EXIT_CTRLC);
 }
+

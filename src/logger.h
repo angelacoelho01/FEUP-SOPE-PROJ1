@@ -21,7 +21,9 @@ int writeToLogger(int pid, const char *event, const char *info);
 
 int closeLogger();
 
-int getInfoSig(char *info, const char *signal, int pid);
+char* getInfoSig(const char *signal, const pid_t pid);
+
+char* getGroupInfoSig(const char *signal, pid_t gid);
 
 char *getInfoFModf(const char *fname);
 

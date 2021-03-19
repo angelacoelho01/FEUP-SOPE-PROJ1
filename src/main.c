@@ -16,20 +16,10 @@
 //char info[MAX_STR_LEN];
 extern char *process_path;
 extern char line_args[MAX_STR_LEN];
+extern int env_def;
 
 int main(int argc, char *argv[], char *envp[]) {
-    signal(SIGINT, ctrlcReceived); // handle ctrlc
-    signal(SIGUSR1, registerAndIgnore); 
-    signal(SIGUSR2, questionPrompt); // confirm exit
-    signal(SIGTERM, terminate);
-
-    // ignore other main signals, and be able to regist them
-    signal(SIGHUP, registerAndIgnore);
-    signal(SIGQUIT, registerAndIgnore);
-    signal(SIGSEGV, registerAndIgnore);
-    signal(SIGPIPE, registerAndIgnore);
-    signal(SIGALRM, registerAndIgnore);
-    signal(SIGCHLD, registerAndIgnore);
+    setUpSignals();
 
     // Check program call
     if (!isValidInput(argc, argv)) {
@@ -46,7 +36,7 @@ int main(int argc, char *argv[], char *envp[]) {
     process_path = path_name;
 
     getLineArgs(mode, path_name, options);
-    openLogger();
+    env_def = openLogger();
     writeToLogger(getpid(), PROC_CREAT, line_args);
 
     if ((pathType(path_name) == TYPE_DIR) && opt_R) {

@@ -49,4 +49,6 @@ char readAnswer(void);
 
 int counterChar(const char* str, const char ch);
 
+void upperCase(char *s);
+
 #endif /* UTILS_H_ */

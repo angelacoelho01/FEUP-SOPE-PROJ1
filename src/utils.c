@@ -85,3 +85,8 @@ int counterChar(const char* str, const char ch) {
     for(i = 0; str[i]; str[i] == ch ? i++ : *str++);
     return i;
 }
+
+void upperCase(char *s) {
+    for(unsigned i = 0; s[i] != 0; i++)
+        s[i] = toupper(s[i]);
+}

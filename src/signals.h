@@ -21,6 +21,10 @@
 
 #define EXIT_CTRLC 5
 
+void setUpSignals();
+
+char *getSignalName(int sig);
+
 /**
  * @brief Register the reception of signals to be ignored
  * 

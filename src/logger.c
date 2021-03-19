@@ -6,6 +6,7 @@ int LOGGER_FD;
 struct timespec START_TIME;
 char line_args[MAX_STR_LEN];
 mode_t new_perm, old_perm;
+int env_def = 0;
 
 int openLogger() {
     // Get logger path
@@ -19,6 +20,7 @@ int openLogger() {
 }
 
 int writeToLogger(int pid, const char *event, const char *info) {
+    if(!env_def) return 1;
     char reg[256];
     sprintf(reg, "%f ; %d ; %s ; %s\n", getElapsedTime(START_TIME), pid, event, info);
     write(LOGGER_FD, reg, strlen(reg));
@@ -29,9 +31,16 @@ int closeLogger() {
     return close(LOGGER_FD);
 }
 
-int getInfoSig(char *info, const char *signal, int pid){
+char* getInfoSig(const char *signal, const pid_t pid) {
+    char *info = (char*)malloc(MAX_STR_LEN);
     sprintf(info, "%s : %d", signal, pid);
-    return 0;
+    return info;
+}
+
+char* getGroupInfoSig(const char *signal, pid_t gid) {
+    char *info = (char*)malloc(MAX_STR_LEN);
+    sprintf(info, "%s : (%d)", signal, gid);
+    return info;
 }
 
 char* getInfoFModf(const char *fname) {
