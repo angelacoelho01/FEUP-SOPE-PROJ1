@@ -88,7 +88,7 @@ int iterateDirectory(const char *options, const char *mode, const char *dirpath)
 
 				/* --- Added to test ctrl-c --- */
 				//printf("Process groupId: %u, id: %u created\n", getpgrp(), getpid());
-				//sleep(5);
+				sleep(5);
 				/* --- --- */
 
                 return (iterateDirectory(options, mode, path));
