@@ -1,8 +1,5 @@
-#ifndef SIGNALS_H_
-#define SIGNALS_H_
-
-#include "utils.h"
-#include "logger.h"
+#ifndef SRC_SIGNALS_H_
+#define SRC_SIGNALS_H_
 
 #include <stdlib.h>
 #include <sys/wait.h>
@@ -11,6 +8,9 @@
 #include <unistd.h>
 #include <signal.h>
 #include <stdbool.h>
+
+#include "../src/utils.h"
+#include "../src/logger.h"
 
 #define STR_SIGINT "SIGINT"
 #define STR_SIGUSR1 "SIGUSR1"
@@ -62,4 +62,4 @@ void questionPrompt(int sig);
  */
 void terminate(int sig);
 
-#endif /* SIGNALS_H_ */
+#endif // SRC_SIGNALS_H_

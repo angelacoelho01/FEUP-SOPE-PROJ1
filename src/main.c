@@ -6,11 +6,11 @@
 #include <time.h>
 #include <sys/time.h>
 
-#include "xmod.h"
-#include "filesystem.h"
-#include "inputcheck.h"
-#include "logger.h"
-#include "signals.h"
+#include "../src/xmod.h"
+#include "../src/filesystem.h"
+#include "../src/inputcheck.h"
+#include "../src/logger.h"
+#include "../src/signals.h"
 
 #define MAX_STR_LEN 256
 #define ERROR -1

@@ -1,4 +1,4 @@
-#include "utils.h"
+#include "../src/utils.h"
 
 extern char line_args[MAX_STR_LEN];
 

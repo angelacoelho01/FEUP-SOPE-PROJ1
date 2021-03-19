@@ -1,5 +1,5 @@
-#ifndef LOGGER_H_
-#define LOGGER_H_
+#ifndef SRC_LOGGER_H_
+#define SRC_LOGGER_H_
 
 #include <stdlib.h>
 #include <sys/types.h>
@@ -8,6 +8,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+
+#include "../src/utils.h"	
 
 #define PROC_CREAT "PROC_CREAT"
 #define PROC_EXIT "PROC_EXIT"
@@ -67,4 +69,4 @@ char* getGroupInfoSig(const char *signal, pid_t gid);
  */
 char *getInfoFModf(const char *path);
 
-#endif /* LOGGER_H_ */
+#endif // SRC_LOGGER_H_

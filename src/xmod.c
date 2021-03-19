@@ -1,4 +1,4 @@
-#include "xmod.h"
+#include "../src/xmod.h"
 
 #define ERROR -1
 #define RESET_MODE_USR ~(000700)
