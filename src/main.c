@@ -58,7 +58,5 @@ int main(int argc, char *argv[], char *envp[]) {
     }
 
     closeLogger();
-    printf("time = %f\n", getElapsedTime(START_TIME) - start_time);
-
     return 0;
 }
