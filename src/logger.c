@@ -2,8 +2,8 @@
 #include "utils.h"	
 
 int LOGGER_FD;
-struct timespec START_TIME;
-long start_time;
+//struct timespec START_TIME;
+struct timeval START_TIME;
 char line_args[MAX_STR_LEN];
 mode_t new_perm, old_perm;
 int env_def = 0;
@@ -26,7 +26,7 @@ int writeToLogger(int pid, const char *event, const char *info) {
     if(!env_def) return 0;
 
     char reg[256];
-    sprintf(reg, "%f ; %d ; %s ; %s\n", getElapsedTime(START_TIME), pid, event, info);
+    sprintf(reg, "%ld ; %d ; %s ; %s\n", getElapsedTime(START_TIME), pid, event, info);
 
     int no_bytes = write(LOGGER_FD, reg, strlen(reg));
 

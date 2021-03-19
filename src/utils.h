@@ -39,12 +39,12 @@ int isNumber(const char *str);
 int findChar(const char possible_str[], unsigned n, const char ch);
 
 /**
- * @brief Gets the elapsed time in milliseconds since the Epoch.
+ * @brief Gets the elapsed time in milliseconds since the epoch.
  * 
  * @param start the start time of the program
- * @return double the time in milliseconds since the Epoch
+ * @return double the time in milliseconds since the epoch
  */
-double getElapsedTime(const struct timespec start);
+long getElapsedTime(const struct timeval start);
 
 /**
  * @brief Gets the line arguments passed to call the program.

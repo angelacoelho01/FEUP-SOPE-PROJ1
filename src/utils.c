@@ -38,18 +38,11 @@ int findChar(const char possible_str[], unsigned n, const char ch) {
     return 0;
 }
 
-double getElapsedTime(const struct timespec start) {
-	//struct timespec end;
-
-	//clock_gettime(CLOCK_MONOTONIC, &end);
-
-	//return (double) (end.tv_sec - start.tv_sec) / 1000.0 + (end.tv_nsec - start.tv_nsec) / 1000000.0;
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    unsigned long ret = tv.tv_usec;
-    ret /= 1000.0;
-    ret += (tv.tv_sec * 1000);
-    return ret;
+long getElapsedTime(const struct timeval start) {
+    struct timeval end;
+    gettimeofday(&end, NULL);
+    long elapsed_time = ((end.tv_sec * 1000000 + end.tv_usec) - (start.tv_sec * 1000000 + start.tv_usec));
+    return elapsed_time;
 }
 
 char readAnswer() { 

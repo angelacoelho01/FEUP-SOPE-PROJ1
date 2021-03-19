@@ -18,11 +18,11 @@
 extern char *process_path;
 extern char line_args[MAX_STR_LEN];
 extern int env_def;
-extern long start_time;
-extern struct timespec START_TIME;
+//extern struct timespec start_time;
+extern struct timeval START_TIME;
 
 int main(int argc, char *argv[], char *envp[]) {
-    start_time = getElapsedTime(START_TIME);
+    gettimeofday(&START_TIME, NULL);
     setUpSignals();
 
     // Check program call
