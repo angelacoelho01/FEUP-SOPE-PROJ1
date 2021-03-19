@@ -1,6 +1,11 @@
 #include "xmod.h"
 
 #define ERROR -1
+#define RESET_MODE_USR ~(000700)
+#define RESET_MODE_GRP ~(000070)
+#define RESET_MODE_OTH ~(000007)
+#define RESET_MODE_ALL ~(000777)
+#define GET_MODE 000777
 
 unsigned int nftot = 0;
 unsigned int nfmod = 0;
@@ -77,7 +82,7 @@ mode_t getNewPerms(const char *mode, const char *path_name){
 	// if octal-mode
 	if (isNumber(mode)) {
 		char *ptr;
-		return strtol(mode, &ptr, 8) | (st.st_mode & RESET_MODE);
+		return strtol(mode, &ptr, 8) | (st.st_mode & RESET_MODE_ALL);
 	}
 	
 	// if normal mode
