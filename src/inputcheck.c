@@ -1,4 +1,4 @@
-#include "inputcheck.h"
+#include "../src/inputcheck.h"
 
 #define INPUT_ERROR -1
 

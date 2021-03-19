@@ -1,5 +1,5 @@
-#ifndef FILESYSTEM_H_
-#define FILESYSTEM_H_
+#ifndef SRC_FILESYSTEM_H_
+#define SRC_FILESYSTEM_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,9 +13,9 @@
 #include <string.h>
 #include <signal.h>
 
-#include "xmod.h"
-#include "logger.h"
-#include "signals.h"
+#include "../src/xmod.h"
+#include "../src/logger.h"
+#include "../src/signals.h"
 
 // Macro: Identify the content's type
 #define TYPE_OTHER 0
@@ -40,4 +40,4 @@ int pathType(const char *path);
  */
 int iterateDirectory(const char *options, const char *mode, const char *dirpath);
 
-#endif /* FILESYSTEM_H_ */
+#endif // SRC_FILESYSTEM_H_

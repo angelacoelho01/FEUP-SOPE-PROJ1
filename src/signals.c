@@ -1,4 +1,4 @@
-#include "signals.h"
+#include "../src/signals.h"
 
 char *process_path;
 extern unsigned int nftot;

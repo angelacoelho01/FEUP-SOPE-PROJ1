@@ -1,5 +1,5 @@
-#ifndef XMOD_H_
-#define XMOD_H_
+#ifndef SRC_XMOD_H_
+#define SRC_XMOD_H_
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,8 +7,8 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "utils.h"
-#include "logger.h"
+#include "../src/utils.h"
+#include "../src/logger.h"
 
 #define MAX_STR_LEN 256
 
@@ -58,4 +58,4 @@ mode_t getNewPerms(const char *mode, const char *path_name);
  */
 mode_t resetModeUser(const mode_t current_mode, const char user);
 
-#endif /* XMOD_H_ */
+#endif // SRC_XMOD_H_

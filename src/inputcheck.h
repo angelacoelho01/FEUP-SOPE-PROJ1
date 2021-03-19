@@ -1,12 +1,12 @@
-#ifndef INPUTCHECK_H_
-#define INPUTCHECK_H_
+#ifndef SRC_INPUTCHECK_H_
+#define SRC_INPUTCHECK_H_
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <string.h>
 
-#include "xmod.h"
+#include "../src/xmod.h"
 
 /**
  * @brief Prints the program usage information.
@@ -23,4 +23,4 @@ void usageNotRight();
  */
 int isValidInput(int argc, char *argv[]);
 
-#endif /* INPUTCHECK_H_ */
+#endif // SRC_INPUTCHECK_H_

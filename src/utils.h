@@ -1,5 +1,5 @@
-#ifndef UTILS_H_
-#define UTILS_H_
+#ifndef SRC_UTILS_H_
+#define SRC_UTILS_H_
 
 #include <string.h>
 #include <libgen.h>
@@ -78,4 +78,4 @@ int counterChar(const char* str, const char ch);
  */
 void upperCase(char *s);
 
-#endif /* UTILS_H_ */
+#endif // SRC_UTILS_H_
