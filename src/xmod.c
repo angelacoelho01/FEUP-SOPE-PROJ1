@@ -10,7 +10,9 @@ int xmod(const char *options, const char *mode, const char *path_name){
 	mode_t new_perms = getNewPerms(mode, path_name);
 	new_perm = new_perms & GET_MODE;
 
-	if (handleOptions(options, path_name, new_perms)) exit(1);
+	if (handleOptions(options, path_name, new_perms)) {
+        exit(ERROR);
+    }
 
 	nftot++; // new file/dir found
 
@@ -28,7 +30,7 @@ int handleOptions(const char *options, const char *path_name, const mode_t new_p
 	struct stat st;
 	if (stat(path_name, &st) == -1) {
 		perror("stat()");
-		exit(1);
+		exit(ERROR);
 	}
 
 	mode_t perms_initial = st.st_mode & GET_MODE;
@@ -66,7 +68,7 @@ mode_t getNewPerms(const char *mode, const char *path_name){
 	struct stat st;
 	if (stat(path_name, &st) == -1) {
 		perror("stat()");
-		exit(1);
+		exit(ERROR);
 	}
 
 	// Save old permissions to logger
