@@ -1,6 +1,9 @@
 #ifndef SIGNALS_H_
 #define SIGNALS_H_
 
+#include "utils.h"
+#include "logger.h"
+
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <stdio.h>
@@ -8,9 +11,6 @@
 #include <unistd.h>
 #include <signal.h>
 #include <stdbool.h>
-
-#include "utils.h"
-#include "logger.h"
 
 #define STR_SIGINT "SIGINT"
 #define STR_SIGUSR1 "SIGUSR1"
@@ -21,6 +21,10 @@
 
 #define EXIT_CTRLC 5
 
+/**
+ * @brief Set the Up Signals object
+ * 
+ */
 void setUpSignals();
 
 /**
